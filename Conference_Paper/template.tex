@@ -161,27 +161,44 @@ $^{2}$ \quad Affiliation 2; e-mail@e-mail.com}
 \begin{document}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\setcounter{section}{-1} %% Remove this when starting to work on the template.
-\section{How to Use this Template}
-
-The template details the sections that can be used in a manuscript. Note that the order and names of article sections may differ from the requirements of the journal (e.g., the positioning of the Materials and Methods section). Please check the instructions on the authors' page of the journal to verify the correct order and names. For any questions, please contact the editorial office of the journal or support@mdpi.com. For LaTeX-related questions please contact latex@mdpi.com.%\endnote{This is an endnote.} % To use endnotes, please un-comment \printendnotes below (before References). Only journal Laws uses \footnote.
-
-% The order of the section titles is different for some journals. Please refer to the "Instructions for Authors” on the journal homepage.
 
 \section{Introduction}
 
-The introduction should briefly place the study in a broad context and highlight why it is important. It should define the purpose of the work and its significance. The current state of the research field should be reviewed carefully and key publications cited. Please highlight controversial and diverging hypotheses when necessary. Finally, briefly mention the main aim of the work and highlight the principal conclusions. As far as possible, please keep the introduction comprehensible to scientists outside your particular field of research. Citing a journal paper \cite{ref-journal}. Now citing a book reference \cite{ref-book1,ref-book2} or other reference types \cite{ref-unpublish,ref-communication,ref-proceeding}. Please use the command \citep{ref-thesis,ref-url} for the following MDPI journals, which use author--date citation: Administrative Sciences, Arts, Econometrics, Economies, Genealogy, Humanities, IJFS, Journal of Intelligence, Journalism and Media, JRFM, Languages, Laws, Religions, Risks, Social Sciences, Literature.
+In 2022 at least 240 injuries involving firefighters conduction firefighting operations in buildings were reported in the United States alone. [Quelle Atemschutzunfälle] To improve safety while performing such dangerous tasks, it can be helpful to determine the exact position of firefighters performing such tasks. This can shorten rescue time of injured personnel or help the firefighters avoid dangerous situations. To determine the position of a person in a building, a Pedestrian Dead Reckoning (PDR) approach is used. PDR is a navigation technique used to estimate the position and movements of pedestrians in indoor or GPS-denied environments. PDR relies on sensors such as accelerometers, gyroscopes, and magnetometers integrated into smartphones, smartwatches, or wearable devices. By continuously tracking a pedestrian's step counts, stride length, and heading changes, PDR algorithms can calculate their relative displacement from a known starting point. Other means of PDR include simultanious locating and mapping (SLAM) or Magnetic Field Mapping solutions. Another method of indoor positioning is magnetic triangulation. \cite{arumugam2020} While PDR is most commonly used in Fitness and Smart devices, but applications also include Robotics, Augmented Reality and Defense.\\
+
+For an application in firefighting operations, many of the aformentioned methods are not feasable. While radio tracking or magnetic mapping yield good results, they are technologies that have to be set up before use. While this may be possible to achieve in large buildings, it would be impossible to do for every building in an area, for example a city. To be able to use the system in any indoor environment, a completely stand-alone, body-worn, system is required. Stand-alone PDR systems often rely on a form of step-detection. While such a system can yield good results when walking, in a firefighting application, more dynamic movements like crouching are hard to detect by step-detection. Therefore a secondary sensor measuring position or velocity is needed. Such systems often rely on using a LIDAR SLAM approach. [Quelle] while this approach might yield good results, tests have shown that LIDAR systems are heavily influenced by smoke particles. \\
+
+The approach chosen is an extended Pedestrian Dead Reconing (PDR) approach. It consists of a tracking camera, able to measure velocity and position relative to a starting point and a step detection with an Inertial Measurement Unit (IMU). While the step-detection has shown promising results in preceded research, it does not provide the required accuracy. To improve tracking accuracy, a secondary sensor is added. The sensor chosen is a stereo tracking camera. Position Data from the tracking camera and step-detection are then fused in an extended Kalman filter.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Materials and Methods}
 
-Materials and Methods should be described with sufficient details to allow others to replicate and build on published results. Please note that publication of your manuscript implicates that you must make all materials, data, computer code, and protocols associated with the publication available to readers. Please disclose at the submission stage any restrictions on the availability of materials or information. New methods and protocols should be described in detail while well-established methods can be briefly described and appropriately cited.
+The system relies on a sensor data fusion algorithm combining position data estimated by a step-detection algorithm and the velocity and position data estimated with a tracking camera.\\
 
-Research manuscripts reporting large datasets that are deposited in a publicly avail-able database should specify where the data have been deposited and provide the relevant accession numbers. If the accession numbers have not yet been obtained at the time of submission, please state that they will be provided during review. They must be provided prior to publication.
+[PDR requires a starting point, fixed coordinate system, etc.]\\
 
-Interventionary studies involving animals or humans, and other studies require ethical approval must list the authority that provided approval and the corresponding ethical approval code.
-\begin{quote}
-This is an example of a quote.
-\end{quote}
+
+
+The step-detection works by analysing the acceleration signal of an IMU. The step-detection combines a peak-detection and a zero-crossing detection to improve the detection accuracy. To detect a step, the acceleration signal firstly is filtered in a Lowwpass filter (LPF) to remove the high frequency accelerations that occur during movement. Since the frequency range of normal human walking is in the range of $1-5\mathrm{Hz}$, the cutoff frequency of the LPF set to $10 \mathrm{Hz}$. The signal is then analysed with the step-detection algorithm: First the acceleration has to pass a set positive threshold $th_{max}$. After $th_{max}$ is passed, a zero crossing has to be detected and the acceleration has to fall below a negative threshold $th_{min}$. If $th_{min}$ is passed and another zero-crossing is detected, the step gets counted as completed. If the step is not completed in a set time limit or negative threshold is not passed the step-detection is reset and no step is counted.   \\ 
+
+ After a step is detected, the length of the step is added to the last known position. The step length is estimated with the equation proposed by Weinberg [Quelle Weinberg]:
+ \begin{equation}
+ 	d = \sqrt[4]{A_{max}-A_{min}}\cdot n\cdot k
+ \end{equation}
+ where $d$ is the distance traveled, $A_{max}$ is the maximum acceleration during a single step, $A_{min}$ is the minimal acceleration during a step, $n$ is the number of steps taken and $k$ is a constant for unit conversion. This method of step length estimation was chosen because it produces accurate estimates with low computational effort compared to other algorithms.[Quelle Vergleich Step Length estimators]. The step then gets added in the direction of movement which is determined by the orientation of the IMU. It is assumed, that because of limited sight and movement during an indoor operation with self-contained breathing apparatus, firefighters will in most cases move in the direction their body is pointed. [komischer Satz!]. Since the IMU is mounted on the air tank of the firefighter, the orientation of the IMU equals the direction of movement.\\
+ 
+ 
+ A low cost IMU is chosen to measure the acceleration. The IMU that is used is the Bosch Sensortech BNO055 absolute orientation sensor. The device measures acceleration in three axes and provides absolute heading data by measuring the earths magnetic field.\\
+ 
+ 
+ 
+ As a secondary sensor a stereo tracking camera is used. A stereo tracking camera works similarly to the human eyes. The device has two cameras that are placed with a distance to each other. By measuring the displacement of a tracked object between the two cameras, the distance to the object can be calculated. By doing this for multiple objects and repeating this process every frame, the position and average velocity can be calculated.\\
+ 
+ The tracking camera chosen is the RealSense T265 stereo tracking camera. Its main advantage against competitors is the on-chip data processing, meaning that no other means of interpreting the data is necessary and the velocity and position data can be directly used for the sensor data fusion. By using parts of the infrared spectrum the camera also can produce accurate tracking results in environments with bad lighting.\\
+ 
+ 
+ 
+ % Sensordata Fusion
+ The position and velocity data are fused in an [extended??] Kalman filter (EKF). The model used assumes a constant acceleration between measurement updates. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Results}
