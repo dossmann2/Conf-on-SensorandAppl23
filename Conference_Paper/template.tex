@@ -164,7 +164,7 @@ $^{2}$ \quad Affiliation 2; e-mail@e-mail.com}
 
 \section{Introduction}
 
-While safety standards in firefighting are continuously improving, indoor operations in burning buildings still present a dangerous task for firefighters. At least 240 injuries and 10 deaths involving firefighters conducting firefighting operations in buildings were reported in the United States in 2022 \cite{atemschutzunfalle.eu2023}. To improve safety while performing such a dangerous task, it can be helpful to determine the exact position of firefighters in indoor environments. This can shorten rescue time of injured personnel or help firefighters avoiding dangerous situations. To determine the position of a person in indoor or GPS-denied environments, a technique called Pedestrian Dead Reckoning (PDR) is used. It relies on sensors such as accelerometers, gyroscopes, and magnetometers integrated into wearable devices, smartphones or smartwatches. By continuously tracking a pedestrian's step counts, stride length, and heading changes, PDR algorithms can calculate their relative displacement from a known starting point. Other means of PDR include simultaneous locating and mapping (SLAM)\cite{lu2019}, magnetic field mapping \cite{wang2016} or magnetic triangulation \cite{arumugam2020}.\\
+While safety standards in firefighting are continuously improving, indoor operations in burning buildings still present a dangerous task for firefighters. At least 240 injuries and 10 deaths involving firefighters conducting firefighting operations in buildings were reported in the United States in 2022 \cite{atemschutzunfalle.eu2023}. To improve safety while performing such a dangerous task, knowing the exact position of firefighters in indoor environments can shorten rescue time of injured personnel or help firefighters avoiding dangerous situations. To determine the position of a person in indoor or GPS-denied environments, a technique called Pedestrian Dead Reckoning (PDR) is used. It relies on sensors such as accelerometers, gyroscopes, and magnetometers integrated into wearable devices, smartphones or smartwatches. By continuously tracking a pedestrian's step counts, stride length, and heading changes, PDR algorithms can calculate their relative displacement from a known starting point. Other means of PDR include simultaneous locating and mapping (SLAM)\cite{lu2019}, magnetic field mapping \cite{wang2016} or magnetic triangulation \cite{arumugam2020}.\\
 
 For an application in firefighting operations, many of the aforementioned PDR methods are not feasible. While radio tracking \cite{cong2023} or magnetic mapping \cite{wang2016} produce accurate results in indoor environments, they are technologies that have to be installed before use. It may be possible to achieve this for some large buildings, however it would not be feasible to do for every building in an area where a fire might occur. For firefighters to being able to use the system in any indoor environment, a stand-alone, body-worn device is required. Stand-alone PDR systems often rely on a form of step-detection \cite{hou2021}. Algorithms based on step-detection can estimate an accurate position during walking, movement occurring in a firefighting application includes more dynamic activities like crouching that are hard to detect by a step-detection algorithm. Therefore, a secondary sensor measuring position or velocity is necessary to improve accuracy in those cases. A common sensor chosen for this is a Light Detection and Ranging (LIDAR) sensor \cite{wang2016}. While this approach can yield good results in smoke free environments, tests have shown that distance readings of LIDAR systems are heavily influenced by smoke particles and therefore are not usable in a firefighting environment. \\
 
@@ -177,7 +177,15 @@ The PDR relies on a sensor data fusion algorithm combining position data estimat
 \subsection{Step-Detection}
 Step-detection describes the process of detecting or counting a persons steps by measuring and analysing the accelerations of a body-worn inertial measurement unit (IMU). The most common ways of step-detection utilize  the vertical acceleration signal and analyse the signal using peak-, zero-crossing or flat zone detection. Since flat zone detection only works for foot mounted sensors and peak-detection accuracy is dependend on a persons walking speed \cite{shin2007}. Zero-Crossing detection analyzes the characteristic shape of the vertical acceleration \cite{zhao2022}. For a step to be counted as complete, the acceleration has to cross the zero line twice, once rising and once falling. To improve the robustness of the detection, the signal is Lowpass filtered. \\
 
-If a step is complete, the step length has to be added to the current position in the direction of movement. There are different ways of calculating the step length. A robust method of estimating step length is a method proposed by Weinberg \cite{weinberg2002}. The distance walked
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\textwidth]{WalkAcceleration.eps}
+	\caption{Z-Acceleration during walking}
+	\label{fig:AccelWalk}
+\end{figure}
+
+\subsection{Step-Length Estimation}
+If a step is complete, the step length has to be added to the current position in the direction of movement. There are different ways of calculating the step length. One method of estimating step length is a method proposed by Weinberg \cite{weinberg2002}. The method uses the connection between hip acceleration and step length to estimate 
  \begin{equation}
 	d = \sqrt[4]{A_{max}-A_{min}}\cdot n\cdot k
 \end{equation}
@@ -228,11 +236,15 @@ If a step is complete, the step length has to be added to the current position i
  For the secondary sensor a stereo tracking camera is chosen. Stereo tracking cameras work similarly to the human eye: The device has two calibrated cameras that are placed with a distance to each other and are horizontally aligned. By measuring the displacement of a tracked object between the two cameras, the distance to the object can be calculated. Figure \ref{fig:cmaera} shows the two aligned cameras.
  Doing this for multiple objects and repeating this process every frame, the position and average velocity can be calculated.
  Some camera models also use a infrared projected grid of dots to determine depth of the surrounding environment and can create a 3D profile.
- 
+ \begin{figure}[h!]
+ 	\centering
+ 	\includegraphics[width=0.7\textwidth]{realsense.png}
+ 	\caption{Realsense Tracking Camera with body coordinate system}
+ \end{figure}
  
 \subsection{Sensor-Data Fusion}
  % Sensordata Fusion
-To combine measurements from different sensors, an extended Kalman filter is used. The Kalman filter is an optimal recursive algorithm used for sensordata fusion. The filter operates in two steps: the prediction step, where the system's state $\hat{x}$ is predicted with the state transition model. And the update step, where measurements are used to correct the predicted state by computing the Kalman gain, which balances the model's predictions and the actual measurements. This process continually refines the state estimate as new data becomes available, making it robust against noise and capable of handling real-time applications. An extended Kalman filter  is almost identical to a Kalman Filter except for the use of non-linear update and measurement functions. The state Jacobian replaces the state transition matrix and  the measurement matrix is being replaced by the measurement Jacobian. The function  $x_{k+1} = f(x_{k},u_k)$ describes the prediction model, where
+To combine measurements from different sensors, a Kalman filter is used. The Kalman filter is an optimal recursive algorithm used for sensordata fusion. The filter operates in two steps: the prediction step, where the system's state $\hat{x}$ is predicted with the state transition model. And the update step, where measurements are used to correct the predicted state by computing the Kalman gain, which balances the model's predictions and the actual measurements. This process continually refines the state estimate as new data becomes available, making it robust against noise and capable of handling real-time applications. The prediction model is described by  $x_{k+1} = f(x_{k},u_k)$, where for each coordinate axis 
 
 \begin{equation}
 	f(x_{k},u_k) = \begin{pmatrix}
@@ -242,10 +254,10 @@ To combine measurements from different sensors, an extended Kalman filter is use
 		
 		\end{pmatrix}
 \end{equation}
-with $A_k$ being the acceleration and $V_k$ being the velocity of the last time step. The sample rate is defined by $\Delta t$. The measurement equations 
+with $A_k$ being the acceleration and $V_k$ being the velocity of the last time step. The sample rate is defined by $\Delta t$. The measurement imputs are the acceleration, velocity and position measurements.
 By tuning the covariance matrices of the Kalman filter, the accuracy of the predictions and measurement updates can be further improved.\\
 
-[Bild Schema Algorithmus]
+
 
 %\begin{figure}[h!]
 %	\centering
@@ -285,7 +297,7 @@ To combine the two measurements and take the confidence markers into account, a 
 is calculated with $x_{step}$ being the position estimate produced by the step-detection and $x_{camera}$ being the position estimate from the tracking camera. The same calculation is performed for the y-position. Since the Z-position has only one measurement input, no weighting is performed.
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=0.7\textwidth]{measurementQuality.eps}
+	\includegraphics[width=0.5\textwidth]{measurementQuality.eps}
 	\caption{$a$ value for measurements of different quality}
 	\label{fig:confidence}
 	
@@ -296,7 +308,7 @@ is calculated with $x_{step}$ being the position estimate produced by the step-d
  
 The IMU used  is the Bosch Sensortech BNO055 MEMS absolute orientation sensor. The device measures acceleration in three axes and provides absolute heading data by measuring the earths magnetic field and fusing gyroscope and Magnetometer data. 
   
-The tracking camera chosen is a RealSense T265 stereo tracking camera. Its main advantage against competitors is the on-chip data processing, meaning that no other means of interpreting the data is necessary and the velocity and position data can be directly used for the sensor data fusion. By using parts of the infrared spectrum the camera also can produce accurate tracking results in environments with bad lighting.\\
+The secondary sensor chosen is a RealSense T265 stereo tracking camera. Its main advantage against competitors is the on-device data processing, meaning that no other means of interpreting the data is necessary and the velocity and position data can be directly used for the sensor data fusion. By using parts of the infrared spectrum the camera also can produce accurate tracking results in environments with bad lighting.\\
   
 For experimantal verification of the system, a wearable sensor assembly is designed. Both sensors are mounted to the backplate of a self-contained breathing apparatus. This design is chosen to imitate a application in a firefighting setting, where the sensors would be placed on the pressurized air tank of the scba. For this a 3D printed spacer is designed to mount the sensors at the right distance. A weigth is added to represent the the scba air tank. The camera and IMU are housed to protect the electronics from damage.  Figure \ref{fig:Assembly} shows the experimental setup.\\
 
@@ -321,112 +333,12 @@ Entry 2		& Data			& Data \textsuperscript{1}\\
 \noindent{\footnotesize{\textsuperscript{1} Tables may have a footer.}}
 \end{table}
 
-The text continues here (Figure~\ref{fig2} and Table~\ref{tab2}).
 
-% Example of a figure that spans the whole page width. The same concept works for tables, too.
-\begin{figure}[H]
-\begin{adjustwidth}{-\extralength}{0cm}
-\centering
-\includegraphics[width=15.5cm]{Definitions/logo-mdpi}
-\end{adjustwidth}
-\caption{This is a wide figure.\label{fig2}}
-\end{figure}  
-
-\begin{table}[H]
-\caption{This is a wide table.\label{tab2}}
-	\begin{adjustwidth}{-\extralength}{0cm}
-		\newcolumntype{C}{>{\centering\arraybackslash}X}
-		\begin{tabularx}{\fulllength}{CCCC}
-			\toprule
-			\textbf{Title 1}	& \textbf{Title 2}	& \textbf{Title 3}     & \textbf{Title 4}\\
-			\midrule
-\multirow[m]{3}{*}{Entry 1 *}	& Data			& Data			& Data\\
-			  	                   & Data			& Data			& Data\\
-			             	      & Data			& Data			& Data\\
-                   \midrule
-\multirow[m]{3}{*}{Entry 2}    & Data			& Data			& Data\\
-			  	                  & Data			& Data			& Data\\
-			             	     & Data			& Data			& Data\\
-                   \midrule
-\multirow[m]{3}{*}{Entry 3}    & Data			& Data			& Data\\
-			  	                 & Data			& Data			& Data\\
-			             	    & Data			& Data			& Data\\
-                  \midrule
-\multirow[m]{3}{*}{Entry 4}   & Data			& Data			& Data\\
-			  	                 & Data			& Data			& Data\\
-			             	    & Data			& Data			& Data\\
-			\bottomrule
-		\end{tabularx}
-	\end{adjustwidth}
-	\noindent{\footnotesize{* Tables may have a footer.}}
-\end{table}
-
-%\begin{listing}[H]
-%\caption{Title of the listing}
-%\rule{\columnwidth}{1pt}
-%\raggedright Text of the listing. In font size footnotesize, small, or normalsize. Preferred format: left aligned and single spaced. Preferred border format: top border line and bottom border line.
-%\rule{\columnwidth}{1pt}
-%\end{listing}
-
-Text.
-
-Text.
-
-\subsection{Formatting of Mathematical Components}
-
-This is the example 1 of equation:
-\begin{linenomath}
-\begin{equation}
-a = 1,
-\end{equation}
-\end{linenomath}
-the text following an equation need not be a new paragraph. Please punctuate equations as regular text.
-%% If the documentclass option "submit" is chosen, please insert a blank line before and after any math environment (equation and eqnarray environments). This ensures correct linenumbering. The blank line should be removed when the documentclass option is changed to "accept" because the text following an equation should not be a new paragraph.
-
-This is the example 2 of equation:
-\begin{adjustwidth}{-\extralength}{0cm}
-\begin{equation}
-a = b + c + d + e + f + g + h + i + j + k + l + m + n + o + p + q + r + s + t + u + v + w + x + y + z
-\end{equation}
-\end{adjustwidth}
-
-% Example of a page in landscape format (with table and table footnote).
-%\startlandscape
-%\begin{table}[H] %% Table in wide page
-%\caption{This is a very wide table.\label{tab3}}
-%	\begin{tabularx}{\textwidth}{CCCC}
-%		\toprule
-%		\textbf{Title 1}	& \textbf{Title 2}	& \textbf{Title 3}	& \textbf{Title 4}\\
-%		\midrule
-%		Entry 1		& Data			& Data			& This cell has some longer content that runs over two lines.\\
-%		Entry 2		& Data			& Data			& Data\textsuperscript{1}\\
-%		\bottomrule
-%	\end{tabularx}
-%	\begin{adjustwidth}{+\extralength}{0cm}
-%		\noindent\footnotesize{\textsuperscript{1} This is a table footnote.}
-%	\end{adjustwidth}
-%\end{table}
-%\finishlandscape
-
-
-Please punctuate equations as regular text. Theorem-type environments (including propositions, lemmas, corollaries etc.) can be formatted as follows:
-%% Example of a theorem:
-\begin{Theorem}
-Example text of a theorem.
-\end{Theorem}
-
-The text continues here. Proofs must be formatted as follows:
-
-%% Example of a proof:
-\begin{proof}[Proof of Theorem 1]
-Text of the proof. Note that the phrase ``of Theorem 1'' is optional if it is clear which theorem is being referred to.
-\end{proof}
-The text continues here.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Discussion}
 
-Authors should discuss the results and how they can be interpreted from the perspective of previous studies and of the working hypotheses. The findings and their implications should be discussed in the broadest context possible. Future research directions may also be highlighted.
+The test results show that by adding a secondary sensor a higher accuracy can be achieved compared to a system relying only with step-detection. To improve this design for firefighting application, a tracking camera working in near zero visibility environments has to be developed. By using multiple IMUs the accuracy could be further improved.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusions}
