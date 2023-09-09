@@ -168,26 +168,42 @@ $^{2}$ \quad Affiliation 2; e-mail@e-mail.com}
 
 While safety standards in firefighting are continuously improving, indoor operations in burning buildings still present a dangerous task for firefighters. At least 240 injuries and 10 deaths involving firefighters conducting firefighting operations in buildings were reported in the United States in 2022 \cite{atemschutzunfalle.eu2023}. To improve safety while performing such a dangerous task, knowing the exact position of firefighters in indoor environments can shorten rescue time of injured personnel or help firefighters avoiding dangerous situations. To determine the position of a person in indoor or GPS-denied environments, a technique called Pedestrian Dead Reckoning (PDR) is used. It relies on sensors such as accelerometers, gyroscopes, and magnetometers integrated into wearable devices, smartphones or smartwatches. By continuously tracking a pedestrian's step counts, stride length, and heading changes, PDR algorithms can calculate their relative displacement from a known starting point. Other means of PDR include simultaneous locating and mapping (SLAM)\cite{lu2019}, magnetic field mapping \cite{wang2016} or magnetic triangulation \cite{arumugam2020}.\\
 
-For an application in firefighting operations, many of the aforementioned PDR methods are not feasible. While radio tracking \cite{cong2023} or magnetic mapping \cite{wang2016} produce accurate results in indoor environments, they are technologies that have to be installed before use. It may be possible to achieve this for some large buildings, however it would not be feasible to do for every building in an area where a fire might occur. For firefighters to being able to use the system in any indoor environment, a stand-alone, body-worn device is required. Stand-alone PDR systems often rely on a form of step-detection \cite{hou2021}. Algorithms based on step-detection can estimate an accurate position during walking, movement occurring in a firefighting application includes more dynamic activities like crouching that are hard to detect by a step-detection algorithm. Therefore, a secondary sensor measuring position or velocity is necessary to improve accuracy in those cases. A common sensor chosen for this is a Light Detection and Ranging (LIDAR) sensor \cite{wang2016}. While this approach can yield good results in smoke free environments, tests have shown that distance readings of LIDAR systems are heavily influenced by smoke particles and therefore are not usable in a firefighting environment. \\
+For an application in firefighting operations, many of the aforementioned PDR methods are not feasible. While radio tracking \cite{cong2023} or magnetic mapping \cite{wang2016} produce accurate results in indoor environments, they are technologies that have to be installed before use. It may be possible to achieve this for some large buildings, however it would not be feasible to do for every building in an area where a fire might occur. For firefighters to being able to use the system in any indoor environment, a stand-alone, body-worn device is required. Stand-alone PDR systems often rely on a form of step-detection \cite{hou2021}. Algorithms based on step-detection can estimate an accurate position during walking, movement occurring in a firefighting application includes more dynamic activities like crouching that are hard to detect by a step-detection algorithm. Therefore, a secondary sensor measuring position or velocity is necessary to improve accuracy in those cases. A common sensor chosen for this is a Light Detection and Ranging (LIDAR) sensor \cite{wang2016}. While this approach can yield good results in smoke free environments, tests show that distance readings of LIDAR systems are heavily influenced by smoke particles and therefore are not usable in a firefighting environment. \\
 
 This paper presents an approach for enhanced PDR. The step-detection algorithm is extended with a stereo tracking camera as a secondary sensor. A tracking camera is able to visually determine velocity and position relative to a starting point and is combined with a step-detection algorithm. Position and velocity data from the tracking camera and position data from the step-detection are then fused in a Kalman filter to improve accuracy.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Materials and Methods}
+\section{Algorithms for Sensor-Data Processing}
 
 The PDR relies on a sensor data fusion algorithm combining position data estimated by a step-detection algorithm and the velocity and position data estimated with a tracking camera.\\
 
-\subsection{Step-Detection}\label{sub:stepD}
-Step-detection describes the process of detecting or counting a persons steps by measuring and analysing the accelerations of a body-worn inertial measurement unit (IMU). The most common ways of step-detection utilize  the vertical acceleration signal and analyse the signal using peak-, zero-crossing or flat zone detection. Since flat zone detection only works for foot mounted sensors and peak-detection accuracy is dependend on a persons walking speed \cite{shin2007}. Zero-Crossing detection analyzes the characteristic shape of the vertical acceleration \cite{zhao2022}. For a step to be counted as complete, the acceleration has to cross the zero line twice, once rising and once falling. To improve the robustness of the detection, the signal is Lowpass filtered. \\
+\subsection{Step-Length Estimation}\label{sub:stepD}
+Step-detection describes the process of detecting or counting a persons steps by measuring and analysing the accelerations of a body-worn inertial measurement unit (IMU). The most common ways of step-detection utilize  the vertical acceleration signal and analyse the signal using peak-, zero-crossing or flat zone detection. A Zero-Crossing detection approach is chosen since flat zone detection only works for foot mounted sensors and peak-detection accuracy is dependend on a persons walking speed \cite{shin2007}. Zero-Crossing detection analyzes the characteristic shape of the vertical acceleration of a torso mounted sensor \cite{zhao2022}. To improve detection accuracy, the high-frequency parts of the signal are reduced using a lowpass filter. A simple method for a discrete lowpass filter is the exponentially weighted moving average where 
+\begin{equation}
+	A_{lpf |k} = \alpha A_k + (1-\alpha) A_{lpf|k-1}
+\end{equation} with $A_{lpf|k-1}$ being the filtered signal of the last time step and $A_k$ being the input contribution \cite{nistsematech2012}. The smoothing factor is in the range $0 \leq \alpha \leq 1$ and can be calculated as 
+\begin{equation}
+	\alpha = \frac{2\pi \Delta_T f_c}{2\pi \Delta_T f_c +1}
+\end{equation} with $\Delta_T$ being the sampling period and $f_c$ being the cut-off frequency.  For a step to be counted as complete, the filtered acceleration signal $A_z$ has to cross the zero line twice, once rising were the condition
+\begin{equation}
+	(A_{z|k} > 0) \wedge (A_{z|k-1} < 0)  %Größer Null etc.!!
+\end{equation} 
+has to be fulfilled and once falling with the condition
+\begin{equation}
+	(A_{z|k} < 0) \wedge (A_{z|k-1} > 0).  %Größer Null etc.!!
+\end{equation} 
+\\
 
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=\textwidth]{WalkAcceleration.eps}
-	\caption{Z-Acceleration during walking}
-	\label{fig:AccelWalk}
-\end{figure}
 
-\subsection{Step-Length Estimation}\label{sub:stepL}
-If a step is complete, the step length has to be added to the current position in the direction of movement. There are different ways of calculating the step length. One method of estimating step length is a method proposed by Weinberg \cite{weinberg2002}. The method uses the connection between hip acceleration and step length to estimate 
+%
+%%\begin{figure}[h!]
+%	\centering
+%	\includegraphics[width=\textwidth]{WalkAcceleration.eps}
+%	\caption{Z-Acceleration during walking}
+%	\label{fig:AccelWalk}
+%\end{figure}
+
+
+Once  a step is registered as complete, the step length has to be added to the current position in the direction of movement. The method used for estimating the step length uses the connection between hip acceleration and step length \cite{weinberg2002} to estimate 
  \begin{equation}
 	d = \sqrt[4]{A_{max}-A_{min}}\cdot n\cdot k
 \end{equation}
@@ -233,21 +249,12 @@ If a step is complete, the step length has to be added to the current position i
 % 
 
  
- 
- \subsection{Tracking Camera}
- For the secondary sensor a stereo tracking camera is chosen. Stereo tracking cameras work similarly to the human eye: The device has two calibrated cameras that are placed with a distance to each other and are horizontally aligned. By measuring the displacement of a tracked object between the two cameras, the distance to the object can be calculated. 
- Doing this for multiple objects and repeating this process every frame, the position and average velocity can be calculated. Figure \ref{fig:cmaera} shows the two aligned cameras as well as the cameras body coordinate frame.
- Some camera models also use a infrared projected grid of dots to determine depth of the surrounding environment and can create a 3D profile.
- \begin{figure}[h!]
- 	\centering
- 	\includegraphics[width=0.7\textwidth]{realsense.png}
- 	\caption{Realsense Tracking Camera with body coordinate system}
- 	\label{fig:cmaera}
- \end{figure}
- 
 \subsection{Sensor-Data Fusion}
+Sensor-data fusion describes the process of using multiple sensor outputs to estimate the state of a system. An example for a simple sensor data fusion algorithm averaging the
+outputs of multiple sensors. Another example is the complementary filter, which combines the data of a fast sensor that is prone to drift and a slow but stable sensor by using the high- or low-frequency parts of the signal.\\
+
  % Sensordata Fusion
-To combine measurements from different sensors, a Kalman filter is used. The Kalman filter is an optimal recursive algorithm used for sensordata fusion. The filter operates in two steps: the prediction step, where the system's state $\hat{x}$ is predicted with the state transition model. And the update step, where measurements are used to correct the predicted state by computing the Kalman gain, which balances the model's predictions and the actual measurements. This process continually refines the state estimate as new data becomes available, making it robust against noise and capable of handling real-time applications. The prediction model is described by  $x_{k+1} = f(x_{k},u_k)$, where for each coordinate axis 
+In this paper, a Kalman filter is used. The Kalman filter is an optimal recursive algorithm used for sensor-data fusion. The filter operates in two steps: the prediction step, where the system's state $\hat{x}$ is predicted with the state transition model. And the update step, where measurements are used to correct the predicted state by computing the Kalman gain, which balances the model's predictions and the actual measurements \cite{chui2009}. This process continually refines the state estimate as new data becomes available, making it robust against noise and capable of handling real-time applications. The prediction model is described by  $x_{k+1} = f(x_{k},u_k)$, where for each coordinate axis 
 
 \begin{equation}
 	f(x_{k},u_k) = \begin{pmatrix}
@@ -269,8 +276,16 @@ By tuning the covariance matrices of the Kalman filter, the accuracy of the pred
 %\end{figure}
 
 % Description Experiment
-\subsection{Algorithm}
- The step-detection uses a zero-crossing technique described in \ref{sub:stepD} enhanced with a threshold-crossing detection to improve the algorithms robustness: The vertical acceleration signal is filtered in a Lowpass filter (LPF) to remove the high frequency parts of the signal that occur during movement. Since the frequency range of normal human walking is in the range of $1-5\mathrm{Hz}$, the edge frequency of the LPF is $10 \mathrm{Hz}$. The signal is then analysed by the step-detection algorithm: First the acceleration has to pass a set positive threshold $th_{max}$. After $th_{max}$ is passed, a zero crossing has to be detected and the acceleration has to fall below a negative threshold $th_{min}$. If $th_{min}$ is passed and another zero-crossing is detected, the step is counted as completed. If the step is not completed in a specified time or the negative threshold is not passed the step-detection logic is reset and no step is counted. Figure \ref{fig:accelerationWalking} shows the vertical acceleration during walking and the points detected by the algorithm. 
+\section{System description}
+
+% \begin{figure}[h!]
+	% 	\centering
+	% 	\includegraphics[width=0.7\textwidth]{realsense.png}
+	% 	\caption{Realsense Tracking Camera with body coordinate system}
+	% 	\label{fig:cmaera}
+	% \end{figure}
+	
+ The step-detection uses a zero-crossing technique described in \ref{sub:stepD} enhanced with a threshold-crossing detection to improve the algorithms robustness: The vertical acceleration signal is filtered with a exponentially weighted moving average lowpass filter (LPF) to remove the high frequency parts of the signal that occur during movement. Since the frequency range of normal human walking is in the range of $1-5\mathrm{Hz}$, the edge frequency of the LPF is $10 \mathrm{Hz}$. The signal is then analysed by the step-detection algorithm: First the acceleration has to pass a set negative threshold $th_{min}$. After $th_{min} = -1.5\mathrm{m/s^2} $ is passed, a zero crossing has to be detected and the acceleration has to rise above the positive threshold $th_{max}$. If $th_{max} = 1.5\mathrm{m/s^2} $ is passed and another zero-crossing is detected, the step is counted as completed. If the step is not completed in a specified time or the negative threshold is not passed the step-detection logic is reset and no step is counted. Figure \ref{fig:accelerationWalking} shows the vertical acceleration during walking and the points detected by the algorithm. 
 
 \begin{figure}[h!]
 	\centering
@@ -280,26 +295,44 @@ By tuning the covariance matrices of the Kalman filter, the accuracy of the pred
 	\label{fig:accelerationWalking}
 \end{figure}
 
-After a step is detected, the length of the step is added to the last known position in the direction of movement which is determined by the heading angle measured by the IMU. The step-length is estimated with the method described in \ref{sub:stepL}. It is assumed, that because of limited field of view and restriction of movement by gear during an indoor operation with self-contained breathing apparatus (scba), firefighters will in most cases move in the direction their body is pointed. Since the IMU is mounted on the air tank of the firefighter, the orientation of the IMU equals the direction of movement. To describe the position in a global refernece frame, the coordinate origin of the global reference frame $n$ is defined when the device is initialized: The initial heading direction defines the x-Axis. The z-Axis is set to be the Axis normal to the ground plane. \\
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\textwidth]{algorithmStepDetect.png}
+	
+	\caption{Vertical acceleration during walking}
+	\label{fig:algorithmStedDetect}
+\end{figure}
+After a step is detected, the length of the step is added to the last known position in the direction of movement which is determined by the heading angle measured by the IMU. The step-length is estimated with the method described in \ref{sub:stepD}. It is assumed, that because of limited field of view and restriction of movement by gear during an indoor operation with self-contained breathing apparatus (scba), firefighters will in most cases move in the direction their body is pointed. Since the IMU is mounted on the air tank of the firefighter, the orientation of the IMU equals the direction of movement. To describe the position in a global refernece frame, the coordinate origin of the global reference frame $n$ is defined when the device is initialized: The initial heading direction defines the x-Axis. The z-Axis is set to be the Axis normal to the ground plane. \\
+
+
+As the secondary sensor a stereo tracking camera is chosen. Stereo tracking cameras work similarly to the human eye: The device has two calibrated cameras that are placed with a distance to each other and are horizontally aligned. By measuring the displacement of a tracked object between the two cameras, the distance to the object can be calculated. 
+Doing this for multiple objects and repeating this process every frame, the position and average velocity can be calculated. Figure \ref{fig:cmaera} shows the two aligned cameras as well as the cameras body coordinate frame.
+Some camera models also use a infrared projected grid of dots to determine depth of the surrounding environment and can create a 3D profile.\\
 
 
 The position calculated by the step-detection as well as the position and velocity measured by the tracking camera then get fused in a Kalman Filter which is implemented using the Matlab Tracking Kalman Filter library.
 The position estimates from the tracking camera and the step detection have to be weighted. The weighting scheme is determined by:
 
 \begin{itemize}
-	\item Time since last step was detected. It is assumed that the accuracy of the estimated position by the step-detection algorithm deterioates with time if no successing step is detected.
-	\item Tracking Confidence of the Tracking Camera. The Tracking Camera is able to calculate and return a confidence value of the tracking results. 
+	\item Time since last step was detected. It is assumed that the accuracy of the estimated position by the step-detection algorithm deterioates with time if no successing step is detected. Three conditions are proposed: the time passed since the last detection event $t_{step} < 0.5\mathrm{s}$, $0.5\mathrm{s} \leq t_{step} < 3\mathrm{s}$ or $t_{step} \geq 3\mathrm{s}$.\\
+	
+	\item Tracking Confidence of the tracking camera. The tracking camera is able to calculate and return a confidence value of the tracking results. The tracking confidence returned by the camera can reach four cases from zero to three, where three is the highest confidence and zero the lowest.
 \end{itemize}
 
-For the step detection, three conditions are proposed: the time after the last step detection event is smaller or greater than 0.5 seconds or the event happened longer than 3 seconds ago. The assumption is, that after that time it can be assumed, that movement has occurred but was not detected by the step detection algorithm.\\
 
 
-The tracking confidence returned by the camera can reach four cases from zero to three, where three is the highest confidence and zero the lowest.
-To combine the two measurements and take the confidence markers into account, a decision matrix is proposed. The decision matrix includes nine cases. This approach was influenced by the approach chosen in \cite{caron2006}. Goal of this approach is to weight and combine the inputs to achieve the best measurement.  If the quality of both markers is bad, the step detection gets highly favoured, since it provides stable results during walking, even in zero visibility environments. If the tracking confidence is high, the tracking camera measurements get slightly favoured. This is because in theory the tracking cameras results will more accurate since it produces continuos position updates and can track the position regardless of the type of movement. Figure \ref{fig:confidence} shows a graphical representation of the decision matrix. The combination of the measurements is performed before they are used in the Kalman Filter. With a combination factor  $a$ the weighted measurement input for the X-position
+To combine the two measurements and take the confidence markers into account, a weighting scheme is proposed. The weighting scheme includes nine cases. This approach was influenced by the method presented in \cite{caron2006}. Goal of this approach is to weight and combine the inputs to achieve the best measurement.  If the quality of both markers is bad, the step detection gets highly favoured, since it provides stable results during walking, even in zero visibility environments. If the tracking confidence is high, the camera measurements get slightly favoured. This is because in theory the tracking cameras results will more accurate since it produces continuos position updates and can track the position regardless of the type of movement. Figure \ref{fig:confidence} shows a graphical representation of the weighting scheme. The combination of the measurements is performed before they are used in the Kalman Filter. With a combination factor  $a$ the weighted measurement input for the x- and y-position
 \begin{equation}
-	x_{k} = a\cdot x_{step} + (1-a)\cdot x_{camera}
+	\begin{pmatrix}
+		x_k\\
+		y_k
+	\end{pmatrix} =
+	\begin{pmatrix}
+		a\cdot x_{step} + (1-a)\cdot x_{camera}\\
+		a\cdot y_{step} + (1-a)\cdot y_{camera}
+	\end{pmatrix}
 \end{equation}  
-is calculated with $x_{step}$ being the position estimate produced by the step-detection and $x_{camera}$ being the position estimate from the tracking camera. The same calculation is performed for the y-position. Since the z-position has only one measurement input, no weighting is performed.
+is calculated with $x_{step}$ and $y_{step}$ being the position estimates produced by the step-detection and $x_{camera}$ and $y_{camera}$ being the position estimate from the tracking camera. Since the z-position has only one measurement input, no weighting is performed.
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=0.5\textwidth]{measurementQuality.eps}
@@ -320,11 +353,13 @@ For experimantal verification of the system, a wearable sensor assembly is desig
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Results}
-To evaluate sensor and algorithm performance, tests on a set trajectory are performed. To quantify the results, the deviation from the true path is evaluated at a set of control points. The control points represent changes in heading in the true trajectory. This allows a simple comparison between the true path and the measured path. In the tests, a dynamic crouching movement often used in firefigthing is used to better evaluate the Step-detection and the Tracking Camera. To simulate obstruction of the tracking camera by dirt or heavy smoke, the tracking confidence is artificially reduced so that the step detection is highly favoured.\\
+\section{Results and Discussion}
+To evaluate sensor and algorithm performance, tests on a predefined path are performed. To quantify the results, the deviation from the true path is evaluated at a set of control points. The control points represent changes in heading. This allows an easy comparison between the true path and the measured path. In the tests, a dynamic crouching movement often used in firefigthing is used to better evaluate the Step-detection and the Tracking Camera. To simulate obstruction of the tracking camera by dirt or heavy smoke, the tracking confidence is artificially reduced so that the step detection is highly favoured.\\
 
-The path defined for the test has an overall length of $12\mathrm{m}$ with four $90\deg$ turns. The starting- and endpoint are identical. Ten test runs are performed where the individual completes the defined path in a crouching movement characteristic for firefighting operations. 
-The results show an improvement in tracking accuracy when using the proposed algorithm compared to a system relying only on step-detection. Table \ref{tab1} shows the mean deviation at each control point of the different algorithms.
+The path defined for the test has an overall length of $12\mathrm{m}$ with four $90\deg$ turns. The starting- and endpoint are identical. Ten test runs are performed where the individual completes the defined path in a crouching movement characteristic for firefighting operations. \\
+
+
+The results show an improvement in tracking accuracy when using the proposed algorithm compared to a system relying only on step-detection. Table \ref{tab1} shows the mean deviation at each control point of the different algorithms. In the case of high tracking confidence the mean deviation is lower than in cases where the tracking confidence is low, showing that the camera significantly influences the position estimate results. 
 \begin{figure}
 	\centering
 	\begin{subfigure}[b]{0.49\textwidth}
@@ -359,21 +394,18 @@ Sensordata Fusion (Low Tracking Confidence) &    $0.66\mathrm{m}$ &   $0.68\math
 \end{tabularx}
 
 
-A second test is performed where a path with an overall length of about $33\mathrm{m}$ is walked. The results show an increased accuracy of the step-detection when walking. 
+A second test is performed where a path with an overall length of about $33\mathrm{m}$ is walked. The results show an increased accuracy of the step-detection when walking compared to crouching movements, therefore increasing overall accuracy.
 \end{table}
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Discussion}
 
-The test results show that by adding a secondary sensor a higher position accuracy can be achieved compared to a system relying only with step-detection. Especially in situations where more dynamic movements like crouching occur, the step-detection method produces unaccurate results. Therefore to improve the accuracy of this design for firefighting applications, an improved tracking camera capable of operating in near zero visibility environments has to be developed. By using multiple IMUs the accuracy could be further improved. 
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusions}
 
-This section is not mandatory, but can be added to the manuscript if the discussion is unusually long or complex.
-
+The test results show that by adding a secondary sensor a higher position accuracy can be achieved compared to a system relying only with step-detection. Especially in situations where more dynamic movements like crouching occur, the step-detection method produces unaccurate results. Therefore to improve the accuracy of this design for firefighting applications, an improved tracking camera capable of operating in near zero visibility environments has to be developed. By using multiple IMUs the accuracy could be further improved. 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Patents}
 
@@ -507,6 +539,11 @@ Francois Caron, Emmanuel Duflos, Denis Pomorski, and Philippe Vanheeghe.
 Introduction of contextual aspects.
 \newblock 7(2):221--230.
 
+\bibitem{chui2009}
+C.~K. Chui and G.~Chen.
+\newblock {\em Kalman Filtering: With Real-Time Applications}.
+\newblock {Springer}, 4th ed edition.
+
 \bibitem{cong2023}
 Li~Cong, Jingnan Tian, and Honglei Qin.
 \newblock Practical {{Step Length Estimation Combining FM Radio Signal}} and
@@ -554,6 +591,10 @@ Hamza Sadruddin, Ahmed Mahmoud, and Mohamed~M. Atia.
 		Dead Reckoning}} ({{PDR}}) {{Model}}.
 \newblock In {\em 2020 {{IEEE}} 63rd {{International Midwest Symposium}} on
 	{{Circuits}} and {{Systems}} ({{MWSCAS}})}, pages 901--904.
+
+\bibitem{nistsematech2012}
+NIST SEMATECH.
+\newblock {{NIST}}/{{SEMATECH}} e-{{Handbook}} of {{Statistical Methods}}.
 
 \bibitem{shin2007}
 S.~H. Shin, C.~G. Park, J.~W. Kim, H.~S. Hong, and J.~M. Lee.
