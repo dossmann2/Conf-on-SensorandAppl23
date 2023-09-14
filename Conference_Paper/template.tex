@@ -93,7 +93,7 @@
 
 % Affiliations / Addresses (Add [1] after \address if there is only one affiliation.)
 \address{%
-$^{1}$ \quad Affiliation 1; e-mail@e-mail.com\\
+$^{1}$ \quad Affiliation 1; e-mail@e-mail.com\\}
 
 % Contact information of the corresponding author
 \corres{Correspondence: e-mail@e-mail.com; Tel.: (optional; include country code; if there are multiple corresponding authors, add author initials) +xx-xxxx-xxx-xxxx (F.L.)}
@@ -167,7 +167,7 @@ $^{1}$ \quad Affiliation 1; e-mail@e-mail.com\\
 
 While safety standards in firefighting are continuously improving, indoor operations in burning buildings still present a dangerous task for firefighters. At least 240 injuries and 10 deaths involving firefighters conducting firefighting operations in buildings were reported in the United States in 2022 \cite{atemschutzunfalle.eu2023}. To improve safety while performing such a dangerous task, knowing the exact position of firefighters in indoor environments can shorten rescue time of injured personnel or help firefighters avoiding dangerous situations. To determine the position of a person in indoor or GPS-denied environments, a technique called Pedestrian Dead Reckoning (PDR) is used. It relies on sensors such as accelerometers, gyroscopes, and magnetometers integrated into wearable devices, smartphones or smartwatches. By continuously tracking a pedestrian's step counts, stride length, and heading changes, PDR algorithms can calculate their relative displacement from a known starting point. Other means of PDR include simultaneous locating and mapping (SLAM)\cite{lu2019}, magnetic field mapping \cite{wang2016} or magnetic triangulation \cite{arumugam2020}.\\
 
-For an application in firefighting operations, many of the aforementioned PDR methods are not feasible. While radio tracking \cite{cong2023} or magnetic mapping \cite{wang2016} produce accurate results in indoor environments, they are technologies that have to be installed before use. It may be possible to achieve this for some large buildings, however it would not be feasible to do for every building in an area where a fire might occur. For firefighters to being able to use the system in any indoor environment, a stand-alone, body-worn device is required. Stand-alone PDR systems often rely on a form of step-detection \cite{hou2021}. Algorithms based on step-detection can estimate an accurate position during walking, movement occurring in a firefighting application includes more dynamic activities like crouching that are hard to detect by a step-detection algorithm. Therefore, a secondary sensor measuring position or velocity is necessary to improve accuracy in those cases. A common sensor chosen for this is a Light Detection and Ranging (LIDAR) sensor \cite{wang2016}. While this approach can yield good results in smoke free environments, tests show that distance readings of LIDAR systems are heavily influenced by smoke particles and therefore are not usable in a firefighting environment. \\
+For an application in firefighting operations, many of the aforementioned PDR methods are not feasible. While radio tracking \cite{cong2023} or magnetic mapping \cite{wang2016} produce accurate results in indoor environments, they are technologies that have to be installed before use. It may be possible to achieve this for some large buildings, however it would not be feasible to do for every building in an area where a fire might occur. For firefighters to being able to use the system in any indoor environment, a stand-alone, body-worn device is required. Stand-alone PDR systems often rely on a form of step-detection \cite{hou2021}. Algorithms based on step-detection can estimate an accurate position during walking, movement occurring in a firefighting application includes more dynamic activities like crouching that are hard to detect by a step-detection algorithm. Therefore, a secondary sensor measuring position or velocity is necessary to improve accuracy in those cases. A common sensor chosen for this is a Light Detection and Ranging (LIDAR) sensor \cite{wang2016}. While this approach can yield good results in smoke-free environments, tests show that distance readings of LIDAR systems are heavily influenced by smoke particles and therefore are not usable in a firefighting environment. \\
 
 This paper presents an approach for enhanced PDR. The step-detection algorithm is extended with a stereo tracking camera as a secondary sensor. A tracking camera is able to visually determine velocity and position relative to a starting point and is combined with a step-detection algorithm. Position and velocity data from the tracking camera and position data from the step-detection are then fused in a Kalman filter to improve accuracy.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -176,7 +176,7 @@ This paper presents an approach for enhanced PDR. The step-detection algorithm i
 The PDR relies on a sensor data fusion algorithm combining position data estimated by a step-detection algorithm and the velocity and position data estimates of a secondary sensor.\\
 
 \subsection{Step-Length Estimation}\label{sub:stepD}
-Step-detection describes the process of detecting and counting a persons steps by measuring and analysing the accelerations of a body-worn inertial measurement unit (IMU). The most common ways of step-detection utilize  the vertical acceleration signal and analyse the signal using peak-, zero-crossing or flat zone detection. A zero-crossing detection approach is chosen since flat zone detection only works for foot mounted sensors and peak-detection accuracy is dependend on a persons walking speed \cite{shin2007}. Zero-crossing detection analyzes the characteristic shape of the vertical acceleration of a torso mounted sensor \cite{zhao2022}. To improve detection accuracy, the high-frequency parts of the signal are reduced using a lowpass filter. A simple method for discrete a lowpass filtering is the exponentially weighted moving average where 
+Step-detection describes the process of detecting and counting a persons steps by measuring and analysing the accelerations of a body-worn inertial measurement unit (IMU). The most common ways of step-detection utilize  the vertical acceleration signal and analyse the signal using peak-, zero-crossing or flat zone detection. A zero-crossing detection approach is chosen since flat zone detection only works for foot mounted sensors and peak-detection accuracy is dependent on a persons walking speed \cite{shin2007}. Zero-crossing detection analyses the characteristic shape of the vertical acceleration of a torso mounted sensor \cite{zhao2022}. To improve detection accuracy, the high-frequency parts of the signal are reduced using a lowpass filter. A simple method for discrete a lowpass filtering is the exponentially weighted moving average where 
 \begin{equation}
 	A_{lpf |k} = \alpha A_k + (1-\alpha) A_{lpf|k-1}
 \end{equation} with $A_{lpf|k-1}$ being the filtered signal of the last time step and $A_k$ being the input contribution \cite{nistsematech2012}. The smoothing factor is in the range $0 \leq \alpha \leq 1$ and can be calculated as 
@@ -277,7 +277,7 @@ By tuning the covariance matrices of the Kalman filter, the accuracy of the pred
 	% 	\label{fig:cmaera}
 	% \end{figure}
 	
- The step-detection uses a zero-crossing technique described in \ref{sub:stepD} enhanced with a threshold-crossing detection to improve the algorithms robustness: The vertical acceleration signal is filtered with an exponentially weighted moving average lowpass filter (LPF) to remove the high frequency parts of the signal that occur during movement. Since the frequency range of normal human walking is in the range of $1-5\mathrm{Hz}$, the edge frequency of the LPF is specified to $10 \mathrm{Hz}$. Figure \ref{fig:AccelWalk} shows the unfiltered and filtered acceleration signal. The signal is then analysed by the step-detection algorithm: First the acceleration has to pass a set negative threshold $th_{min}$. After $th_{min} = -1.5\mathrm{m/s^2} $ is passed, a zero crossing has to be detected and the acceleration has to rise above the positive threshold $th_{max}$. If $th_{max} = 1.5\mathrm{m/s^2} $ is passed and another zero-crossing is detected, the step is counted as completed. If the step is not completed in a specified time or the negative threshold is not passed the step-detection logic is reset and no step is counted. 
+ The step-detection uses a zero-crossing technique described in \ref{sub:stepD} enhanced with a threshold-crossing detection to improve the algorithm's robustness: The vertical acceleration signal is filtered with an exponentially weighted moving average lowpass filter (LPF) to remove the high frequency parts of the signal that occur during movement. Since the frequency range of normal human walking is in the range of $1-5\mathrm{Hz}$, the edge frequency of the LPF is specified to $10 \mathrm{Hz}$. Figure \ref{fig:AccelWalk} shows the unfiltered and filtered acceleration signal. The signal is then analysed by the step-detection algorithm: First the acceleration has to pass a set negative threshold $th_{min}$. After $th_{min} = -1.5\mathrm{m/s^2} $ is passed, a zero crossing has to be detected, and the acceleration has to rise above the positive threshold $th_{max}$. If $th_{max} = 1.5\mathrm{m/s^2} $ is passed and another zero-crossing is detected, the step is counted as completed. If the step is not completed in a specified time or the negative threshold is not passed the step-detection logic is reset and no step is counted. 
 % Figure \ref{fig:accelerationWalking} shows the vertical acceleration during walking and the points detected by the algorithm. 
 A schematic representation of the step-detection algorithm can be seen in Figure \ref{fig:algorithmStedDetect}
 
@@ -301,11 +301,12 @@ After a step is detected, the length of the step is added to the last known posi
 
 
 As the secondary sensor a stereo tracking camera is chosen. Stereo tracking cameras work similarly to the human eye: The device has two calibrated cameras that are placed with a distance to each other and are horizontally aligned. By measuring the displacement of a tracked object between the two cameras, the distance to the object can be calculated. 
-Doing this for multiple objects and repeating this process every frame, the position and average velocity can be calculated. Figure \ref{fig:cmaera} shows the two aligned cameras as well as the cameras body coordinate frame.
+Doing this for multiple objects and repeating this process every frame, the position and average velocity can be calculated. 
+%Figure \ref{fig:cmaera} shows the two aligned cameras as well as the cameras body coordinate frame.
 Some camera models also use an infrared projected grid of dots to determine depth of the surrounding environment and can create a 3D profile.\\
 
 
-The position calculated by the step-detection as well as the position and velocity measured by the tracking camera then get fused in a Kalman Filter which is implemented using the Matlab Tracking Kalman Filter library.
+The position calculated by the step-detection as well as the position and velocity measured by the tracking camera then get fused in a Kalman filter which is implemented using the Matlab Tracking Kalman Filter library.
 The position estimates from the tracking camera and the step detection have to be weighted. The weighting scheme is determined by:
 
 \begin{itemize}
@@ -343,15 +344,22 @@ The IMU used  is the Bosch Sensortech BNO055 MEMS absolute orientation sensor. T
   
 The secondary sensor chosen is a RealSense T265 stereo tracking camera. Its main advantage is the on-chip, online data processing, meaning that no other means of interpreting the data is necessary and the velocity and position data can be directly used for the sensor data fusion. By using parts of the infrared spectrum the camera also can produce accurate tracking results in environments with bad lighting.\\
   
-For experimantal verification of the system, a wearable sensor assembly is designed. Both sensors are mounted to the backplate of a self-contained breathing apparatus. This design is chosen to imitate a application in a firefighting setting, where the sensors would be placed on the pressurized air tank of the scba. For this a 3D printed spacer is designed to mount the sensors at the right distance. A weigth is added to represent the scba air tank. The camera and IMU are protected from damage by a custom enclosure.  Figure \ref{fig:Assembly} shows the experimental setup.\\
+For experimental verification of the system, a wearable sensor assembly is designed. Both sensors are mounted to the backplate of a self-contained breathing apparatus. This design is chosen to imitate a application in a firefighting setting, where the sensors would be placed on the pressurized air tank of the scba. For this a 3D printed spacer is designed to mount the sensors at the right distance. A weight is added to represent the scba air tank. The camera and IMU are protected from damage by a custom enclosure.  Figure \ref{fig:Assembly} shows the experimental setup.\\
 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Results and Discussion}
-To evaluate sensor and algorithm performance, tests on a predefined path are performed. To quantify the results, the deviation from the true path is evaluated at a set of control points. The control points represent changes in heading. This allows an easy comparison between the true path and the measured path. In the tests, a dynamic crouching movement often used in firefighting is used to better evaluate the Step-detection and the Tracking Camera. To simulate obstruction of the tracking camera by dirt or heavy smoke, the tracking confidence is artificially reduced so that the step detection is highly favoured.\\
+To evaluate sensor and algorithm performance, tests on a predefined path are performed. To quantify the results, the deviation from the true path is evaluated at a set of control points. The control points represent changes in heading. This allows an easy comparison between the true path and the measured path.
 
-The path defined for the test has an overall length of $12\mathrm{m}$ with four $90\deg$ turns. The starting- and endpoint are identical. Ten test runs are performed where the individual completes the defined path in a crouching movement characteristic for firefighting operations. \\
+\subsection{Evaluationg Performanced during Walking}
+
+To evaluate the enhanced PDR and test the step detection during longer walking events, experiments are performed, where an individual is walking on a $33\mathrm{m}$ long path. The position estimates of the tracking camera and the step-detection are combined in the presented sensor-date fusion algorithm.
+The results show an increased accuracy of the enhanced step-detection algorithm compared to step-detection algorithms relying on peak detection and length estimation using a fixed step length. Figure \ref{fig:path2} shows the estimated position of the estimation methods compared to the true path.
+
+\subsection{Evaluation Performance while Crouching} 
+
+In the tests, a dynamic crouching movement often used in firefighting is used to better evaluate the Step-detection and the Tracking Camera. To simulate obstruction of the tracking camera by dirt or heavy smoke, the tracking confidence is artificially reduced so that the step detection is highly favoured. The path defined for the test has an overall length of $12\mathrm{m}$ with four $90\deg$ turns. The starting- and endpoint are identical. Ten test runs are performed where the individual completes the defined path in a crouching movement characteristic for firefighting operations. \\
 
 
 The results show an improvement in tracking accuracy when using the proposed algorithm compared to a system relying only on step-detection. Table \ref{tab1} shows the mean deviation at each control point of the different algorithms. In the case of high tracking confidence the mean deviation is lower than in cases where the tracking confidence is low, showing that the camera significantly influences the position estimate results. 
@@ -360,7 +368,7 @@ The results show an improvement in tracking accuracy when using the proposed alg
 	\begin{subfigure}[b]{0.49\textwidth}
 		\centering
 		\hspace{-2.5cm}
-		\includegraphics[width=1.1\textwidth]{Path.eps}
+		\includegraphics[width=1.11\textwidth]{Path.png}
 		\caption{Estimated and True Path}
 		\label{fig:path}
 	\end{subfigure}
@@ -389,7 +397,7 @@ Sensordata Fusion (Low Tracking Confidence) &    $0.66\mathrm{m}$ &   $0.68\math
 \end{tabularx}
 
 
-A second test is performed where a path with an overall length of about $33\mathrm{m}$ is walked. The results show an increased accuracy of the step-detection when walking compared to crouching movements, therefore increasing overall accuracy.
+
 \end{table}
 
 
@@ -400,7 +408,13 @@ A second test is performed where a path with an overall length of about $33\math
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusions}
 
-The test results show that by adding a secondary sensor a higher position accuracy can be achieved compared to a system relying only with step-detection. Especially in situations where more dynamic movements like crouching occur, the step-detection method produces unaccurate results. Therefore to improve the accuracy of this design for firefighting applications, an improved tracking camera capable of operating in near zero visibility environments has to be developed. By using multiple IMUs the accuracy could be further improved. 
+An enhanced Pedestrian Dead Reckoning method for firefighting applications has been presented. The results of the research can be summarized as follows:
+\begin{itemize}
+	\item Enhancing a step-detection algorithm with a secondary sensor improves the position estimates
+	\item While a tracking camera produces good position estimates and can be used as a secondary sensor, the disadvantages of a optical sensor have to be considered
+	\item During more dynamic movements like crouching the system has to rely on the secondary sensor since the step-detection does not produce good position estimates
+\end{itemize}
+By adapting the step-detection algorithm for crouching movements the tracking estimates could be further improved. Developing a tracking camera designed for firefighting applications could also further improve position estimation.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\section{Patents}
 %
@@ -436,7 +450,7 @@ The test results show that by adding a secondary sensor a higher position accura
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \authorcontributions{For research articles with several authors, a short paragraph specifying their individual contributions must be provided. The following statements should be used ``Conceptualization, X.X. and Y.Y.; methodology, X.X.; software, X.X.; validation, X.X., Y.Y. and Z.Z.; formal analysis, X.X.; investigation, X.X.; resources, X.X.; data curation, X.X.; writing---original draft preparation, X.X.; writing---review and editing, X.X.; visualization, X.X.; supervision, X.X.; project administration, X.X.; funding acquisition, Y.Y. All authors have read and agreed to the published version of the manuscript.'', please turn to the  \href{http://img.mdpi.org/data/contributor-role-instruction.pdf}{CRediT taxonomy} for the term explanation. Authorship must be limited to those who have contributed substantially to the work~reported.}
 
-\funding{Please add: ``This research received no external funding'' or ``This research was funded by NAME OF FUNDER grant number XXX.'' and  and ``The APC was funded by XXX''. Check carefully that the details given are accurate and use the standard spelling of funding agency names at \url{https://search.crossref.org/funding}, any errors may affect your future funding.}
+\funding{This research received no external funding}
 
 \institutionalreview{In this section, you should add the Institutional Review Board Statement and approval number, if relevant to your study. You might choose to exclude this statement if the study did not require ethical approval. Please note that the Editorial Office might ask you for further information. Please add “The study was conducted in accordance with the Declaration of Helsinki, and approved by the Institutional Review Board (or Ethics Committee) of NAME OF INSTITUTE (protocol code XXX and date of approval).” for studies involving humans. OR “The animal study protocol was approved by the Institutional Review Board (or Ethics Committee) of NAME OF INSTITUTE (protocol code XXX and date of approval).” for studies involving animals. OR “Ethical review and approval were waived for this study due to REASON (please provide a detailed justification).” OR “Not applicable” for studies not involving humans or animals.}
 
