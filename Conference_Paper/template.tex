@@ -109,7 +109,7 @@
 %\conference{} % An extended version of a conference paper
 
 % Abstract (Do not insert blank lines, i.e. \\) 
-\abstract{Knowing the exact position of firefighters in a building during an indoor firefighting operation is critical to improving the efficiency and safety of firefighters. For the estimation of an individual's  position in indoor or Global Positioning System (GPS) denied environments commonly Pedestriasn Dead Reckoning (PDR) is used. PDR tries to estimate the required position via sensors without	external references, for example using accelerometers and gyroscopes. One of the most common techniques of PDR is step-detection. Applications like firefighting, however, involving more dynamic movements like crouching. Thus, the accuracy of a step-detection algorithm is reduced dramatically. Therefore, this paper presents a novel PDR algorithm that augments the conventional PDR technique with a tracking camera. The position estimates of a zero-crossing step-detection algorithm and the tracking camera estimates are fused via a Kalman filter. A system prototype, designed for algorithm validation, is presented in detail. The experimental  results confirm that enhancing the system with a secondary sensor leads to a substantial   increase in the position estimation accuracy also for dynamic crouching maneuvers compared to conventional step-detection algorithms.}
+\abstract{Knowing the exact position of firefighters in a building during an indoor firefighting operation is critical to improving the efficiency and safety of firefighters. For the estimation of an individual's  position in indoor or Global Positioning System (GPS) denied environments commonly Pedestriasn Dead Reckoning (PDR) is used. PDR tries to estimate the required position via sensors without	external references, for example using accelerometers and gyroscopes. One of the most common techniques of PDR is step-detection. Applications like firefighting, however, involve more dynamic movements like crouching. Thus, the accuracy of a step-detection algorithm is reduced dramatically. Therefore, this paper presents a novel PDR algorithm that augments the conventional PDR technique with a tracking camera. The position estimates of a zero-crossing step-detection algorithm and the tracking camera estimates are fused via a Kalman filter. A system prototype, designed for algorithm validation, is presented in detail. The experimental  results confirm that enhancing the system with a secondary sensor leads to a substantial   increase in the position estimation accuracy also for dynamic crouching maneuvers compared to conventional step-detection algorithms.}
 
 
 % Keywords
@@ -192,7 +192,7 @@ has to be fulfilled and once falling with the condition
 \begin{equation}
 	(A_{z|k} < 0) \wedge (A_{z|k-1} > 0).  %Größer Null etc.!!
 \end{equation} 
-\\
+
 
 
 
@@ -209,46 +209,11 @@ Once  a step is registered as complete, the step length has to be added to the c
 %\end{figure}
 
 
- 
-%  % Coordinate System/ Reference frame -> Appendix?
-% For the measurements to be interpreted correctly, a global reference system $n$ has to be determined. This coordinate system is set by the starting position of the tracked individual, where the starting point represents the $\left[0\;0\;0\right]$ coordinate origin and the direction the individual is looking in represents the X-Axis (Heading angle $\alpha_h = 0$). The Z-Axis is the normal vector of a imagined plane the individual is standing on. The body reference frame $b$ of the two devices has to be rotated  into the global reference frame $n$. Since the tracking camera defines its starting-point and coordinate system by the same principles, the camera coordinate transformation gets performed by the camera itself. For the acceleration values of the IMU, a coordinate transformation has to be performed: The acceleration measured in the body coordinate frame has to be rotated into the global reference frame. 
-% \begin{equation}
-% 	\begin{bmatrix}
-% 		a_{x_n}\\
-% 		a_{y_n}\\
-% 		a_{z_n}
-% 	\end{bmatrix} = R_n^b \cdot
-% 	\begin{bmatrix}
-% 		a_{x_n}\\
-% 		a_{y_n}\\
-% 		a_{z_n}
-% 	\end{bmatrix}
-% \end{equation}
-% with the $R_{zxz}$ Transformation Matrix $R_n^b$: [QUELLE]
-% \begin{equation}
-% 	R_n^b =\\
-% 	\begin{bmatrix}
-% 		s_1  - \cos \beta s_2 &
-% 		s_3  + \cos \beta s_4 &
-% 		\sin \beta \sin \gamma \\
-% 		- s_4 -  \cos \beta s_3 &
-% 		- s_2 +  \cos \beta s_1 &
-% 		\sin \beta  \cos \gamma  \\
-% 		\sin \alpha \sin \beta &
-% 		-\cos \alpha \sin \beta &
-% 		\cos \beta
-% 	\end{bmatrix}	
-% \end{equation}
-% where $s_1 = \cos \alpha \cos \gamma$, $s_2 = \sin\alpha\sin\gamma$, $s_3 =  \sin \alpha \cos \gamma$ and $s_4 = \cos \alpha \sin \gamma$\\
-% 
 
  
 \subsection{Sensor-Data Fusion}
 Sensor-data fusion describes the process of using multiple sensor outputs to estimate the state of a system. An example for a simple sensor data fusion algorithm is averaging the
-outputs of multiple sensors. Another example is the complementary filter, which combines the data of a fast sensor that is prone to drift and a slow but stable sensor by using the high- or low-frequency parts of the signal.\\
-
- % Sensordata Fusion
-In this paper, a Kalman filter is used. The Kalman filter is an optimal recursive algorithm used for sensor-data fusion. The filter operates in two steps: the prediction step, where the system's state $\hat{x}$ is predicted with the state transition model. And the update step, where measurements are used to correct the predicted state by computing the Kalman gain, which balances the model's predictions and the actual measurements \cite{chui2009}. This process continually refines the state estimate as new data becomes available, making it robust against noise and capable of handling real-time applications. The prediction model is described by  $x_{k+1} = f(x_{k},u_k)$, where for each coordinate axis 
+outputs of multiple sensors. Another example is the complementary filter, which combines the data of a fast sensor that is prone to drift and a slow but stable sensor by using the high- or low-frequency parts of the signal. In this paper, a Kalman filter is used. The Kalman filter is an optimal recursive algorithm used for sensor-data fusion. The filter operates in two steps: the prediction step, where the system's state $\hat{x}$ is predicted with the state transition model. And the update step, where measurements are used to correct the predicted state by computing the Kalman gain, which balances the model's predictions and the actual measurements \cite{chui2009}. This process continually refines the state estimate as new data becomes available, making it robust against noise and capable of handling real-time applications. The prediction model is described by  $x_{k+1} = f(x_{k},u_k)$, where for each coordinate axis 
 
 \begin{equation}
 	f(x_{k},u_k) = \begin{pmatrix}
@@ -281,7 +246,7 @@ By tuning the covariance matrices of the Kalman filter, the accuracy of the pred
 	
  The step-detection uses a zero-crossing technique described in \ref{sub:stepD} enhanced with a threshold-crossing detection to improve the algorithm's robustness: The vertical acceleration signal is filtered with an exponentially weighted moving average lowpass filter (LPF) to remove the high frequency parts of the signal that occur during movement. Since the frequency range of normal human walking is in the range of $1-5\mathrm{Hz}$, the edge frequency of the LPF is specified to $10 \mathrm{Hz}$. Figure \ref{fig:AccelWalk} shows the unfiltered and filtered acceleration signal. The signal is then analysed by the step-detection algorithm: First the acceleration has to pass a set negative threshold $th_{min}$. After $th_{min} = -1.5\mathrm{m/s^2} $ is passed, a zero crossing has to be detected, and the acceleration has to rise above the positive threshold $th_{max}$. If $th_{max} = 1.5\mathrm{m/s^2} $ is passed and another zero-crossing is detected, the step is counted as completed. If the step is not completed in a specified time or the negative threshold is not passed the step-detection logic is reset and no step is counted. 
 % Figure \ref{fig:accelerationWalking} shows the vertical acceleration during walking and the points detected by the algorithm. 
-A schematic representation of the step-detection algorithm can be seen in Figure \ref{fig:algorithmStedDetect}
+%A schematic representation of the step-detection algorithm can be seen in Figure \ref{fig:algorithmStedDetect}
 
 
 \begin{figure}[h!]
@@ -292,34 +257,33 @@ A schematic representation of the step-detection algorithm can be seen in Figure
 \end{figure}
 
 
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=\textwidth]{algorithmStepDetect.png}
-	
-	\caption{Vertical acceleration during walking}
-	\label{fig:algorithmStedDetect}
-\end{figure}
-After a step is detected, the length of the step is added to the last known position in the direction of movement which is determined by the heading angle measured by the IMU. The step-length is estimated with the method described in \ref{sub:stepD}. It is assumed, that because of limited field of view and restriction of movement by gear during an indoor operation with self-contained breathing apparatus (scba), firefighters will in most cases move in the direction their body is pointed. Since the IMU is mounted on the air tank of the firefighter, the orientation of the IMU equals the direction of movement. To describe the position in a global reference frame, the coordinate origin of the global reference frame $n$ is defined when the device is initialized: The initial heading direction defines the x-Axis. The z-Axis is set to be the Axis normal to the ground plane. \\
+%\begin{figure}[h!]
+%	\centering
+%	\includegraphics[width=\textwidth]{algorithmStepDetect.png}
+%	
+%	\caption{Vertical acceleration during walking}
+%	\label{fig:algorithmStedDetect}
+%\end{figure}
 
-
-As the secondary sensor a stereo tracking camera is chosen. Stereo tracking cameras work similarly to the human eye: The device has two calibrated cameras that are placed with a distance to each other and are horizontally aligned. By measuring the displacement of a tracked object between the two cameras, the distance to the object can be calculated. 
+After a step is detected, the length of the step is added to the last known position in the direction of movement which is determined by the heading angle measured by the IMU. The step-length is estimated with the method described in \ref{sub:stepD}. It is assumed, that because of limited field of view and restriction of movement by gear during an indoor operation with self-contained breathing apparatus (scba), firefighters will in most cases move in the direction their body is pointed. Since the IMU is mounted on the air tank of the firefighter, the orientation of the IMU equals the direction of movement. To describe the position in a global reference frame, the coordinate origin of the global reference frame $n$ is defined when the device is initialized: The initial heading direction defines the x-Axis. The z-Axis is set to be the Axis normal to the ground plane. As the secondary sensor a stereo tracking camera is chosen. Stereo tracking cameras work similarly to the human eye: The device has two calibrated cameras that are placed with a distance to each other and are horizontally aligned. By measuring the displacement of a tracked object between the two cameras, the distance to the object can be calculated. 
 Doing this for multiple objects and repeating this process every frame, the position and average velocity can be calculated. 
 %Figure \ref{fig:cmaera} shows the two aligned cameras as well as the cameras body coordinate frame.
 Some camera models also use an infrared projected grid of dots to determine depth of the surrounding environment and can create a 3D profile.\\
 
 
 The position calculated by the step-detection as well as the position and velocity measured by the tracking camera then get fused in a Kalman filter which is implemented using the Matlab Tracking Kalman Filter library.
-The position estimates from the tracking camera and the step detection have to be weighted. The weighting scheme is determined by:
+The position estimates from the tracking camera and the step detection have to be weighted. The weighting scheme is determined by: Time since last step was detected. It is assumed that the accuracy of the estimated position by the step-detection algorithm deteriorates with time if no succeeding step is detected. Three conditions are proposed: the time passed since the last detection event $t_{step} < 0.5\mathrm{s}$, $5\mathrm{s} \leq t_{step} < 3\mathrm{s}$ or $t_{step} \geq 3\mathrm{s}$. Tracking Confidence of the tracking camera. The tracking camera is able to calculate and return a confidence value of the tracking results. The tracking confidence returned by the camera can reach four cases from zero to three, where three is the highest confidence and zero the lowest.\\
 
-\begin{itemize}
-	\item Time since last step was detected. It is assumed that the accuracy of the estimated position by the step-detection algorithm deteriorates with time if no succeeding step is detected. Three conditions are proposed: the time passed since the last detection event $t_{step} < 0.5\mathrm{s}$, $5\mathrm{s} \leq t_{step} < 3\mathrm{s}$ or $t_{step} \geq 3\mathrm{s}$.\\
-	
-	\item Tracking Confidence of the tracking camera. The tracking camera is able to calculate and return a confidence value of the tracking results. The tracking confidence returned by the camera can reach four cases from zero to three, where three is the highest confidence and zero the lowest.
-\end{itemize}
+%\begin{itemize}
+%	\item Time since last step was detected. It is assumed that the accuracy of the estimated position by the step-detection algorithm deteriorates with time if no succeeding step is detected. Three conditions are proposed: the time passed since the last detection event $t_{step} < 0.5\mathrm{s}$, $5\mathrm{s} \leq t_{step} < 3\mathrm{s}$ or $t_{step} \geq 3\mathrm{s}$.\\
+%	
+%	\item Tracking Confidence of the tracking camera. The tracking camera is able to calculate and return a confidence value of the tracking results. The tracking confidence returned by the camera can reach four cases from zero to three, where three is the highest confidence and zero the lowest.
+%\end{itemize}
 
 
 
-To combine the two measurements and take the confidence markers into account, a weighting scheme is proposed. The weighting scheme includes nine cases. This approach was influenced by the method presented in \cite{caron2006}. Goal of this approach is to weight and combine the inputs to achieve the best measurement.  If the quality of both markers is bad, the step detection gets highly favoured, since it provides stable results during walking, even in zero visibility environments. If the tracking confidence is high, the camera measurements get slightly favoured. This is because in theory the tracking cameras results will more accurate since it produces continuos position updates and can track the position regardless of the type of movement. Figure \ref{fig:confidence} shows a graphical representation of the weighting scheme. The combination of the measurements is performed before they are used in the Kalman Filter. With a combination factor  $a$ the weighted measurement input for the x- and y-position
+To combine the two measurements and take the confidence markers into account, a weighting scheme is proposed. The weighting scheme includes nine cases. This approach was influenced by the method presented in \cite{caron2006}. Goal of this approach is to weight and combine the inputs to achieve the best measurement.  If the quality of both markers is bad, the step detection gets highly favoured, since it provides stable results during walking, even in zero visibility environments. If the tracking confidence is high, the camera measurements get slightly favoured. This is because in theory the tracking cameras results will more accurate since it produces continuos position updates and can track the position regardless of the type of movement. %Figure \ref{fig:confidence} shows a graphical representation of the weighting scheme. 
+The combination of the measurements is performed before they are used in the Kalman Filter. With a combination factor  $a$ the weighted measurement input for the x- and y-position
 \begin{equation}
 	\begin{pmatrix}
 		x_k\\
@@ -331,13 +295,13 @@ To combine the two measurements and take the confidence markers into account, a 
 	\end{pmatrix}
 \end{equation}  
 is calculated with $x_{step}$ and $y_{step}$ being the position estimates produced by the step-detection and $x_{camera}$ and $y_{camera}$ being the position estimate from the tracking camera. Since the z-position has only one measurement input, no weighting is performed.
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=0.5\textwidth]{measurementQuality.eps}
-	\caption{$a$ value for measurements of different quality}
-	\label{fig:confidence}
-	
-\end{figure}
+%\begin{figure}[h!]
+%	\centering
+%	\includegraphics[width=0.5\textwidth]{measurementQuality.eps}
+%	\caption{$a$ value for measurements of different quality}
+%	\label{fig:confidence}}{Nenner}
+%	
+%\end{figure}
 
 \subsection{Sensor Assembly}
  % Sensor assembly
@@ -367,10 +331,7 @@ The results show an increased accuracy of the enhanced step-detection algorithm 
 
 \subsection{Evaluation Performance while Crouching} 
 
-In the tests, a dynamic crouching movement often used in firefighting is used to better evaluate the Step-detection and the Tracking Camera. To simulate obstruction of the tracking camera by dirt or heavy smoke, the tracking confidence is artificially reduced so that the step detection is highly favoured. The path defined for the test has an overall length of $12\mathrm{m}$ with four $90\deg$ turns. The starting- and endpoint are identical. Ten test runs are performed where the individual completes the defined path in a crouching movement characteristic for firefighting operations. \\
-
-
-The results show an improvement in tracking accuracy when using the proposed algorithm compared to a system relying only on step-detection. Table \ref{tab1} shows the mean deviation at each control point of the different algorithms. In the case of high tracking confidence the mean deviation is lower than in cases where the tracking confidence is low, showing that the camera significantly influences the position estimate results. 
+In the tests, a dynamic crouching movement often used in firefighting is used to better evaluate the Step-detection and the Tracking Camera. To simulate obstruction of the tracking camera by dirt or heavy smoke, the tracking confidence is artificially reduced so that the step detection is highly favoured. The path defined for the test has an overall length of $12\mathrm{m}$ with four $90\deg$ turns. The starting- and endpoint are identical. Ten test runs are performed where the individual completes the defined path in a crouching movement characteristic for firefighting operations. The results show an improvement in tracking accuracy when using the proposed algorithm compared to a system relying only on step-detection. Table \ref{tab1} shows the mean deviation at each control point of the different algorithms. In the case of high tracking confidence the mean deviation is lower than in cases where the tracking confidence is low, showing that the camera significantly influences the position estimate results. 
 \begin{figure}
 	\centering
 	\begin{subfigure}[b]{0.49\textwidth}
@@ -456,7 +417,10 @@ By adapting the step-detection algorithm for crouching movements the tracking es
 %}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\authorcontributions{For research articles with several authors, a short paragraph specifying their individual contributions must be provided. The following statements should be used ``Conceptualization, X.X. and Y.Y.; methodology, X.X.; software, X.X.; validation, X.X., Y.Y. and Z.Z.; formal analysis, X.X.; investigation, X.X.; resources, X.X.; data curation, X.X.; writing---original draft preparation, X.X.; writing---review and editing, X.X.; visualization, X.X.; supervision, X.X.; project administration, X.X.; funding acquisition, Y.Y. All authors have read and agreed to the published version of the manuscript.'', please turn to the  \href{http://img.mdpi.org/data/contributor-role-instruction.pdf}{CRediT taxonomy} for the term explanation. Authorship must be limited to those who have contributed substantially to the work~reported.}
+
+\authorcontributions{T.A.: methodology, visualisation, analysis, synthesis, testing, validation and original draft preparation. D.O.: Supervision, project management and proofreading and
+	language correction All authors have read and agreed to the published version of the manuscript.}
+%\authorcontributions{Conceptualization, X.X. and Y.Y.; methodology, X.X.; software, X.X.; validation, X.X., Y.Y. and Z.Z.; formal analysis, X.X.; investigation, X.X.; resources, X.X.; data curation, X.X.; writing---original draft preparation, X.X.; writing---review and editing, X.X.; visualization, X.X.; supervision, X.X.; project administration, X.X.; funding acquisition, Y.Y. All authors have read and agreed to the published version of the manuscript.}
 
 \funding{This research received no external funding}
 
@@ -474,53 +438,53 @@ By adapting the step-detection algorithm for crouching movements the tracking es
 % Only for journal Nursing Reports
 %\guidelinesstandards{Please add a statement indicating which reporting guideline was used when drafting the report. For example, ``This manuscript was drafted against the XXX (the full name of reporting guidelines and citation) for XXX (type of research) research''. A complete list of reporting guidelines can be accessed via the equator network: \url{https://www.equator-network.org/}.}
 
-\acknowledgments{In this section you can acknowledge any support given which is not covered by the author contribution or funding sections. This may include administrative and technical support, or donations in kind (e.g., materials used for experiments).}
+%\acknowledgments{In this section you can acknowledge any support given which is not covered by the author contribution or funding sections. This may include administrative and technical support, or donations in kind (e.g., materials used for experiments).}
 
-\conflictsofinterest{Declare conflicts of interest or state ``The authors declare no conflict of interest.'' Authors must identify and declare any personal circumstances or interest that may be perceived as inappropriately influencing the representation or interpretation of reported research results. Any role of the funders in the design of the study; in the collection, analyses or interpretation of data; in the writing of the manuscript; or in the decision to publish the results must be declared in this section. If there is no role, please state ``The funders had no role in the design of the study; in the collection, analyses, or interpretation of data; in the writing of the manuscript; or in the decision to publish the results''.} 
+\conflictsofinterest{The authors declare no conflict of interest.} 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Optional
-\sampleavailability{Samples of the compounds ... are available from the authors.}
+%\sampleavailability{Samples of the compounds ... are available from the authors.}
 
 %% Only for journal Encyclopedia
 %\entrylink{The Link to this entry published on the encyclopedia platform.}
 
-\abbreviations{Abbreviations}{
-The following abbreviations are used in this manuscript:\\
-
-\noindent 
-\begin{tabular}{@{}ll}
-MDPI & Multidisciplinary Digital Publishing Institute\\
-DOAJ & Directory of open access journals\\
-TLA & Three letter acronym\\
-LD & Linear dichroism
-\end{tabular}
-}
+%\abbreviations{Abbreviations}{
+%The following abbreviations are used in this manuscript:\\
+%
+%\noindent 
+%\begin{tabular}{@{}ll}
+%MDPI & Multidisciplinary Digital Publishing Institute\\
+%DOAJ & Directory of open access journals\\
+%TLA & Three letter acronym\\
+%LD & Linear dichroism
+%\end{tabular}
+%}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Optional
 \appendixtitles{no} % Leave argument "no" if all appendix headings stay EMPTY (then no dot is printed after "Appendix A"). If the appendix sections contain a heading then change the argument to "yes".
 \appendixstart
 \appendix
-\section[\appendixname~\thesection]{}
-\subsection[\appendixname~\thesubsection]{}
-The appendix is an optional section that can contain details and data supplemental to the main text---for example, explanations of experimental details that would disrupt the flow of the main text but nonetheless remain crucial to understanding and reproducing the research shown; figures of replicates for experiments of which representative data are shown in the main text can be added here if brief, or as Supplementary Data. Mathematical proofs of results not central to the paper can be added as an appendix.
-
-\begin{table}[H] 
-\caption{This is a table caption.\label{tab5}}
-\newcolumntype{C}{>{\centering\arraybackslash}X}
-\begin{tabularx}{\textwidth}{CCC}
-\toprule
-\textbf{Title 1}	& \textbf{Title 2}	& \textbf{Title 3}\\
-\midrule
-Entry 1		& Data			& Data\\
-Entry 2		& Data			& Data\\
-\bottomrule
-\end{tabularx}
-\end{table}
-
-\section[\appendixname~\thesection]{}
-All appendix sections must be cited in the main text. In the appendices, Figures, Tables, etc. should be labeled, starting with ``A''---e.g., Figure A1, Figure A2, etc.
+%\section[\appendixname~\thesection]{}
+%\subsection[\appendixname~\thesubsection]{}
+%The appendix is an optional section that can contain details and data supplemental to the main text---for example, explanations of experimental details that would disrupt the flow of the main text but nonetheless remain crucial to understanding and reproducing the research shown; figures of replicates for experiments of which representative data are shown in the main text can be added here if brief, or as Supplementary Data. Mathematical proofs of results not central to the paper can be added as an appendix.
+%
+%\begin{table}[H] 
+%\caption{This is a table caption.\label{tab5}}
+%\newcolumntype{C}{>{\centering\arraybackslash}X}
+%\begin{tabularx}{\textwidth}{CCC}
+%\toprule
+%\textbf{Title 1}	& \textbf{Title 2}	& \textbf{Title 3}\\
+%\midrule
+%Entry 1		& Data			& Data\\
+%Entry 2		& Data			& Data\\
+%\bottomrule
+%\end{tabularx}
+%\end{table}
+%
+%\section[\appendixname~\thesection]{}
+%All appendix sections must be cited in the main text. In the appendices, Figures, Tables, etc. should be labeled, starting with ``A''---e.g., Figure A1, Figure A2, etc.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{adjustwidth}{-\extralength}{0cm}
