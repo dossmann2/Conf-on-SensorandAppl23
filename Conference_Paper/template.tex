@@ -70,17 +70,18 @@
 
 %=================================================================
 % Full title of the paper (Capitalized)
-\Title{Title}
+% Author Orchid ID: enter ID or remove command
+
+\Title{Enhanced Pedestrian Dead Reckoning Sensor Fusion for Firefighting }
 
 % MDPI internal command: Title for citation in the left column
-\TitleCitation{Title}
+\TitleCitation{Enhanced Pedestrian Dead Reckoning Sensor Fusion for Firefighting }
 
-% Author Orchid ID: enter ID or remove command
-\newcommand{\orcidauthorA}{0000-0000-0000-000X} % Add \orcidA{} behind the author's name
-%\newcommand{\orcidauthorB}{0000-0000-0000-000X} % Add \orcidB{} behind the author's name
+\newcommand{\orcidauthorA}{0009-0000-9900-4172} % Add \orcidA{} behind the author's name
+\newcommand{\orcidauthorB}{0000-0003-4499-5639} % Add \orcidB{} behind the author's name
 
 % Authors, for the paper (add full first names)
-\Author{Firstname Lastname $^{1,\dagger,\ddagger}$\orcidA{}, Firstname Lastname $^{2,\ddagger}$ and Firstname Lastname $^{2,}$*}
+\Author{Tobias Augustin $^{1}$*\orcidA{}, Daniel Ossmann $^{1}$\orcidB{} }
 
 %\longauthorlist{yes}
 
@@ -93,10 +94,10 @@
 
 % Affiliations / Addresses (Add [1] after \address if there is only one affiliation.)
 \address{%
-$^{1}$ \quad Affiliation 1; e-mail@e-mail.com\\}
+	$^{1}$ \quad Munich University of Applied Sciences HM \\}
 
 % Contact information of the corresponding author
-\corres{Correspondence: e-mail@e-mail.com; Tel.: (optional; include country code; if there are multiple corresponding authors, add author initials) +xx-xxxx-xxx-xxxx (F.L.)}
+\corres{Correspondence: tobias.augustin@hm.edu)}
 
 % Current address and/or shared authorship
 %\firstnote{Current address: Affiliation 3.} 
@@ -108,7 +109,7 @@ $^{1}$ \quad Affiliation 1; e-mail@e-mail.com\\}
 %\conference{} % An extended version of a conference paper
 
 % Abstract (Do not insert blank lines, i.e. \\) 
-\abstract{To determine the position of an individual in an indoor environment, in most cases, an approach called Pedestrian Dead Reckoning (PDR) is used. PDR describes the process of estimating the position by using sensors like accelerometers and gyroscopes. One of the most common techniques of PDR is step-detection. However, in an application like firefighting, where more dynamic movements like crouching occur, this is not sufficient. This paper presents a PDR approach which enhances a traditional step-detection using vertical acceleration with a tracking camera as a secondary sensor and fusing the sensor data in a Kalman filter. A prototype of the design is designed and tested. Results show that using a secondary sensor can improve overall accuracy.  }
+\abstract{Knowing the exact position of firefighters in a building during an indoor firefighting operation is critical to improving the efficiency and safety of firefighting. In Indoor or GPS denied environments an approach called Pedestriasn Dead Reckoning (PDR) is used. PDR describes the process of estimating position by using sensors like accelerometers and gyroscopes. One of the most common techniques of PDR is step-detection. However, in an application like firefighting, where more dynamic movements like crouching occur, the accuracy of the position estimate is not satisfactory. This paper presents a PDR approach which enhances a traditional step-detection using vertical acceleration with a tracking camera as a secondary sensor. The sensor data is fused in in a Kalman filter. A prototype of the system is designed to test the algorithm. Results show that using a secondary sensor improves overall accuracy.  }
 
 % Keywords
 \keyword{keyword 1; keyword 2; keyword 3 (List three to ten pertinent keywords specific to the article; yet reasonably common within the subject discipline.)} 
