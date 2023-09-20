@@ -81,15 +81,15 @@
 \newcommand{\orcidauthorB}{0000-0003-4499-5639} % Add \orcidB{} behind the author's name
 
 % Authors, for the paper (add full first names)
-\Author{Tobias Augustin $^{1}$*\orcidA{}, Daniel Ossmann $^{1}$\orcidB{} }
+\Author{Tobias Augustin $^{1}$*, Daniel Ossmann $^{1}$\orcidB{} }
 
 %\longauthorlist{yes}
 
 % MDPI internal command: Authors, for metadata in PDF
-\AuthorNames{Firstname Lastname, Firstname Lastname and Firstname Lastname}
+\AuthorNames{Tobias Augustin, Daniel Ossmann}
 
 % MDPI internal command: Authors, for citation in the left column
-\AuthorCitation{Lastname, F.; Lastname, F.; Lastname, F.}
+\AuthorCitation{Augustin, T.; Ossmann, D.}
 % If this is a Chicago style journal: Lastname, Firstname, Firstname Lastname, and Firstname Lastname.
 
 % Affiliations / Addresses (Add [1] after \address if there is only one affiliation.)
@@ -97,7 +97,7 @@
 	$^{1}$ \quad Munich University of Applied Sciences HM \\}
 
 % Contact information of the corresponding author
-\corres{Correspondence: tobias.augustin@hm.edu)}
+\corres{Correspondence: tobias.augustin@hm.edu}
 
 % Current address and/or shared authorship
 %\firstnote{Current address: Affiliation 3.} 
@@ -109,7 +109,7 @@
 %\conference{} % An extended version of a conference paper
 
 % Abstract (Do not insert blank lines, i.e. \\) 
-\abstract{Knowing the exact position of firefighters in a building during an indoor firefighting operation is critical to improving the efficiency and safety of firefighting. In Indoor or GPS denied environments an approach called Pedestriasn Dead Reckoning (PDR) is used. PDR describes the process of estimating position by using sensors like accelerometers and gyroscopes. One of the most common techniques of PDR is step-detection. However, in an application like firefighting, where more dynamic movements like crouching occur, the accuracy of the position estimate is not satisfactory. This paper presents a PDR approach which enhances a traditional step-detection using vertical acceleration with a tracking camera as a secondary sensor. The sensor data is fused in in a Kalman filter. A prototype of the system is designed to test the algorithm. Results show that using a secondary sensor improves overall accuracy.  }
+\abstract{Knowing the exact position of firefighters in a building during an indoor firefighting operation is critical to improving the efficiency and safety of firefighting. In Indoor or GPS denied environments an approach called Pedestriasn Dead Reckoning (PDR) is used. PDR describes the process of estimating position by using sensors like accelerometers and gyroscopes. One of the most common techniques of PDR is step-detection. However, in an application like firefighting, where more dynamic movements like crouching occur, the accuracy of the position estimate is not satisfactory. This paper presents a enhanced PDR algorithm that augments conventional step-detection techniques with a tracking camera as a secondary sensor. The position estimates of a zero-crossing step-detection algorithm and the tracking camera estimates are fused in a Kalman filter. A system prototype is designed for algorithm validation. The experimental outcomes  demonstrate that the inclusion of a secondary sensor leads to a substantial enhancement in overall accuracy. Particularly in tests involving dynamic crouching maneuvers overall accuracy is improved. }
 
 % Keywords
 \keyword{keyword 1; keyword 2; keyword 3 (List three to ten pertinent keywords specific to the article; yet reasonably common within the subject discipline.)} 
