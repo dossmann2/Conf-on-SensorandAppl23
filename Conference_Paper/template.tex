@@ -169,9 +169,12 @@
 
 While safety standards in firefighting are continuously improving, indoor operations in burning buildings still present a dangerous task for firefighters. At least 240 injuries and 10 deaths involving firefighters conducting firefighting operations in buildings were reported in the United States in 2022 \cite{atemschutzunfalle.eu2023}. To improve safety while performing such a dangerous task, knowing the exact position of firefighters in indoor environments can shorten rescue time of injured personnel or help firefighters avoiding dangerous situations. To determine the position of a person in indoor or GPS-denied environments, a technique called Pedestrian Dead Reckoning (PDR) is used. It relies on sensors such as accelerometers, gyroscopes, and magnetometers integrated into wearable devices, smartphones or smartwatches. By continuously tracking a pedestrian's step counts, stride length, and heading changes, PDR algorithms can calculate their relative displacement from a known starting point. Other means of PDR include simultaneous locating and mapping (SLAM)\cite{lu2019}, magnetic field mapping \cite{wang2016} or magnetic triangulation \cite{arumugam2020}.
 
-For an application in firefighting operations, many of the aforementioned PDR methods are not feasible. While radio tracking \cite{cong2023} or magnetic mapping \cite{wang2016} produce accurate results in indoor environments, they are technologies that have to be installed before use. It may be possible to achieve this for some large buildings, however it would not be feasible to do for every building in an area where a fire might occur. For firefighters to being able to use the system in any indoor environment, a stand-alone, body-worn device is required. Stand-alone PDR systems often rely on a form of step-detection \cite{hou2021}. Algorithms based on step-detection can estimate an accurate position during walking, movement occurring in a firefighting application includes more dynamic activities like crouching that are hard to detect by a step-detection algorithm. Therefore, a secondary sensor measuring position or velocity is necessary to improve accuracy in those cases. A common sensor chosen for this is a Light Detection and Ranging (LIDAR) sensor \cite{wang2016}. While this approach can yield good results in smoke-free environments, tests show that distance readings of LIDAR systems are heavily influenced by smoke particles and therefore are not usable in a firefighting environment.
+For an application in firefighting operations, many of the aforementioned PDR methods are not feasible. While radio tracking \cite{cong2023} or magnetic mapping \cite{wang2016} produce accurate results in indoor environments, they are technologies that have to be installed before use. It may be possible to achieve this for some large buildings, however it would not be feasible to do for every building in an area where a fire might occur. For tracking firefighters in any indoor environment, a stand-alone, body-worn device is required. Stand-alone PDR systems often rely on a form of step-detection \cite{hou2021}. Algorithms based on step-detection can estimate an accurate position mainly  during walking. Movements occurring in a firefighting application, however, also include more dynamic activities like crouching. Those movements are hard to detect by standard step-detection algorithms. Thus, a secondary sensor measuring position or velocity is necessary to improve accuracy in those scenarios. A common sensor chosen for this is a Light Detection and Ranging (LIDAR) sensor \cite{wang2016}. While this approach can yield good results in smoke-free environments, tests show that distance readings of LIDAR systems are heavily influenced by smoke particles and therefore are not usable in a firefighting environment.
 
-This paper presents an approach for enhanced PDR. The step-detection algorithm is extended with a stereo tracking camera as a secondary sensor. A tracking camera is able to visually determine velocity and position relative to a starting point and is combined with a step-detection algorithm. Position and velocity data from the tracking camera and position data from the step-detection are then fused in a Kalman filter to improve accuracy.
+Due to these shortcomings in PDR for firefighting application, in this paper  a novel approach for enhanced PDR is presented. The step-detection algorithm is extended with a stereo tracking camera as a secondary sensor. This tracking camera is able to visually determine velocity and position relative to a starting point, even is smoky scenarios. The camera providing position and velocity is combined with a step-detection algorithm providing position information. The gathered data is 
+fused using a Kalman filter to robustly estimate the firefighters position. While in section 2 the fundamentals of the step-detection and the model for the Kalman filter is presented, in section 3 the overall PDR system setup including software and hardware components is described. Finally, section 4 discusses the results of a verification campaign in which position data from the proposed algorithm is compared to data generated by step-detection only.
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Sensor-Data Processing Algorithms}
 The PDR relies on an advanced sensor data fusion algorithm combining position data estimated by a step-detection algorithm and the velocity and position data estimates of a secondary sensor.
@@ -209,7 +212,7 @@ In equation (\ref{eq:dist}) with $a_{\max}$ is the maximum possible acceleration
  
 \subsection{Sensor-Data Fusion}
 Sensor-data fusion describes the process of using multiple sensor outputs to estimate the state of a system. A common approach for sensor fusion complementary filtering, which combines high frequency data of one sensor, that fast but prone to drift, with low frequency data from another sensor, which stabilized the output signal.
-In this paper we use the more advanced method of a Kalman filter. The idea of the Kalman filter is to use an optimal recursive algorithm  for sensor-data fusion. The filter operates in two steps: the prediction step, where the system's state  is predicted using a  state transition model, i.e., a mathematical model of the underlying dynamics; and the update step, where measurements are used to correct the predicted state by computing the Kalman gain. This gain balances the model's predictions and the actual measurements \cite{chui2009}. The process continually refines the state estimate as new data becomes available, making it robust against noise and capable of handling real-time applications. The prediction model is described by  the non-linear function $x((k+1)\,\Delta_T) = f(x(k\,\Delta_T),u(k\,\Delta_T))$. As underlying model in this paper we define for each of the three coordinate  axis the function 
+In this paper we use the more advanced method of a Kalman filtering. The idea of the Kalman filter is to use an optimal recursive algorithm  for sensor-data fusion. The filter operates in two steps: the prediction step, where the system's state  is predicted using a prediction model, i.e., a mathematical model of the underlying dynamics; and the update step, \textcolor{red}{where measurements are used to correct the predicted state by computing the Kalman gain - Frage: stimmt das? wird das gain wirklich mit den measurements bestimmt? oder setzen sie das gain fest und es mischt die messungen zum modell?!}. This gain balances the model's predictions and the actual measurements \cite{chui2009}. The process continually refines the state estimate as new data becomes available, making it robust against noise and capable of handling real-time applications. The required prediction model is described by  the non-linear function $x((k+1)\,\Delta_T) = f(x(k\,\Delta_T),u(k\,\Delta_T))$. As underlying model in this paper we define for each of the three coordinate  axis the function 
 \begin{equation}\label{eq:nl}
 	f(x,u) = \begin{pmatrix}
 		a \\
@@ -222,7 +225,7 @@ with $a$ being the acceleration and $v$ being the velocity. The three elements o
 Note that the dependency of the signals on time, i.e., on $k\Delta_T$, is omitted in equation (\ref{eq:nl}) for readability reasons.
  The measurement inputs are the acceleration $a$, velocity $v$ and position $x$ measurements for each of the three axes. By changing the covariance matrices of the Kalman filter, the accuracy of the predictions and measurement updates is tuned. \textcolor{red}{Hier braucht es ne Referenz zur Kalman filter literatur, sonst hängt das mit der Kovarianz in der Luft!!} \\
 
-\textcolor{red}{Gleichung (6) ist noch nicht sauber; denn wir schreiben f(u,x), aber es is komplett unnklar was u und was x ist. Z.b. sehe ich keine position in gleichung 6 obwohl sie es so erwähnen. So wie es da steht sind v und a eher eingägen und keine zustände. Und die Zustande sind dann halt jeweils das integral von den Eingängen, tauchen aber nicht explizit in f() auf. Ich glaube das ist nicht korrekt?! \\ Zudem ist mir nun nicht klar, was die Sensor fusion ist; kommt a und v aus unterschiedlicen sensoren? ich sehe nicht wo die potionsdaten von der step detection da eingehen. aber dasklär sich ws wenn ich weiß was u ist. }
+\textcolor{red}{Gleichung (6) ist noch nicht sauber; denn wir schreiben f(u,x), aber es is komplett unnklar was u und was x ist. Z.b. sehe ich keine position in gleichung 6 obwohl sie es so erwähnen. So wie es da steht sind v und a eher Eingängen und keine zustände. Und die Zustande sind dann halt jeweils das integral von der Eingängen auf der rechten Seite, tauchen aber nicht explizit in f() auf, das wäre also dann nur ein f(u). Ist das so gedacht? \\ Zudem ist mir nun nicht klar, was die Sensor fusion ist; kommt a und v aus unterschiedlicen sensoren? ich sehe nicht wo die potionsdaten von der step detection da eingehen. aber dasklär sich ws wenn ich weiß was u ist. }
 
 
 
@@ -435,7 +438,7 @@ By adapting the step-detection algorithm for crouching movements the tracking es
 
 %\acknowledgments{In this section you can acknowledge any support given which is not covered by the author contribution or funding sections. This may include administrative and technical support, or donations in kind (e.g., materials used for experiments).}
 
-\conflictsofinterest{The authors declare no conflict of interest.} 
+%\conflictsofinterest{The authors declare no conflict of interest.} 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Optional
@@ -458,9 +461,9 @@ By adapting the step-detection algorithm for crouching movements the tracking es
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Optional
-\appendixtitles{no} % Leave argument "no" if all appendix headings stay EMPTY (then no dot is printed after "Appendix A"). If the appendix sections contain a heading then change the argument to "yes".
-\appendixstart
-\appendix
+%\appendixtitles{no} % Leave argument "no" if all appendix headings stay EMPTY (then no dot is printed after "Appendix A"). If the appendix sections contain a heading then change the argument to "yes".
+%\appendixstart
+%\appendix
 %\section[\appendixname~\thesection]{}
 %\subsection[\appendixname~\thesubsection]{}
 %The appendix is an optional section that can contain details and data supplemental to the main text---for example, explanations of experimental details that would disrupt the flow of the main text but nonetheless remain crucial to understanding and reproducing the research shown; figures of replicates for experiments of which representative data are shown in the main text can be added here if brief, or as Supplementary Data. Mathematical proofs of results not central to the paper can be added as an appendix.
@@ -647,7 +650,7 @@ Giulio Zizzo and Lei Ren.
 %Reviewer 3 comments and authors’ response
 %}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\PublishersNote{}
+%\PublishersNote{}
 \end{adjustwidth}
 \end{document}
 
