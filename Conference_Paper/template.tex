@@ -249,8 +249,8 @@ Note that the dependency of the signals on time, i.e., on $k\Delta_T$, is omitte
 %A schematic representation of the step-detection algorithm can be seen in Figure \ref{fig:algorithmStedDetect}
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=\textwidth]{WalkAcceleration.eps}
-	\caption{Vertical acceleration during walking, raw data on the left and filtered data on the right.}
+	\includegraphics[width=0.8\textwidth]{WalkAcceleration.eps}
+	\caption{Vertical acceleration during walking, raw data on the left and filtered data on the right. The acceleration signal during a single step is highlighted.}
 	\label{fig:AccelWalk}
 \end{figure}
 
@@ -325,11 +325,11 @@ To evaluate sensor and algorithm performance, tests on a predefined path are per
 \subsection{Performance during Walking}
 
 To evaluate the enhanced PDR and test the step detection during longer walking events, experiments are performed, where an individual is walking on a 33\,m long path. The position estimates of the tracking camera and the step-detection are combined in the presented sensor-date fusion algorithm.
-The results show an increased accuracy of the enhanced step-detection algorithm compared to step-detection algorithms relying on peak detection and length estimation using a fixed step length. The right diagram in Figure \ref{fig:path} shows the estimated position of the estimation methods compared to the true path.
+The results show a 55\% increased accuracy of the enhanced step-detection algorithm compared to step-detection algorithms relying on peak detection and length estimation using a fixed step length. The right diagram in Figure \ref{fig:path} shows the estimated position of the estimation methods compared to the true path.
 
 \subsection{Performance while Crouching} 
 
-In the tests, a dynamic crouching movement often used in firefighting is used to better evaluate the step-detection and the Tracking Camera. To simulate obstruction of the tracking camera by dirt or heavy smoke, the tracking confidence is artificially reduced so that the step detection is highly favored. The path defined for the test has an overall length of 12\,m with four 90$^\circ$ turns, as shown in the left diagram in Figure \ref{fig:path}. The starting- and endpoint are identical. Ten test runs are performed where the individual completes the defined path in a crouching movement characteristic for firefighting operations. The results show an improvement in tracking accuracy when using the proposed algorithm compared to a system relying only on step-detection. Table \ref{tab1} shows the mean deviation at each control point of the different algorithms. In the case of high tracking confidence the mean deviation is lower than in cases where the tracking confidence is low, showing that the camera significantly influences the position estimate results. 
+In the tests, a dynamic crouching movement often used in firefighting is used to better evaluate the step-detection and the Tracking Camera. To simulate obstruction of the tracking camera by dirt or heavy smoke, the tracking confidence is artificially reduced so that the step detection is highly favored. The path defined for the test has an overall length of 12\,m with four 90$^\circ$ turns, as shown in the left diagram in Figure \ref{fig:path}. The starting- and endpoint are identical. Ten test runs are performed where the individual completes the defined path in a crouching movement characteristic for firefighting operations. The results show a deviation of 0.66\,m and therefore a 55\% improvement in tracking accuracy when using the proposed algorithm compared to a system relying only on step-detection. Table \ref{tab1} shows the mean deviation at each control point of the different algorithms. In the case of high tracking confidence the mean deviation is 0.32\,m and therefore 50\% lower than in cases where the tracking confidence is low, showing that the camera significantly influences the position estimate results. 
 \begin{figure}
 	\centering
 	\begin{subfigure}[b]{0.49\textwidth}
