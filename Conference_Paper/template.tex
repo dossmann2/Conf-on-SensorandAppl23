@@ -113,7 +113,7 @@
 
 
 % Keywords
-\keyword{Step Detection; Firefighting; Kalman Filter} 
+\keyword{Pedestrian Dead Reckoning;  Kalman Filter; Firefighting} 
 
 % The fields PACS, MSC, and JEL may be left empty or commented out if not applicable
 %\PACS{J0101}
@@ -180,7 +180,7 @@ fused using a Kalman filter to robustly estimate the firefighters position. Whil
 The PDR relies on an advanced sensor data fusion algorithm combining position data estimated by a step-detection algorithm and the velocity and position data estimates of a secondary sensor.
 
 \subsection{Step-Length Estimation}\label{sub:stepD}
-Step-detection describes the process of detecting and counting a persons steps by measuring and analysing the accelerations of a body-worn inertial measurement unit (IMU). The most common ways of step-detection utilize  the vertical acceleration signal and analyse the signal using peak-, zero-crossing or flat zone detection. A zero-crossing detection approach is chosen since flat zone detection only works for foot mounted sensors and peak-detection accuracy is dependent on a persons walking speed \cite{shin2007}. Zero-crossing detection analyses the characteristic shape of the vertical acceleration of a torso mounted sensor \cite{zhao2022}. To improve detection accuracy, the high-frequency content of the signal is filtered out using a lowpass filter. A straightforward implementation of a first order low pass filter is the so-called exponentially weighted moving average 
+Step-detection describes the process of detecting and counting a persons steps by measuring and analysing the accelerations of a body-worn inertial measurement unit (IMU). The most common ways of step-detection utilize  the vertical acceleration signal and analyse the signal using peak-, zero-crossing or flat zone detection. A zero-crossing detection approach is chosen since flat zone detection only works for foot mounted sensors and peak-detection accuracy is dependent on a persons walking speed \cite{shin2007}. Zero-crossing detection analyses the characteristic shape of the vertical acceleration of a torso mounted sensor \cite{zhao2022}. To improve detection accuracy, the high-frequency content of the signal is filtered out using a low-pass filter. A straightforward implementation of a first order low pass filter is the so-called exponentially weighted moving average 
 \begin{equation}\label{eq:fil}
 	y(k\Delta_T) = \alpha u(k\Delta_T) + (1-\alpha) y((k-1)\Delta_T), 
 \end{equation} where $u(k\Delta_T)$ is the raw signal at time step $k\Delta_T$, and $y(k\Delta_T)$ and $y((k-1)\Delta_T)$ is the filtered signal of the current and the last time step, respectively  \cite{nistsematech2012}. The smoothing factor $\alpha$ lies between 0 and 1 and can be calculated as 
@@ -222,7 +222,7 @@ In this paper we use the more advanced method of a Kalman filtering. The idea of
 \end{equation}
 with the input $u$ to the model being the measured acceleration $a$ by the inertial measurement unit and the state vector $x = [x_1, x_2, x_3]^T$. Based on this model the Kalman filter provides estimates of the position and the velocity in the corresponding axis.  
 Note that the dependency of the signals on time, i.e., on $k\Delta_T$, is omitted in equation (\ref{eq:nl}) for readability reasons.
-By changing the covariance matrices of the Kalman filter, the accuracy of the predictions and measurement updates is tuned \cite{welch2006}.\\
+By changing the covariance matrices of the Kalman filter, the accuracy of the predictions and measurement updates is tuned \cite{welch2006}.
 
 %\textcolor{red}{Gleichung (6) ist noch nicht sauber; denn wir schreiben f(u,x), aber es is komplett unnklar was u und was x ist. Z.b. sehe ich keine position in gleichung 6 obwohl sie es so erwähnen. So wie es da steht sind v und a eher Eingängen und keine zustände. Und die Zustande sind dann halt jeweils das integral von der Eingängen auf der rechten Seite, tauchen aber nicht explizit in f() auf, das wäre also dann nur ein f(u). Ist das so gedacht? \\ Zudem ist mir nun nicht klar, was die Sensor fusion ist; kommt a und v aus unterschiedlicen sensoren? ich sehe nicht wo die potionsdaten von der step detection da eingehen. aber dasklär sich ws wenn ich weiß was u ist. }
 
@@ -236,7 +236,7 @@ By changing the covariance matrices of the Kalman filter, the accuracy of the pr
 
 % Description Experiment
 \section{Enhanced Pedestrian Dead Reckoning System}
-The enhanced PDR makes use of a robust step detection-scheme with which the poision of the firefighter is estimated. Additionally, a tracking camer serves as seconday sensor providing position and speed measurement to back up the step detection based position. Finally, all available signals are fused together via a Kalman filter prvodiding the position and velocity of the firefighter.
+The enhanced PDR makes use of a robust step detection-scheme with which the position of the firefighter is estimated. Additionally, a tracking camera serves as secondary sensor providing position and speed measurement to back up the step detection based position. Finally, all available signals are fused together via a Kalman filter providing the position and velocity of the firefighter.
 % \begin{figure}[h!]
 	% 	\centering
 	% 	\includegraphics[width=0.7\textwidth]{realsense.png}
@@ -245,7 +245,7 @@ The enhanced PDR makes use of a robust step detection-scheme with which the pois
 	% \end{figure}
 
 \subsection{Robust Step-Length Estimation and secondary Sensor Setup}	
-As basis, step-detection herein uses the zero-crossing technique as described  in Section \ref{sub:stepD}. The vertical acceleration signal used for the step-detection is filtered with a lowpass filter to remove the undesired, high frequency parts of the signal that occur during movement. Since the frequency range of normal human walking is in the range of 1\,Hz to 5\,Hz, the bandwidth of the lowpass filter is specified at $f_c=10$\,Hz in equation (\ref{eq:fil}) ensuring an adequate roll-off at higher frequencies. Figure \ref{fig:AccelWalk} shows a comparison of the raw data with the filtered acceleration data. Clearly, sharp peaks and noise are filtered out.
+As basis, step-detection herein uses the zero-crossing technique as described  in Section \ref{sub:stepD}. The vertical acceleration signal used for the step-detection is filtered with a low-pass filter to remove the undesired, high frequency parts of the signal that occur during movement. Since the frequency range of normal human walking is in the range of 1\,Hz to 5\,Hz, the bandwidth of the low-pass filter is specified at $f_c=10$\,Hz in equation (\ref{eq:fil}) ensuring an adequate roll-off at higher frequencies. Figure \ref{fig:AccelWalk} shows a comparison of the raw data with the filtered acceleration data. Clearly, sharp peaks and noise are filtered out.
 To also consider dynamic movements of firefighters as crouching, the step-detection algorithm's robustness is improved via an additional threshold-crossing detection: 
 \textcolor{red}{
 To initiate the counting process, the acceleration signal has to pass the negative threshold at $\tau_{\min} -1.5\,$m/s$^2$. Afterwards, a step is counted as valid, only if between the detection of two subsequent  zero-crossings, a rise above the positive threshold $\tau_{\max} = 1.5\,\mathrm{m/s^2}$ is registered. If after the initialization via the negative threshold  the described sequence is not completed in a specified time the step-detection logic is reset and no step is counted.
