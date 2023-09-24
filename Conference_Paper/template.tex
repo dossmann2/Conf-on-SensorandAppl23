@@ -281,7 +281,7 @@ Based on the model in equation (\ref{eq:nl}), the available acceleration signal 
 %	\item Tracking Confidence of the tracking camera. The tracking camera is able to calculate and return a confidence value of the tracking results. The tracking confidence returned by the camera can reach four cases from zero to three, where three is the highest confidence and zero the lowest.
 %\end{itemize}
 
-The resulting weighting, motivated by the work in \cite{caron2006}, scheme includes nine \textcolor{red}{Ist 4x3 nicht 12??? 0...3 und 3 levels} cases.  If the quality of both markers is bad, the step detection gets highly favored, since it provides stable results during walking, even in zero visibility environments. If the tracking confidence is high, the camera measurements get slightly favored. This is because in theory the tracking cameras results will more accurate since it produces continuous position updates and can track the position regardless of the type of movement. %Figure \ref{fig:confidence} shows a graphical representation of the weighting scheme. 
+The resulting weighting, motivated by the work in \cite{caron2006}, scheme includes twelve \textcolor{red}{Ist 4x3 nicht 12??? 0...3 und 3 levels} cases.  If the quality of both markers is bad, the step detection gets highly favored, since it provides stable results during walking, even in zero visibility environments. If the tracking confidence is high, the camera measurements get slightly favored. This is because in theory the tracking cameras results will more accurate since it produces continuous position updates and can track the position regardless of the type of movement. %Figure \ref{fig:confidence} shows a graphical representation of the weighting scheme. 
 The combination of the measurements is performed before they are used in the Kalman Filter. With a weighting gain  $w$  the weighted measurement input for the x- and y-position is calculated via
 \begin{equation}
 	\begin{bmatrix}
@@ -293,7 +293,7 @@ The combination of the measurements is performed before they are used in the Kal
 		w(k\Delta_T) \, y_{\text{step}}(k\Delta_T) + (1-w(k\Delta_T)) \, y_{\text{camera}}(k\Delta_T)
 	\end{bmatrix},
 \end{equation}  
-with $x_{\text{step}}$ and $y_{\text{step}}$ are the position estimates produced by the step-detection and $x_{\text{camera}}$ and $y_{\text{camera}}$ being the position estimate from the tracking camera. Since the z-position has only the measurement  \textcolor{red}{from the tracking camera}, no weighting is performed. \textcolor{red}{der letzte Satz ist nicht klar!das wurde bsiher nicht erklärt; von z gibts nur tracking camera oder?! bitte den satz einfach genauer schreiben)}
+with $x_{\text{step}}$ and $y_{\text{step}}$ are the position estimates produced by the step-detection and $x_{\text{camera}}$ and $y_{\text{camera}}$ being the position estimate from the tracking camera. Since the step-detection can not estimate the z-position, only the measurement  \textcolor{red}{from the tracking camera} is used, therefore no weighting is performed. \textcolor{red}{der letzte Satz ist nicht klar!das wurde bsiher nicht erklärt; von z gibts nur tracking camera oder?! bitte den satz einfach genauer schreiben)}
 %\begin{figure}[h!]
 %	\centering
 %	\includegraphics[width=0.5\textwidth]{measurementQuality.eps}
