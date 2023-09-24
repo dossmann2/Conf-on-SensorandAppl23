@@ -222,7 +222,7 @@ In this paper we use the more advanced method of a Kalman filtering. The idea of
 \end{equation}
 with the input $u$ to the model being the measured acceleration $a$ by the inertial measurement unit and the state vector $x = [x_1, x_2, x_3]^T$. Based on this model the Kalman filter provides estimates of the position and the velocity in the corresponding axis.  
 Note that the dependency of the signals on time, i.e., on $k\Delta_T$, is omitted in equation (\ref{eq:nl}) for readability reasons.
-By changing the covariance matrices of the Kalman filter, the accuracy of the predictions and measurement updates is tuned. \textcolor{red}{Hier braucht es ne Referenz zur Kalman filter literatur, sonst hängt das mit der Kovarianz in der Luft!!} \\
+By changing the covariance matrices of the Kalman filter, the accuracy of the predictions and measurement updates is tuned \cite{welch2006}.\\
 
 %\textcolor{red}{Gleichung (6) ist noch nicht sauber; denn wir schreiben f(u,x), aber es is komplett unnklar was u und was x ist. Z.b. sehe ich keine position in gleichung 6 obwohl sie es so erwähnen. So wie es da steht sind v und a eher Eingängen und keine zustände. Und die Zustande sind dann halt jeweils das integral von der Eingängen auf der rechten Seite, tauchen aber nicht explizit in f() auf, das wäre also dann nur ein f(u). Ist das so gedacht? \\ Zudem ist mir nun nicht klar, was die Sensor fusion ist; kommt a und v aus unterschiedlicen sensoren? ich sehe nicht wo die potionsdaten von der step detection da eingehen. aber dasklär sich ws wenn ich weiß was u ist. }
 
