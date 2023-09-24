@@ -273,7 +273,7 @@ As the secondary sensor a stereo tracking camera is used to provide additional p
 %Some camera models also use an infrared projected grid of dots to determine depth of the surrounding environment and can create a 3D profile.
 
 \subsection{Sensor Fusion Algorithm}
-Based on the model in equation (\ref{eq:nl}), the available acceleration signal by the IMU,  and position and velocity information the Kalman filter estimates the firefighters velocity and position. The position data from the step-detection and the tracking-camera, however, needs to be fused before entering the filter, as discrete confidence levels of the camera are available, which cannot be handled by the Kalman filter. Thus, the fusion of the two signals is performed via a simple weighting scheme using discrete weights. The tracking camera provides a confidence value of the tracking results. This tracking confidence four discrete cases, from the  highest confidence to the lowest. For the step-detection it is assumed that the accuracy of the estimated position by the step-detection algorithm deteriorates the longer no step is fully registered. To limit the weighting possibilities to a discrete set also for the step-detection, three discrete conditions are used to reflect the accuracy after the last detection: \textcolor{red}{ the time passed since the last detection event $t_{\text{step}} < 0.5\mathrm{s}$, $5\mathrm{s} \leq t_{\text{step}} < 3\mathrm{s}$ or $t_{\text{step}} \geq 3\mathrm{s}$ CHECKEN, die intervalle ist definitiv falsch}.
+Based on the model in equation (\ref{eq:nl}), the available acceleration signal by the IMU,  and position and velocity information the Kalman filter estimates the firefighters velocity and position. The position data from the step-detection and the tracking-camera, however, needs to be fused before entering the filter, as discrete confidence levels of the camera are available, which cannot be handled by the Kalman filter. Thus, the fusion of the two signals is performed via a simple weighting scheme using discrete weights. The tracking camera provides a confidence value of the tracking results. This tracking confidence four discrete cases, from the  highest confidence to the lowest. For the step-detection it is assumed that the accuracy of the estimated position by the step-detection algorithm deteriorates the longer no step is fully registered. To limit the weighting possibilities to a discrete set also for the step-detection, three discrete conditions are used to reflect the accuracy after the last detection: \textcolor{red}{ the time passed since the last detection event $t_{\text{step}} < 0.5\mathrm{s}$, $0.5\mathrm{s} \leq t_{\text{step}} < 3\mathrm{s}$ or $t_{\text{step}} \geq 3\mathrm{s}$ CHECKEN, die intervalle ist definitiv falsch}.
 
 %\begin{itemize}
 %	\item Time since last step was detected. It is assumed that the accuracy of the estimated position by the step-detection algorithm deteriorates with time if no succeeding step is detected. Three conditions are proposed: the time passed since the last detection event $t_{step} < 0.5\mathrm{s}$, $5\mathrm{s} \leq t_{step} < 3\mathrm{s}$ or $t_{step} \geq 3\mathrm{s}$.\\
@@ -505,112 +505,117 @@ By adapting the step-detection algorithm for crouching movements the tracking es
 Darmindra~D. Arumugam, Peter Littlewood, Nicholas Peng, and Divyam Mishra.
 \newblock Long-{{Range Through-the-Wall Magnetoquasistatic Coupling}} and
 {{Application}} to {{Indoor Position Sensing}}.
-\newblock 19(3):507--511.
+\newblock {\em IEEE Antennas and Wireless Propagation Letters}, 19(3):507--511,
+March 2020.
 
 \bibitem{atemschutzunfalle.eu2023}
-Atemschutzunfälle.eu.
-\newblock Unfälle in {{Amerika}}.
+Atemschutzunf{\"a}lle.eu.
+\newblock Unf\"alle in {{Amerika}}.
+\newblock https://www.atemschutzunfaelle.de/unfaelle/amerika/, 2023.
 
 \bibitem{caron2006}
 Francois Caron, Emmanuel Duflos, Denis Pomorski, and Philippe Vanheeghe.
 \newblock {{GPS}}/{{IMU}} data fusion using multisensor {{Kalman}} filtering:
 Introduction of contextual aspects.
-\newblock 7(2):221--230.
+\newblock {\em Information Fusion}, 7(2):221--230, June 2006.
 
 \bibitem{chui2009}
 C.~K. Chui and G.~Chen.
 \newblock {\em Kalman Filtering: With Real-Time Applications}.
-\newblock {Springer}, 4th ed edition.
+\newblock {Springer}, {Berlin}, 4th ed edition, 2009.
 
 \bibitem{cong2023}
 Li~Cong, Jingnan Tian, and Honglei Qin.
 \newblock Practical {{Step Length Estimation Combining FM Radio Signal}} and
 {{Accelerometer}}.
-\newblock 72:1--13.
+\newblock {\em IEEE Transactions on Instrumentation and Measurement}, 72:1--13,
+2023.
 
 \bibitem{hajati2021}
 N.~Hajati and A.~Rezaeizadeh.
 \newblock A {{Wearable Pedestrian Localization}} and {{Gait Identification
 		System Using Kalman Filtered Inertial Data}}.
-\newblock 70.
-\newblock Cited By :13.
+\newblock {\em IEEE Transactions on Instrumentation and Measurement}, 70, 2021.
 
 \bibitem{hou2021}
 X.~Hou and J.~Bergmann.
 \newblock Pedestrian {{Dead Reckoning}} with {{Wearable Sensors}}: {{A
 		Systematic Review}}.
-\newblock 21(1):143--152.
-\newblock Cited By :52.
+\newblock {\em IEEE Sensors Journal}, 21(1):143--152, 2021.
 
 \bibitem{jen2023}
 Y.-H. Jen, C.-H. Huang, S.~Tsai, and K.-W. Chiang.
 \newblock A {{MULTI-IMU BASED SELF-CONTAINED PEDESTRIAN NAVIGATION ALGORITHM}}.
-\newblock XLVIII-1/W1-2023:603--608.
-\newblock Multiple IMUs improve heading estimatioon,.
+\newblock {\em The International Archives of the Photogrammetry, Remote Sensing
+	and Spatial Information Sciences}, XLVIII-1/W1-2023:603--608, May 2023.
 
 \bibitem{lu2019}
 C.~Lu, H.~Uchiyama, D.~Thomas, A.~Shimada, and R.-I. Taniguchi.
 \newblock Indoor positioning system based on chest-mounted {{IMU}}.
-\newblock 19(2).
-\newblock Cited By :47.
+\newblock {\em Sensors (Switzerland)}, 19(2), 2019.
 
 \bibitem{petukhov2022}
 Nikita~I. Petukhov, Vladimir~N. Zamolodchikov, Alexander~P. Malyshev,
 Tatyana~A. Brovko, Sergey~A. Serov, and Ilya~V. Korogodin.
 \newblock Synthesis of {{PDR Algorithm}} and {{Experimental Estimation}} of
 {{Accuracy}} of {{Step Length Estimation Methods}}.
-\newblock In {\em 2022 4th {{International Youth Conference}} on {{Radio
-			Electronics}}, {{Electrical}} and {{Power Engineering}} ({{REEPE}})}, pages
-1--5. {IEEE}.
+{Moscow, Russian Federation}, March 2022. {IEEE}.
 
 \bibitem{sadruddin2020}
 Hamza Sadruddin, Ahmed Mahmoud, and Mohamed~M. Atia.
 \newblock Enhancing {{Body-Mounted LiDAR SLAM}} using an {{IMU-based Pedestrian
 		Dead Reckoning}} ({{PDR}}) {{Model}}.
 \newblock In {\em 2020 {{IEEE}} 63rd {{International Midwest Symposium}} on
-	{{Circuits}} and {{Systems}} ({{MWSCAS}})}, pages 901--904.
+	{{Circuits}} and {{Systems}} ({{MWSCAS}})}, pages 901--904, August 2020.
 
 \bibitem{nistsematech2012}
 NIST SEMATECH.
 \newblock {{NIST}}/{{SEMATECH}} e-{{Handbook}} of {{Statistical Methods}}.
+\newblock https://www.itl.nist.gov/div898/handbook/, 2012.
 
 \bibitem{shin2007}
 S.~H. Shin, C.~G. Park, J.~W. Kim, H.~S. Hong, and J.~M. Lee.
 \newblock Adaptive {{Step Length Estimation Algorithm Using Low-Cost MEMS
 		Inertial Sensors}}.
-\newblock In {\em 2007 {{IEEE Sensors Applications Symposium}}}, pages 1--5.
+\newblock In {\em 2007 {{IEEE Sensors Applications Symposium}}}, pages 1--5,
+February 2007.
 
 \bibitem{wang2016}
 Qu~Wang, Haiyong Luo, Fang Zhao, and Wenhua Shao.
 \newblock An indoor self-localization algorithm using the calibration of the
 online magnetic fingerprints and indoor landmarks.
 \newblock In {\em 2016 {{International Conference}} on {{Indoor Positioning}}
-	and {{Indoor Navigation}} ({{IPIN}})}, pages 1--8.
+	and {{Indoor Navigation}} ({{IPIN}})}, pages 1--8, October 2016.
 
 \bibitem{weinberg2002}
 Harvey Weinberg.
 \newblock Using the {{ADXL202}} in {{Pedometer}} and {{Personal Navigation
 		Applications}}.
+\newblock 2002.
+
+\bibitem{welch2006}
+Greg Welch and Gary Bishop.
+\newblock An {{Introduction}} to the {{Kalman Filter}}.
+\newblock 2006.
 
 \bibitem{wu2022}
 Yibin Wu, Jian Kuang, and Xiaoji Niu.
 \newblock Wheel-{{INS2}}: {{Multiple MEMS IMU-based Dead Reckoning System}} for
-{{Wheeled Robots}} with {{Evaluation}} of {{Different IMU Configurations}}.
-\newblock Comment: Accepted to IEEE Transactions on Intelligent Transportation
-Systems.
+{{Wheeled Robots}} with {{Evaluation}} of {{Different IMU Configurations}},
+November 2022.
 
 \bibitem{zaarane2020}
 Abdelmoghit Zaarane, Ibtissam Slimani, Wahban Al~Okaishi, Issam Atouf, and
 Abdellatif Hamdoun.
 \newblock Distance measurement system for autonomous vehicles using stereo
 camera.
-\newblock 5:100016.
+\newblock {\em Array}, 5:100016, March 2020.
 
 \bibitem{zhao2021}
 Tianyi Zhao and Mohammed~Jalal Ahamed.
 \newblock Pseudo-{{Zero Velocity Re-Detection Double Threshold Zero-Velocity
 		Update}} ({{ZUPT}}) for {{Inertial Sensor-Based Pedestrian Navigation}}.
-\newblock 21(12):13772--13785.
+\newblock {\em IEEE Sensors Journal}, 21(12):13772--13785, June 2021.
 
 \bibitem{zhao2022}
 Yue Zhao, Jianyong Wang, and Chengyong Duan.
@@ -618,13 +623,14 @@ Yue Zhao, Jianyong Wang, and Chengyong Duan.
 personnel positioning system based on {{MEMS}} sensor.
 \newblock In {\em International {{Conference}} on {{Neural Networks}},
 	{{Information}}, and {{Communication Engineering}} ({{NNICE}} 2022)}, volume
-12258, pages 695--704. {SPIE}.
+12258, pages 695--704. {SPIE}, July 2022.
 
 \bibitem{zizzo2017}
 Giulio Zizzo and Lei Ren.
 \newblock Position {{Tracking During Human Walking Using}} an {{Integrated
 		Wearable Sensing System}}.
-\newblock 17(12):2866.
+\newblock {\em Sensors}, 17(12):2866, December 2017.
+
 \end{thebibliography}
 
 % If authors have biography, please use the format below
