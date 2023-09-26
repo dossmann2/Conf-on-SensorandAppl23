@@ -272,7 +272,7 @@ As the secondary sensor a stereo tracking camera is used to provide additional p
 %Some camera models also use an infrared projected grid of dots to determine depth of the surrounding environment and can create a 3D profile.
 
 \subsection{Sensor Fusion Algorithm}
-Based on the model in equation (\ref{eq:nl}), the available acceleration signal by the IMU,  and position and velocity information the Kalman filter estimates the firefighters velocity and position. The position data from the step-detection and the tracking-camera, however, needs to be fused before entering the filter, as discrete confidence levels of the camera are available, which cannot be handled by the Kalman filter. Thus, the fusion of the two signals is performed via a simple weighting scheme using discrete weights. The tracking camera provides a confidence value of the tracking results. This tracking confidence four discrete cases, from the  highest confidence to the lowest. For the step-detection it is assumed that the accuracy of the estimated position by the step-detection algorithm deteriorates the longer no step is fully registered. To limit the weighting possibilities to a discrete set also for the step-detection, three discrete conditions are used to reflect the accuracy after the last detection: the time passed since the last detection event $t_{\text{step}} < 0.5\mathrm{s}$, $0.5\mathrm{s} \leq t_{\text{step}} < 3\mathrm{s}$ or $t_{\text{step}} \geq 3\mathrm{s}$.
+Based on the model in equation (\ref{eq:nl}), the available acceleration signal by the IMU,  and position and velocity information the Kalman filter estimates the firefighters velocity and position. The position data from the step-detection and the tracking-camera, however, needs to be fused before entering the filter, as discrete confidence levels of the camera are available, which cannot be handled by the Kalman filter. Thus, the fusion of the two signals is performed via a simple weighting scheme using discrete weights. The tracking camera provides a confidence value of the tracking results. This tracking confidence four discrete cases, from the  highest confidence to the lowest. For the step-detection it is assumed that the estimated position accuracy by the step-detection algorithm deteriorates the longer no step is fully registered. To limit the weighting possibilities to a discrete set also for the step-detection, three discrete conditions are used to reflect the accuracy after the last detection based on the time passed since the last detection event: if $t_{\text{step}} < 0.5\mathrm{s}$ best accuracy, if $0.5\mathrm{s} \leq t_{\text{step}} < 3\mathrm{s}$ medium accuracy, and if $t_{\text{step}} \geq 3\mathrm{s}$  worst accuracy is assumed.
 
 %\begin{itemize}
 %	\item Time since last step was detected. It is assumed that the accuracy of the estimated position by the step-detection algorithm deteriorates with time if no succeeding step is detected. Three conditions are proposed: the time passed since the last detection event $t_{step} < 0.5\mathrm{s}$, $5\mathrm{s} \leq t_{step} < 3\mathrm{s}$ or $t_{step} \geq 3\mathrm{s}$.\\
@@ -306,7 +306,7 @@ with $x_{\text{step}}$ and $y_{\text{step}}$ are the position estimates produced
  % Sensor assembly
 The IMU used  is the Bosch Sensortech BNO055 MEMS absolute orientation sensor. The device measures acceleration in three axes and provides absolute heading data by measuring the earths magnetic field and fusing gyroscope and Magnetometer data. The secondary sensor is a RealSense T265 stereo tracking camera. Its main advantage is the on-chip, online data processing. Thus, no other means of interpreting the data is necessary and the velocity and position data are directly available for the sensor  fusion algorithm presented herein. Note that by using parts of the infrared spectrum the camera also can produce accurate tracking results in environments with bad lighting.
   
-For experimental verification of the system, a wearable sensor assembly is designed. Both sensors are mounted to the backplate of a self-contained breathing apparatus. This design is chosen to imitate a application in a firefighting setting, where the sensors would be placed on the pressurized air tank. For this a 3D printed spacer is designed to mount the sensors at the right distance. A weight is added to represent the  air tank. The camera and IMU are protected from damage by a custom enclosure.  Figure \ref{fig:Assembly} shows the developed experimental setup.
+For validation of the system, a wearable sensor assembly is designed. Both sensors are mounted on a backplate of a self-contained breathing apparatus. This design is chosen to imitate an application in firefighting settings, where the sensors are placed on the pressurized air tank. For this a 3D-printed spacer is designed to mount the sensors at the right distance. Weight is added to represent the  air tank. Camera and IMU are protected from damage by an enclosure.  Figure \ref{fig:Assembly} shows the developed experimental setup.
 
 \begin{figure}
 	\centering
@@ -318,17 +318,23 @@ For experimental verification of the system, a wearable sensor assembly is desig
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Results}
-To evaluate sensor and algorithm performance, tests on a predefined path are performed. To quantify the results, the deviation from the true path is evaluated at a set of control points. The control points represent changes in heading. This allows an easy comparison between the true path and the measured path.
 
-\subsection{Performance during Walking}
+For a realistic validation of the sensor setup and the  algorithms,  tests on predefined paths are performed.
+%The deviation from this predefined path at four specific points are determined to validate the algorithms' accuracy. 
+%\subsection{Performance during Walking}
+First, in order to validate the performance during regular walking scenarios, a g 33\,m long path is tested. The right diagram in Figure \ref{fig:path} shows the estimated position of the different  algorithms compared to the true path. While at the beginning of the test all three  deliver accurate results, the step-detection deviates strongly after the first heading change. The proposed sensor fusion is able to stay close to the real path and deliver the best results most of the time.
+The tracking camera alone, however, delivers the best result in the middle of the experiments. This is due to the fact, that here the step-detection shows a big error dragging also the sensor fusion algorithm away from the real path. This indicates that a fine tuning still can improve the results.
 
-To evaluate the enhanced PDR and test the step detection during longer walking events, experiments are performed, where an individual is walking on a 33\,m long path. The position estimates of the tracking camera and the step-detection are combined in the presented sensor-date fusion algorithm.
-The results show a 55\% increased accuracy of the enhanced step-detection algorithm compared to step-detection algorithms relying on peak detection and length estimation using a fixed step length. The right diagram in Figure \ref{fig:path} shows the estimated position of the estimation methods compared to the true path.
+%The results show a 55\% increased accuracy of the enhanced step-detection algorithm compared to step-detection algorithms relying on peak detection and length estimation using a fixed step length.
 
-\subsection{Performance while Crouching} 
+%\subsection{Performance while Crouching} 
 
-In the tests, a dynamic crouching movement often used in firefighting is used to better evaluate the step-detection and the Tracking Camera. To simulate obstruction of the tracking camera by dirt or heavy smoke, the tracking confidence is artificially reduced so that the step detection is highly favored. The path defined for the test has an overall length of 12\,m with four 90$^\circ$ turns, as shown in the left diagram in Figure \ref{fig:path}. The starting- and endpoint are identical. Ten test runs are performed where the individual completes the defined path in a crouching movement characteristic for firefighting operations. The results show a deviation of 0.66\,m and therefore a 55\% improvement in tracking accuracy when using the proposed algorithm compared to a system relying only on step-detection. Table \ref{tab1} shows the mean deviation at each control point of the different algorithms. In the case of high tracking confidence the mean deviation is 0.32\,m and therefore 50\% lower than in cases where the tracking confidence is low, showing that the camera significantly influences the position estimate results. 
-\begin{figure}
+As dynamic crouching is often used in firefighting, this scenarios is tested in the second validation experiment. To simulate obstruction of the tracking camera by dirt or heavy smoke, the tracking confidence is artificially reduced so that the step detection is highly favored. The path defined for the test has an overall length of 12\,m with four 90$^\circ$ turns, as shown in the left diagram in Figure \ref{fig:path}. The starting- and endpoint are identical and 10 test runs  are performed. Clearly, the step detection alone performs the worst in this scenario.
+% where the individual completes the defined path in a crouching movement characteristic for firefighting operations.
+The results over 10 runs show a mean deviation of 0.66\,m and therefore a 55\,\% improvement in tracking accuracy when using the proposed algorithm compared to the use of on step-detection only. In Table \ref{tab1}  the mean deviation at each control point of the different algorithms is listed. In the case of high tracking confidence the mean deviation is 0.32\,m and therefore 50\% lower than in cases where the tracking confidence is low, showing that the camera significantly influences the position estimate results. 
+
+\textcolor{red}{ nach der figure zu unteilen wäre hier intessant, auch die ergebnisse der 10 läufe zu zeigen, wenn man nur die kamera nimmt, denn die siehtim bild nicht viel schlechter aus. SO hat man als Leser das Gefühl, sie verheimlichen etwas! HAben wir Daten, um das noch hinzuzufügen?!Selbst wenn es leicht besser wäre, wäre es ja in Ordnung.}
+\begin{figure}[t!]
 	\centering
 	\begin{subfigure}[b]{0.49\textwidth}
 		\centering
@@ -341,27 +347,34 @@ In the tests, a dynamic crouching movement often used in firefighting is used to
 		\hspace{-1cm}
 		\includegraphics[width=1.1\textwidth]{Path2.png}
 	\end{subfigure}
-\caption{Experimental results comparing step detection only, tracking camera only, and the proposed sensor data fusion to the true path for crouching (left) and walking (right).}
-\label{fig:path}
+	\caption{Experimental results comparing step detection only, tracking camera only, and the proposed sensor data fusion to the true path for crouching (left) and walking (right).}
+	\label{fig:path}
 \end{figure}
 
-
-\begin{table}[H] 
-\caption{Mean deviation from the true path at four control points\label{tab1}}
-\newcolumntype{C}{>{\centering\arraybackslash}X}
-\begin{tabularx}{\textwidth}{lccccc}
-\toprule
-\textbf{Estimation Method}	& \textbf{P1}	& \textbf{P2} & \textbf{P3} & \textbf{P4} & \textbf{Mean}\\
-\midrule
-Step Detection	&    $1.60\mathrm{m}$ &   $2.45\mathrm{m}$ &   $2.44\mathrm{m}$  &  $1.80\mathrm{m}$ & $2.07\mathrm{m}$ \\
-Sensordata Fusion  &  $0.28\mathrm{m}$  &  $0.42\mathrm{m}$  &  $0.27\mathrm{m}$ &   $0.32\mathrm{m}$ & $0.32\mathrm{m}$ \\
-Sensordata Fusion (Low Tracking Confidence) &    $0.66\mathrm{m}$ &   $0.68\mathrm{m}$  &  $0.76\mathrm{m}$  &  $0.54\mathrm{m}$ & $0.66\mathrm{m}$\\
-\bottomrule\\
-\end{tabularx}
-
-
-
+\begin{table}
+\caption{Mean deviation from the true path at four corners of the path\label{tab1}}
+\begin{tabular}{lcccc}
+	\toprule
+	\textbf{Estimation Method}                  &   \textbf{P1}    &   \textbf{P2}    &   \textbf{P3}    &   \textbf{P4}      \\ \midrule
+	Step-Detection                              & $1.60\mathrm{m}$ & $2.45\mathrm{m}$ & $2.44\mathrm{m}$ & $1.80\mathrm{m}$  \\
+	Sensordata Fusion                           & $0.28\mathrm{m}$ & $0.42\mathrm{m}$ & $0.27\mathrm{m}$ & $0.32\mathrm{m}$  \\
+	Low tracking confidence S. F. & $0.66\mathrm{m}$ & $0.68\mathrm{m}$ & $0.76\mathrm{m}$ & $0.54\mathrm{m}$  \\ \bottomrule
+\end{tabular}
 \end{table}
+
+	
+%\begin{table}[H] 
+%	\caption{Mean deviation from the true path at four control points\label{tab1}}
+%	\newcolumntype{C}{>{\centering\arraybackslash}X}
+%	\begin{tabularx}{\textwidth}{lccccc}
+%		\toprule
+%		\textbf{Estimation Method}                  &   \textbf{P1}    &   \textbf{P2}    &   \textbf{P3}    &   \textbf{P4}    &  \textbf{Mean}   \\ \midrule
+%		Step Detection                              & $1.60\mathrm{m}$ & $2.45\mathrm{m}$ & $2.44\mathrm{m}$ & $1.80\mathrm{m}$ & $2.07\mathrm{m}$ \\
+%		Sensordata Fusion                           & $0.28\mathrm{m}$ & $0.42\mathrm{m}$ & $0.27\mathrm{m}$ & $0.32\mathrm{m}$ & $0.32\mathrm{m}$ \\
+%		Sensordata Fusion (Low Tracking Confidence) & $0.66\mathrm{m}$ & $0.68\mathrm{m}$ & $0.76\mathrm{m}$ & $0.54\mathrm{m}$ & $0.66\mathrm{m}$ \\ \bottomrule
+%		&
+%	\end{tabularx}
+%\end{table}
 
 
 
@@ -370,14 +383,11 @@ Sensordata Fusion (Low Tracking Confidence) &    $0.66\mathrm{m}$ &   $0.68\math
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusions}
-
-An enhanced Pedestrian Dead Reckoning method for firefighting applications has been presented. The results of the research can be summarized as follows:
-\begin{itemize}
-	\item Enhancing a step-detection algorithm with a secondary sensor improves the position estimates
-	\item While a tracking camera produces good position estimates and can be used as a secondary sensor, the disadvantages of a optical sensor have to be considered
-	\item During more dynamic movements like crouching the system has to rely on the secondary sensor since the step-detection does not produce good position estimates
-\end{itemize}
-By adapting the step-detection algorithm for crouching movements the tracking estimates could be further improved. Developing a tracking camera designed for firefighting applications could also further improve position estimation.
+An enhanced Pedestrian Dead Reckoning method for firefighting applications has been presented. The step-detection  has been successfully upgraded with a secondary sensor to improve  position estimates in different moving scenarios. The required sensor fusion algorithm has been successfully  validated in an experimental validation campaign showing promising results for the usage of the developed prototype system.
+%	\item While a tracking camera produces good position estimates and can be used as a secondary sensor, the disadvantages of a optical sensor have to be considered
+%	\item During more dynamic movements like crouching the system has to rely on the secondary sensor since the step-detection does not produce good position estimates
+%By adapting the step-detection algorithm for crouching movements the tracking estimates could be further improved.
+%Developing a tracking camera designed for firefighting applications could also further improve position estimation.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\section{Patents}
 %
@@ -412,8 +422,7 @@ By adapting the step-detection algorithm for crouching movements the tracking es
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\authorcontributions{T.A.: methodology, visualisation, analysis, synthesis, testing, validation and original draft preparation. D.O.: Supervision, project management and proofreading and
-	language correction All authors have read and agreed to the published version of the manuscript.}
+\authorcontributions{T.A.: methodology, visualization, analysis, synthesis, testing, validation and original draft preparation. D.O.: Supervision, scientific review and proofreading. All authors have read and agreed to the published version of the manuscript.}
 %\authorcontributions{Conceptualization, X.X. and Y.Y.; methodology, X.X.; software, X.X.; validation, X.X., Y.Y. and Z.Z.; formal analysis, X.X.; investigation, X.X.; resources, X.X.; data curation, X.X.; writing---original draft preparation, X.X.; writing---review and editing, X.X.; visualization, X.X.; supervision, X.X.; project administration, X.X.; funding acquisition, Y.Y. All authors have read and agreed to the published version of the manuscript.}
 
 %\funding{This research received no external funding}
