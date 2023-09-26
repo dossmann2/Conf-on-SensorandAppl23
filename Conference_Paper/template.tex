@@ -247,9 +247,8 @@ The enhanced PDR makes use of a robust step detection-scheme with which the posi
 \subsection{Robust Step-Length Estimation and secondary Sensor Setup}	
 As basis, step-detection herein uses the zero-crossing technique as described  in Section \ref{sub:stepD}. The vertical acceleration signal used for the step-detection is filtered with a low-pass filter to remove the undesired, high frequency parts of the signal that occur during movement. Since the frequency range of normal human walking is in the range of 1\,Hz to 5\,Hz, the bandwidth of the low-pass filter is specified at $f_c=10$\,Hz in equation (\ref{eq:fil}) ensuring an adequate roll-off at higher frequencies. Figure \ref{fig:AccelWalk} shows a comparison of the raw data with the filtered acceleration data. Clearly, sharp peaks and noise are filtered out.
 To also consider dynamic movements of firefighters as crouching, the step-detection algorithm's robustness is improved via an additional threshold-crossing detection: 
-\textcolor{red}{
 To initiate the counting process, the acceleration signal has to pass the negative threshold at $\tau_{\min} -1.5\,$m/s$^2$. Afterwards, a step is counted as valid, only if between the detection of two subsequent  zero-crossings, a rise above the positive threshold $\tau_{\max} = 1.5\,\mathrm{m/s^2}$ is registered. If after the initialization via the negative threshold  the described sequence is not completed in a specified time the step-detection logic is reset and no step is counted.
-}
+
 % Figure \ref{fig:accelerationWalking} shows the vertical acceleration during walking and the points detected by the algorithm. 
 %A schematic representation of the step-detection algorithm can be seen in Figure \ref{fig:algorithmStedDetect}
 \begin{figure}[h!]
@@ -273,7 +272,7 @@ As the secondary sensor a stereo tracking camera is used to provide additional p
 %Some camera models also use an infrared projected grid of dots to determine depth of the surrounding environment and can create a 3D profile.
 
 \subsection{Sensor Fusion Algorithm}
-Based on the model in equation (\ref{eq:nl}), the available acceleration signal by the IMU,  and position and velocity information the Kalman filter estimates the firefighters velocity and position. The position data from the step-detection and the tracking-camera, however, needs to be fused before entering the filter, as discrete confidence levels of the camera are available, which cannot be handled by the Kalman filter. Thus, the fusion of the two signals is performed via a simple weighting scheme using discrete weights. The tracking camera provides a confidence value of the tracking results. This tracking confidence four discrete cases, from the  highest confidence to the lowest. For the step-detection it is assumed that the accuracy of the estimated position by the step-detection algorithm deteriorates the longer no step is fully registered. To limit the weighting possibilities to a discrete set also for the step-detection, three discrete conditions are used to reflect the accuracy after the last detection: \textcolor{red}{ the time passed since the last detection event $t_{\text{step}} < 0.5\mathrm{s}$, $0.5\mathrm{s} \leq t_{\text{step}} < 3\mathrm{s}$ or $t_{\text{step}} \geq 3\mathrm{s}$ CHECKEN, die intervalle ist definitiv falsch}.
+Based on the model in equation (\ref{eq:nl}), the available acceleration signal by the IMU,  and position and velocity information the Kalman filter estimates the firefighters velocity and position. The position data from the step-detection and the tracking-camera, however, needs to be fused before entering the filter, as discrete confidence levels of the camera are available, which cannot be handled by the Kalman filter. Thus, the fusion of the two signals is performed via a simple weighting scheme using discrete weights. The tracking camera provides a confidence value of the tracking results. This tracking confidence four discrete cases, from the  highest confidence to the lowest. For the step-detection it is assumed that the accuracy of the estimated position by the step-detection algorithm deteriorates the longer no step is fully registered. To limit the weighting possibilities to a discrete set also for the step-detection, three discrete conditions are used to reflect the accuracy after the last detection: the time passed since the last detection event $t_{\text{step}} < 0.5\mathrm{s}$, $0.5\mathrm{s} \leq t_{\text{step}} < 3\mathrm{s}$ or $t_{\text{step}} \geq 3\mathrm{s}$.
 
 %\begin{itemize}
 %	\item Time since last step was detected. It is assumed that the accuracy of the estimated position by the step-detection algorithm deteriorates with time if no succeeding step is detected. Three conditions are proposed: the time passed since the last detection event $t_{step} < 0.5\mathrm{s}$, $5\mathrm{s} \leq t_{step} < 3\mathrm{s}$ or $t_{step} \geq 3\mathrm{s}$.\\
@@ -281,7 +280,7 @@ Based on the model in equation (\ref{eq:nl}), the available acceleration signal 
 %	\item Tracking Confidence of the tracking camera. The tracking camera is able to calculate and return a confidence value of the tracking results. The tracking confidence returned by the camera can reach four cases from zero to three, where three is the highest confidence and zero the lowest.
 %\end{itemize}
 
-The resulting weighting, motivated by the work in \cite{caron2006}, scheme includes twelve \textcolor{red}{Ist 4x3 nicht 12??? 0...3 und 3 levels} cases.  If the quality of both markers is bad, the step detection gets highly favored, since it provides stable results during walking, even in zero visibility environments. If the tracking confidence is high, the camera measurements get slightly favored. This is because in theory the tracking cameras results will more accurate since it produces continuous position updates and can track the position regardless of the type of movement. %Figure \ref{fig:confidence} shows a graphical representation of the weighting scheme. 
+The resulting weighting, motivated by the work in \cite{caron2006}, scheme includes twelve cases.  If the quality of both markers is bad, the step detection gets highly favored, since it provides stable results during walking, even in zero visibility environments. If the tracking confidence is high, the camera measurements get slightly favored. This is because in theory the tracking cameras results will more accurate since it produces continuous position updates and can track the position regardless of the type of movement. %Figure \ref{fig:confidence} shows a graphical representation of the weighting scheme. 
 The combination of the measurements is performed before they are used in the Kalman Filter. With a weighting gain  $w$  the weighted measurement input for the x- and y-position is calculated via
 \begin{equation}
 	\begin{bmatrix}
@@ -293,7 +292,7 @@ The combination of the measurements is performed before they are used in the Kal
 		w(k\Delta_T) \, y_{\text{step}}(k\Delta_T) + (1-w(k\Delta_T)) \, y_{\text{camera}}(k\Delta_T)
 	\end{bmatrix},
 \end{equation}  
-with $x_{\text{step}}$ and $y_{\text{step}}$ are the position estimates produced by the step-detection and $x_{\text{camera}}$ and $y_{\text{camera}}$ being the position estimate from the tracking camera. Since the step-detection can not estimate the z-position, only the measurement  \textcolor{red}{from the tracking camera} is used, therefore no weighting is performed. \textcolor{red}{der letzte Satz ist nicht klar!das wurde bsiher nicht erklärt; von z gibts nur tracking camera oder?! bitte den satz einfach genauer schreiben)}
+with $x_{\text{step}}$ and $y_{\text{step}}$ are the position estimates produced by the step-detection and $x_{\text{camera}}$ and $y_{\text{camera}}$ being the position estimate from the tracking camera. Since the step-detection cannot estimate the z-position, only the measurement from the tracking camera is used, therefore no weighting is performed.
 %\begin{figure}[h!]
 %	\centering
 %	\includegraphics[width=0.5\textwidth]{measurementQuality.eps}
@@ -305,7 +304,6 @@ with $x_{\text{step}}$ and $y_{\text{step}}$ are the position estimates produced
 
 \subsection{Sensor Hardware Assembly}
  % Sensor assembly
- 
 The IMU used  is the Bosch Sensortech BNO055 MEMS absolute orientation sensor. The device measures acceleration in three axes and provides absolute heading data by measuring the earths magnetic field and fusing gyroscope and Magnetometer data. The secondary sensor is a RealSense T265 stereo tracking camera. Its main advantage is the on-chip, online data processing. Thus, no other means of interpreting the data is necessary and the velocity and position data are directly available for the sensor  fusion algorithm presented herein. Note that by using parts of the infrared spectrum the camera also can produce accurate tracking results in environments with bad lighting.
   
 For experimental verification of the system, a wearable sensor assembly is designed. Both sensors are mounted to the backplate of a self-contained breathing apparatus. This design is chosen to imitate a application in a firefighting setting, where the sensors would be placed on the pressurized air tank. For this a 3D printed spacer is designed to mount the sensors at the right distance. A weight is added to represent the  air tank. The camera and IMU are protected from damage by a custom enclosure.  Figure \ref{fig:Assembly} shows the developed experimental setup.
@@ -347,7 +345,6 @@ In the tests, a dynamic crouching movement often used in firefighting is used to
 \label{fig:path}
 \end{figure}
 
-\textcolor{red}{Bild (a) ist bzw war nirgends erklärt oder erwähnt. Mir ist nicht ganz klar was links und rechts ist. Ich habs mir mal zusammengereimt, bitte prüfen.}
 
 \begin{table}[H] 
 \caption{Mean deviation from the true path at four control points\label{tab1}}
