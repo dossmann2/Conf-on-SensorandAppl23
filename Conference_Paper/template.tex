@@ -322,18 +322,19 @@ For validation of the system, a wearable sensor assembly is designed. Both senso
 For a realistic validation of the sensor setup and the  algorithms,  tests on predefined paths are performed.
 %The deviation from this predefined path at four specific points are determined to validate the algorithms' accuracy. 
 %\subsection{Performance during Walking}
-First, in order to validate the performance during regular walking scenarios, a g 33\,m long path is tested. The right diagram in Figure \ref{fig:path} shows the estimated position of the different  algorithms compared to the true path. While at the beginning of the test all three  deliver accurate results, the step-detection deviates strongly after the first heading change. The proposed sensor fusion is able to stay close to the real path and deliver the best results most of the time.
-The tracking camera alone, however, delivers the best result in the middle of the experiments. This is due to the fact, that here the step-detection shows a big error dragging also the sensor fusion algorithm away from the real path. This indicates that a fine tuning still can improve the results.
-
+First, to validate the performance during regular walking scenarios, a 33\,m long path is tested. The right diagram in Figure \ref{fig:path} shows the estimated position of the different algorithms compared to the true path. While at the beginning of the test all three algorithms deliver accurate results, the step-detection deviates strongly after the first heading change. The proposed sensor fusion is able to stay close to the real path and deliver the best results most of the time.
+The tracking camera alone, however, delivers the best result in the middle of the experiments. This is due to the fact, that here the step-detection shows a big error dragging also the sensor fusion algorithm away from the real path.
 %The results show a 55\% increased accuracy of the enhanced step-detection algorithm compared to step-detection algorithms relying on peak detection and length estimation using a fixed step length.
-
 %\subsection{Performance while Crouching} 
 
-As dynamic crouching is often used in firefighting, this scenarios is tested in the second validation experiment. To simulate obstruction of the tracking camera by dirt or heavy smoke, the tracking confidence is artificially reduced so that the step detection is highly favored. The path defined for the test has an overall length of 12\,m with four 90$^\circ$ turns, as shown in the left diagram in Figure \ref{fig:path}. The starting- and endpoint are identical and 10 test runs  are performed. Clearly, the step detection alone performs the worst in this scenario.
-% where the individual completes the defined path in a crouching movement characteristic for firefighting operations.
-The results over 10 runs show a mean deviation of 0.66\,m and therefore a 55\,\% improvement in tracking accuracy when using the proposed algorithm compared to the use of on step-detection only. In Table \ref{tab1}  the mean deviation at each control point of the different algorithms is listed. In the case of high tracking confidence the mean deviation is 0.32\,m and therefore 50\% lower than in cases where the tracking confidence is low, showing that the camera significantly influences the position estimate results. With a mean deviation of 0.3\,m the tracking camera alone performs slightly better than the sensor fusion algorithm, however it has to be acknowledged that these results are performed in perfect conditions for the optical sensor. 
+In the second validation experiment, dynamic crouching, frequently employed in firefighting, was tested. The test path, illustrated in the left diagram of Figure \ref{fig:path}, covers a total length of 12\,m and includes four 90$^\circ$ turns.
 
-\textcolor{red}{ nach der figure zu unteilen wäre hier intessant, auch die ergebnisse der 10 läufe zu zeigen, wenn man nur die kamera nimmt, denn die siehtim bild nicht viel schlechter aus. SO hat man als Leser das Gefühl, sie verheimlichen etwas! HAben wir Daten, um das noch hinzuzufügen?!Selbst wenn es leicht besser wäre, wäre es ja in Ordnung.}
+
+
+The starting- and endpoint are identical and 10 test runs  are performed. Clearly, the step detection alone performs the worst in this scenario, because simply no steps are performed during the movement. The  mean values over 10 runs, as listed in Table \ref{tab1}, demonstrate significant improvements in tracking accuracy, with at least a five-fold enhancement at the four corner points (P1 to P4) when utilizing the proposed algorithm compared to relying solely on step detection. To simulate potential obstructions of the tracking camera caused by dirt or heavy smoke, the tracking confidence is artificially reduced so that the step detection is highly favored.
+In these scenarios, the mean deviation at each control point is degraded but lies still within the acceptable range of 1\,m. The data in Table \ref{tab1} also indicates that the tracking camera alone performs similar well to the sensor fusion algorithm. In these results, however, the tracking camera confidence was set to its highest possible level. 
+To ensure reliable results, even in scenarios where the camera confidence is degraded, it is essential to incorporate data from step detection for crouching scenarios. This is crucial because the camera  may produce highly inaccurate data in those scenarios. 
+
 \begin{figure}[t!]
 	\centering
 	\begin{subfigure}[b]{0.49\textwidth}
@@ -356,10 +357,10 @@ The results over 10 runs show a mean deviation of 0.66\,m and therefore a 55\,\%
 \begin{tabular}{lcccc}
 	\toprule
 	\textbf{Estimation Method}                  &   \textbf{P1}    &   \textbf{P2}    &   \textbf{P3}    &   \textbf{P4}      \\ \midrule
-	Step-Detection                              & $1.60\,\mathrm{m}$ & $2.45\,\mathrm{m}$ & $2.44\,\mathrm{m}$ & $1.80\,\mathrm{m}$  \\
+	Step-Detection only                              & $1.60\,\mathrm{m}$ & $2.45\,\mathrm{m}$ & $2.44\,\mathrm{m}$ & $1.80\,\mathrm{m}$  \\
 	Sensordata Fusion                           & $0.28\,\mathrm{m}$ & $0.42\,\mathrm{m}$ & $0.27\,\mathrm{m}$ & $0.32\,\mathrm{m}$  \\
 	Low tracking confidence S. F. & $0.66\,\mathrm{m}$ & $0.68\,\mathrm{m}$ & $0.76\,\mathrm{m}$ & $0.54\,\mathrm{m}$ \\
-	Tracking Camera & $0.27\,\mathrm{m}$ & $0.43\,\mathrm{m}$ & $0.24\,\mathrm{m}$ & $0.29\,\mathrm{m}$ \\ \bottomrule
+	Tracking Camera only & $0.27\,\mathrm{m}$ & $0.43\,\mathrm{m}$ & $0.24\,\mathrm{m}$ & $0.29\,\mathrm{m}$ \\ \bottomrule
 \end{tabular}
 \end{table}
 
