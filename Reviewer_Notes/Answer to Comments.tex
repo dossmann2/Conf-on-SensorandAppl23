@@ -14,12 +14,12 @@ Augustin, T; Ossmann, D}
 \date{}
 \maketitle
 
-We  thank the reviewer for spending their valuable time to review our paper. Your comments are greatly appreciated and helped to substantially improved the article. We provide detailed responses to each comment below.
+We  thank the reviewer for spending his or her valuable time to review our paper. Your comments are greatly appreciated and helped to substantially improved the article. We tried to take your valuable comments into account and provide detailed responses to recommended revision below.
 
 
-\section*{Reviewer 1}
+%\section*{Reviewer 1}
 
-\begin{enumerate}
+\begin{itemize}
 \item Expand on the literature review, showcasing where the current method fills a gap.\\
 \textit{Thank you for the remarks on the literature. We took inspiration for our approach from a review on Pedestrian Dead Reckoning, where a clear lack of solutions using cameras for tracking was evident. We added a sentence pointing to the review and the lack of tracking camera technology in PDR. \textcolor{blue}{Note that blue text shows changes or additions to the text.}}\\
 
@@ -27,36 +27,39 @@ We  thank the reviewer for spending their valuable time to review our paper. You
 \textit{Due to these shortcomings in PDR for firefighting application, in this paper  a novel approach for enhanced PDR is presented. The step-detection algorithm is extended with a stereo tracking camera as a secondary sensor. \textcolor{blue}{Despite Tracking cameras being readily availabe and producing accurate tracking results, they are hardly used in Pedestrian Dead Reckoning applications \cite{hou2021}}. This tracking camera is able to visually determine velocity and position relative to a starting point, even is smoky scenarios. The camera providing position and velocity is combined with a step-detection algorithm providing position information.}
 
 \item Clarify the selection of specific technologies and provide deeper insights into the Kalman filter's implementation.\\
-\textit{Thank you for the remarks on the step-detection algorithm. While there are more sophisticated step-detection algorithms, we chose the method presented in the paper for it is simple yet has a good tracking accuracy. For further improvements this a dedicated study developing a step and motion detection for a firefighting application would be necessary in any case. We added a short sentence to point to this problem:}
+\textit{Thank you for the remarks on the step-detection algorithm. While there are more sophisticated step-detection algorithms, we chose the method presented in the paper for it is simple yet has a good tracking accuracy. For further improvements a dedicated study developing a step and motion detection for a firefighting application would be necessary in any case. We added insight to make the reader aware of the problem problem:}
 
-\textit{The most common ways of step-detection utilize  the vertical acceleration signal and analyse the signal using peak-, zero-crossing or flat zone detection. \textcolor{blue}{Those simple methods are able to produce accurate results which where sufficient for the scope of this study. for the In following studies, a step- and motion-detection algorithm designed for firefighting applications should be developed.} A zero-crossing detection approach is chosen since flat zone detection only works for foot mounted sensors and peak-detection accuracy is dependent on a persons walking speed \cite{shin2007}.}\\
+\textit{The most common ways of step-detection utilize  the vertical acceleration signal and analyze the signal using peak-, zero-crossing or flat zone detection. \textcolor{blue}{Those simple but accurate methods are considered to be sufficient for this initial study.} A zero-crossing detection approach is chosen since flat zone detection only works for foot mounted sensors and peak-detection accuracy is dependent on a persons walking speed \cite{shin2007}.}\\
 
-\textit{We added a short part describing the equations of the Kalman Filter in more detail:}\\
+\textit{We agree that the description of the Kalman filter is quite short, but this is due to the actual space limitation. However, we have added a sentence on the equations of the Kalman Filter to provide more detail:}\\
 
 \textit{with the input $u$ to the model being the measured acceleration $a$ by the inertial measurement unit and the state vector $x = [x_1, x_2, x_3]^T$. \textcolor{blue}{The update step of the Kalman filtering process, uses the velocity measured by the tracking camera and the position estimate by the tracking camera and the step-detection to correct the filter estimate.} Based on this model the Kalman filter provides estimates of the position and the velocity in the corresponding axis. 
 [...]
 By changing the covariance matrices of the Kalman filter, the accuracy of the predictions and measurement updates is tuned \cite{welch2006}.}
 
 \item Conduct tests in more realistic and unpredictable environments to validate the system's real-world applicability.\\
-\textit{We acknowledge that tests in a controlled environment are not reflecting the performance in a real-world application. While we agree that in a real application there are more dynamic movements than crouching, it is (at least in german firefighting tactics), one of the most dominant methods of moving in low visibility environments. In this study we wanted to produce a prove of concept and the ability to understand the system. For further improvement of the design tests with firefighters are planned, however, the design shown in this study is meant to be used as a mockup, not as equipment for real-life firefighting applications. We added a short paragraph describing our thoughts:}\\
+\textit{Thanks for pointing out that it could not be transported to the reader well enough, that this is  a primary technology demonstration which thus, requires validation in a lab environment. We therefore acknowledge that tests in a controlled environment are not fully reflecting the performance in a real-world application. While we agree that in a real application there are more dynamic movements than crouching, it is (at least in German firefighting tactics), one of the most dominant methods of moving in low visibility environments. Please note that the corresponding author is fire-fighter himself.  In this study we aimed to produce a prove of concept and the ability to understand the system. For further improvement of the design tests with firefighters are planned, however, the design shown in this study is meant to be used as a mockup, not as equipment for real-life firefighting applications. For clarification we have added a short paragraph describing our thoughts:}\\
 
 
-\textit{To ensure reliable results, even in scenarios where the camera confidence is degraded, it is essential to incorporate data from step detection for crouching scenarios. This is crucial because the camera  may produce highly inaccurate data in those scenarios. \textcolor{blue}{In German firefighting tactics a crouching movement is predominantly used in low visibility environments (where the camera confidence will be degraded). The assumption is, that in those situations a reliable step-detection is still possible, since the individual will use the crouching method. This assumption will have to be tested in real-life applications.}}
+\textit{To ensure reliable results, even in scenarios where the camera confidence is degraded, it is essential to incorporate data from step detection for crouching scenarios. This is crucial because the camera  may produce highly inaccurate data in those scenarios. \textcolor{blue}{In German firefighting tactics crouching movement is predominantly used in low visibility environments (where the camera confidence will be degraded). Thus, the assumption herein is, that in those low visibility situations a reliable step-detection is still possible due to the use of he crouching method. This assumption will be validated in real-life applications in future studies.}}
 
 \item Address potential limitations and challenges more transparently, especially regarding the camera's limitations in smoke and low visibility conditions.\\
 
 
-\textit{The secondary sensor is a RealSense T265 stereo tracking camera. Its main advantage is the on-chip, online data processing. Thus, no other means of interpreting the data is necessary and the velocity and position data are directly available for the sensor  fusion algorithm presented herein. Note that by using parts of the infrared spectrum the camera also can produce accurate tracking results in environments with bad lighting. \textcolor{blue}{One disadvantage of using an optical sensor is of course the risk of obstruction by particles sticking to the lense or thick smoke. This is especially true in a firefighting environment. How severe the camera is affected by such obstructions will have to be evaluated in a real firefighting application.}}\\
+\textit{Thank you for this important comment. We are aware of this problem and have already planned a special investigation on this matter. However, the results will not be available before the end of the year.  We enhanced, however,  the description on the optical sensor as follows and pointed to our future work:\\	
+	The secondary sensor is a RealSense T265 stereo tracking camera. Its main advantage is the on-chip, online data processing. Thus, no other means of interpreting the data is necessary and the velocity and position data are directly available for the sensor  fusion algorithm presented herein. Note that by using parts of the infrared spectrum the camera also can produce accurate tracking results in environments with bad lighting. \textcolor{blue}{One disadvantage of using an optical sensor is the risk of obstruction by particles sticking to the lense or thick smoke.  Investigations of these effects on camera performance in firefighting environments will be conducted and made available in  future works.}}\\
 
 
 
 \item Conclusions should be more measured, with a clearer roadmap for future research and development.\\
 
-\textit{An enhanced Pedestrian Dead Reckoning method for firefighting applications has been presented. The step-detection  has been successfully upgraded with a secondary sensor to improve  position estimates in different moving scenarios. The required sensor fusion algorithm has been successfully  validated in an experimental validation campaign showing promising results for the usage of the developed prototype system.  \textcolor{blue}{To further improve and validate the system, real-world trials with professional firefighters using the equipment have to be performed. Such application-near experiments would show the limitations of the system in a real-fire scenario and allow us to use feedback from firefighters to further improve the system. In addition, further tuning of the sensor-data fusion algorithm has to be performed to improve prediction accuracy.}}
+Thanks for this comment on which we agree. Thus we enhanced the conclusion by the following:
+
+\textit{An enhanced Pedestrian Dead Reckoning method for firefighting applications has been presented. The step-detection  has been successfully upgraded with a secondary sensor to improve  position estimates in different moving scenarios. The required sensor fusion algorithm has been successfully  validated in an experimental validation campaign showing promising results for the usage of the developed prototype system.  \textcolor{blue}{To further validate the proposed  system, real-world trials with professional firefighters using the equipment will  be performed. Such application-near experiments will provide insight into the limitations of the system in a real-fire scenario and provide feedback to further improve the system setup. It will also allow to define the specific conditions which require further improvement of the sensor-data fusion algorithm accuracy.}}
 
 
 
-\end{enumerate}
+\end{itemize}
 
 
 
