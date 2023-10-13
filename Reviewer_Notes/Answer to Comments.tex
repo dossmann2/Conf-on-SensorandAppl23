@@ -1,0 +1,54 @@
+\documentclass{article}
+\usepackage{graphicx,color}
+\usepackage[scale=0.7]{geometry}
+\usepackage{enumitem}
+\newcommand{\e}[1]{{\color{red}#1}}
+
+
+\begin{document}
+
+\title{\textsf{Response to Reviewer Comments} \\ [+2mm] \small Enhanced Pedestrian Dead Reckoning Sensor Fusion for Firefighting
+\\ [+2mm]
+Augustin, T; Ossmann, D}
+
+\date{}
+\maketitle
+
+We  thank the reviewer for spending their valuable time to review our paper. Your comments are greatly appreciated and helped to substantially improved the article. We provide detailed responses to each comment below.
+
+
+\section*{Reviewer 1}
+
+\begin{enumerate}
+\item Expand on the literature review, showcasing where the current method fills a gap.\\
+\textit{Due to these shortcomings in PDR for firefighting application, in this paper  a novel approach for enhanced PDR is presented. The step-detection algorithm is extended with a stereo tracking camera as a secondary sensor. \textcolor{red}{Tracking cameras are readily availabe and produce accurate tracking results, however, they are hardly used in Pedestrian Dead Reckoning applications \cite{hou2021}}. This tracking camera is able to visually determine velocity and position relative to a starting point, even is smoky scenarios. The camera providing position and velocity is combined with a step-detection algorithm providing position information.}
+
+\item Clarify the selection of specific technologies and provide deeper insights into the Kalman filter's implementation.
+
+\item Conduct tests in more realistic and unpredictable environments to validate the system's real-world applicability.\\
+\textit{We acknowledge that tests in a controlled environment are not reflecting the performance in a real-world application. While we wanted to produce a prove of concept and the ability to understand the system  in this study, further tests with firefighters are planned.}\\
+
+\item Address potential limitations and challenges more transparently, especially regarding the camera's limitations in smoke and low visibility conditions.
+\textit{The secondary sensor is a RealSense T265 stereo tracking camera. Its main advantage is the on-chip, online data processing. Thus, no other means of interpreting the data is necessary and the velocity and position data are directly available for the sensor  fusion algorithm presented herein. Note that by using parts of the infrared spectrum the camera also can produce accurate tracking results in environments with bad lighting. \textcolor{red}{One disadvantage of using an optical sensor is of course the danger of obstruction by particles sticking to the lense or thick smoke. This is especially true in a firefighting environment. How severe the camera is affected by such obstructions will have to be evaluated in a real firefighting application.}}
+
+\item Conclusions should be more measured, with a clearer roadmap for future research and development.
+
+\textit{An enhanced Pedestrian Dead Reckoning method for firefighting applications has been presented. The step-detection  has been successfully upgraded with a secondary sensor to improve  position estimates in different moving scenarios. The required sensor fusion algorithm has been successfully  validated in an experimental validation campaign showing promising results for the usage of the developed prototype system. \textcolor{red}{To further improve and validate the system, real-world trials have to be performed. Such application-near experiments would show the limitations of the system in a real-fire scenario and allow us to use feedback from firefighters to further improve the system.}}
+
+
+
+\end{enumerate}
+
+
+
+%\bibliographystyle{alpha}
+%\bibliography{BIB_Ossmann,root}
+\end{document}
+
+Thank you for this observation
+Thanks a lot for pointing that out to us.
+We apologize for the confusion.
+We agree that some additional clarification would be useful.
+This is a very good point, thank you.
+This observation is correct.
+Thanks a lot for pointing that out to us.
