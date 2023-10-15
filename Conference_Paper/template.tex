@@ -109,7 +109,7 @@
 %\conference{} % An extended version of a conference paper
 
 % Abstract (Do not insert blank lines, i.e. \\) 
-\abstract{Knowing the exact position of firefighters in a building during an indoor firefighting operation is critical to improving the efficiency and safety of firefighters. For the estimation of an individual's  position in indoor or Global Positioning System (GPS) denied environments commonly Pedestriasn Dead Reckoning (PDR) is used. PDR tries to estimate the required position via sensors without	external references, for example using accelerometers and gyroscopes. One of the most common techniques of PDR is step-detection. Applications like firefighting, however, involve more dynamic movements like crouching. Thus, the accuracy of a step-detection algorithm is reduced dramatically. Therefore, this paper presents a novel PDR algorithm that augments the conventional PDR technique with a tracking camera. The position estimates of a zero-crossing step-detection algorithm and the tracking camera estimates are fused via a Kalman filter. A system prototype, designed for algorithm validation, is presented in detail. The experimental  results confirm that enhancing the system with a secondary sensor leads to a substantial   increase in the position estimation accuracy also for dynamic crouching maneuvers compared to conventional step-detection algorithms.}
+\abstract{Knowing the exact position of firefighters in a building during an indoor firefighting operation is critical to improving the efficiency and safety of firefighters. For the estimation of an individual’s position in indoor or Global Positioning System (GPS) denied environments  Pedestrian Dead Reckoning (PDR) is commonly used. PDR tries to estimate the required position via sensors without external references, for example using accelerometers and gyroscopes. One of the most common techniques of PDR is step-detection. Applications like firefighting, however, also involve dynamic movements like crouching. Thus, the accuracy of a step-detection algorithm is reduced dramatically. Therefore, this paper presents a novel PDR algorithm that augments the conventional PDR technique with a tracking camera. The position estimates of a zero-crossing step-detection algorithm and the tracking camera estimates are fused via a Kalman filter. A system prototype, designed for algorithm validation, is presented. The experimental results confirm that enhancing the system with a secondary sensor leads to a substantial increase in the position estimation accuracy also for dynamic crouching maneuvers compared to conventional step-detection algorithms.}
 
 
 % Keywords
@@ -167,9 +167,9 @@
 
 \section{Introduction}
 
-While safety standards in firefighting are continuously improving, indoor operations in burning buildings still present a dangerous task for firefighters. At least 240 injuries and 10 deaths involving firefighters conducting firefighting operations in buildings were reported in the United States in 2022 \cite{atemschutzunfalle.eu2023}. To improve safety while performing such a dangerous task, knowing the exact position of firefighters in indoor environments can shorten rescue time of injured personnel or help firefighters avoiding dangerous situations. \textcolor{red}{Technology like this can not only improve safety of the involved firefighters, but can provide the data in real-time for  Internet of Emergency Services applications (IoES), which aims to use the Internet of Things to improve emergency response and disaster management \cite{damasevcius2023}.} To determine the position of a person in indoor or GPS-denied environments, a technique called Pedestrian Dead Reckoning (PDR) is used. It relies on sensors such as accelerometers, gyroscopes, and magnetometers integrated into wearable devices, smartphones or smartwatches. By continuously tracking a pedestrian's step counts, stride length, and heading changes, PDR algorithms can calculate their relative displacement from a known starting point. Other means of PDR include simultaneous locating and mapping (SLAM)\cite{lu2019}, magnetic field mapping \cite{wang2016} or magnetic triangulation \cite{arumugam2020}.
+While safety standards in firefighting are continuously improving, indoor operations in burning buildings still present a dangerous task for firefighters. At least 240 injuries and 10 deaths involving firefighters conducting firefighting operations in buildings were reported in the United States in 2022 \cite{atemschutzunfalle.eu2023}. To improve safety while performing such a dangerous task, knowing the exact position of firefighters in indoor environments can shorten rescue time of injured personnel or help firefighters avoiding dangerous situations. Such technologies can not only improve safety of the involved firefighters, but can provide  real-time data for so-called internet of emergency services applications, which aims to improve emergency response and disaster management \cite{damasevcius2023}. To determine the position of a person in indoor or GPS-denied environments, a technique called Pedestrian Dead Reckoning (PDR) is used. It relies on sensors such as accelerometers, gyroscopes, and magnetometers integrated into wearable devices, smartphones or smartwatches. By continuously tracking a pedestrian's step counts, stride length, and heading changes, PDR algorithms can calculate their relative displacement from a known starting point. Other means of PDR include simultaneous locating and mapping \cite{lu2019}, magnetic field mapping \cite{wang2016} or magnetic triangulation \cite{arumugam2020}.
 
-For an application in firefighting operations, many of the aforementioned PDR methods are not feasible. While radio tracking \cite{cong2023} or magnetic mapping \cite{wang2016} produce accurate results in indoor environments, they are technologies that have to be installed before use. It may be possible to achieve this for some large buildings, however it would not be feasible to do for every building in an area where a fire might occur. For tracking firefighters in any indoor environment, a stand-alone, body-worn device is required. Stand-alone PDR systems often rely on a form of step-detection \cite{hou2021}. Algorithms based on step-detection can estimate an accurate position mainly  during walking. Movements occurring in a firefighting application, however, also include more dynamic activities like crouching. Those movements are hard to detect by standard step-detection algorithms. Thus, a secondary sensor measuring position or velocity is necessary to improve accuracy in those scenarios. A common sensor chosen for this is a Light Detection and Ranging (LIDAR) sensor \cite{wang2016}. While this approach can yield good results in smoke-free environments, tests show that distance readings of LIDAR systems are heavily influenced by smoke particles and therefore are not usable in a firefighting environment. 
+For an application in firefighting operations, many of the aforementioned PDR methods are not feasible. While radio tracking \cite{cong2023} or magnetic mapping \cite{wang2016} produce accurate results in indoor environments, they are technologies that have to be installed before use. It may be possible to achieve this in large buildings, however it would not be feasible to do for every building in an area where a fire might occur. For tracking firefighters in any indoor environment, a stand-alone, body-worn device is required. Stand-alone PDR systems often rely on a form of step-detection \cite{hou2021}. Algorithms based on step-detection can estimate an accurate position mainly  during walking. Movements occurring in a firefighting application, however, also include more dynamic activities like crouching. Those movements are hard to detect by standard step-detection algorithms. Thus, a secondary sensor measuring position or velocity is necessary to improve accuracy in those scenarios. A common sensor chosen for this is a Light Detection and Ranging (LIDAR) sensor \cite{wang2016}. While this approach can yield good results in smoke-free environments, tests show that distance readings of LIDAR systems are heavily influenced by smoke particles and therefore are not usable in a firefighting environment. 
 
 Due to these shortcomings in PDR for firefighting application, in this paper  a novel approach for enhanced PDR is presented. The step-detection algorithm is extended with a stereo tracking camera as a secondary sensor. Despite tracking cameras being readily available and producing accurate tracking results, they are hardly used in PDR applications \cite{hou2021}. This tracking camera is able to visually determine velocity and position relative to a starting point, even is smoky scenarios. The camera providing position and velocity is combined with a step-detection algorithm providing position information. The gathered data is 
 fused using a Kalman filter to robustly estimate the firefighters position. While in section 2 the fundamentals of the step-detection and the model for the Kalman filter is presented, in section 3 the overall PDR system setup including software and hardware components is described. Finally, section 4 discusses the results of a verification campaign in which position data from the proposed algorithm is compared to data generated by step-detection only.
@@ -194,7 +194,7 @@ and afterwards once falling, i.e.,
 \begin{equation}
 	(a_{z} < 0) \wedge (a_{z} > 0).  %Größer Null etc.!!
 \end{equation} 
-Only if these two conditions have been registered in the algorithm, a step can be finally counted.
+Only if these two conditions are registered in the algorithm, a step can be finally counted.
 
 Once  a step is registered as complete, the step length has to be added to the current estimated position in the direction of movement. To estimate the step-length $d$ a method  using the relation between hip acceleration and the length of a step following  \cite{weinberg2002} is applied, i.e.,
  \begin{equation}\label{eq:dist}
@@ -223,7 +223,7 @@ In this paper we use the more advanced method of a Kalman filtering. The idea of
 with the input $u$ to the model being the measured acceleration $a$ provided by the IMU and the state vector $x = [x_1, x_2, x_3]^\text{T}$. The update step of the Kalman filtering process, uses the velocity measured by the tracking camera and the position estimate by the tracking camera and the step-detection to correct the filter estimate. Based on the  model in equation (\ref{eq:nl}) the Kalman filter finally provides estimates of the position and the velocity in the corresponding axis. 
 Note that the dependency of the signals on time, i.e., on $k\Delta_T$, is omitted in equation (\ref{eq:nl}) for readability reasons.
 By changing the covariance matrices of the Kalman filter, the accuracy of the predictions and measurement updates is tuned \cite{welch2006}. 
-%\textcolor{red}{Gleichung (6) ist noch nicht sauber; denn wir schreiben f(u,x), aber es is komplett unnklar was u und was x ist. Z.b. sehe ich keine position in gleichung 6 obwohl sie es so erwähnen. So wie es da steht sind v und a eher Eingängen und keine zustände. Und die Zustande sind dann halt jeweils das integral von der Eingängen auf der rechten Seite, tauchen aber nicht explizit in f() auf, das wäre also dann nur ein f(u). Ist das so gedacht? \\ Zudem ist mir nun nicht klar, was die Sensor fusion ist; kommt a und v aus unterschiedlicen sensoren? ich sehe nicht wo die potionsdaten von der step detection da eingehen. aber dasklär sich ws wenn ich weiß was u ist. }
+%\textcolor{red}{Gleichung (6) ist noch nicht sauber; denn wir schreiben f(u,x), aber es is komplett unnklar was u und was x ist. Z.b. sehe ich keine position in gleichung 6 obwohl sie es so erwähnen. So wie es da steht sind v und a eher Eingängen und keine zustände. Und die Zustande sind dann halt jeweils das integral von der Eingängen auf der rechten Seite, tauchen aber nicht explizit in f() auf, das wäre also dann nur ein f(u). Ist das so gedacht? \\ Zudem ist mir nun nicht klar, was die Sensor fusion ist; kommt a und v aus unterschiedlicen sensoren? ich sehe nicht wo die potionsdaten von der step-detection da eingehen. aber dasklär sich ws wenn ich weiß was u ist. }
 
 
 
@@ -235,7 +235,7 @@ By changing the covariance matrices of the Kalman filter, the accuracy of the pr
 
 % Description Experiment
 \section{Enhanced Pedestrian Dead Reckoning System}
-The enhanced PDR makes use of a robust step detection-scheme with which the position of the firefighter is estimated. Additionally, a tracking camera serves as secondary sensor providing position and speed measurement to back up the step detection based position. Finally, all available signals are fused together via a Kalman filter providing the position and velocity of the firefighter.
+The enhanced PDR makes use of a robust step-detection-scheme with which the position of the firefighter is estimated. Additionally, a tracking camera serves as secondary sensor providing position and speed measurement to back up the step-detection based position. Finally, all available signals are fused together via a Kalman filter providing the position and velocity of the firefighter.
 % \begin{figure}[h!]
 	% 	\centering
 	% 	\includegraphics[width=0.7\textwidth]{realsense.png}
@@ -264,14 +264,14 @@ To initiate the counting process, the acceleration signal has to pass the negati
 %	\label{fig:algorithmStedDetect}
 %\end{figure}
 
-After a step is detected, the length of the step is added to the last known position in the direction of movement which is determined by the heading angle measured by the IMU. The step-length is estimated via equation (\ref{eq:dist}). It is assumed, that due to the limited field of view and restriction of movement by gear during an indoor operation, firefighters move in the direction their body is aligned. Since the IMU is mounted on the air tank of the firefighter, the orientation of the IMU equals the direction of movement. To describe the position in a global reference frame, the coordinate origin of the global reference frame is defined when the device is initialized, where the initial heading  defines the x-axis.
+After a step is detected, the length of the step is added to the last known position in the direction of movement that is determined by the heading angle measured by the IMU. The step-length is estimated via equation (\ref{eq:dist}). It is assumed, that due to the limited field of view and restriction of movement by gear during an indoor operation, firefighters move in the direction their body is aligned. Since the IMU is mounted on the air tank of the firefighter, the orientation of the IMU equals the direction of movement. To describe the position in a global reference frame, the coordinate origin of the global reference frame is defined when the device is initialized, where the initial heading  defines the x-axis.
 
 As the secondary sensor a stereo tracking camera is used to provide additional position and velocity information. Such a device has two calibrated cameras that are placed with a distance to each other and are horizontally aligned. By measuring the displacement of a tracked object between the two cameras, the distance to the object can be calculated. Doing this for multiple objects and repeating this process every frame, the position and average velocity is provided. 
 %Figure \ref{fig:cmaera} shows the two aligned cameras as well as the cameras body coordinate frame.
 %Some camera models also use an infrared projected grid of dots to determine depth of the surrounding environment and can create a 3D profile.
 
 \subsection{Sensor Fusion Algorithm}
-Based on the model in equation (\ref{eq:nl}), the available acceleration signal by the IMU,  and position and velocity information the Kalman filter estimates the firefighters velocity and position. The position data from the step-detection and the tracking-camera, however, needs to be fused before entering the filter, as discrete confidence levels of the camera are available, which cannot be handled by the Kalman filter. Thus, the fusion of the two signals is performed via a simple weighting scheme using discrete weights. The tracking camera provides a confidence value of the tracking results. This tracking confidence four discrete cases, from the  highest confidence to the lowest. For the step-detection it is assumed that the estimated position accuracy by the step-detection algorithm deteriorates the longer no step is fully registered. To limit the weighting possibilities to a discrete set also for the step-detection, three discrete conditions are used to reflect the accuracy after the last detection based on the time passed since the last detection event: if $t_{\text{step}} < 0.5\mathrm{s}$ best accuracy, if $0.5\mathrm{s} \leq t_{\text{step}} < 3\mathrm{s}$ medium accuracy, and if $t_{\text{step}} \geq 3\mathrm{s}$  worst accuracy is assumed.
+Based on the model in equation (\ref{eq:nl}), the available acceleration signal by the IMU,  and position and velocity information the Kalman filter estimates the firefighters velocity and position. The position data from the step-detection and the tracking-camera, however, needs to be fused before entering the filter, as discrete confidence levels of the camera are available, which cannot be handled by the Kalman filter. Thus, the fusion of the two signals is performed via a simple weighting scheme using discrete weights. The tracking camera provides four different confidence level indicators, from the  highest confidence to the lowest. For the step-detection it is assumed that the estimated position accuracy by the step-detection algorithm deteriorates the longer no step is fully registered. To limit the weighting possibilities to a discrete set also for the step-detection, three discrete conditions are used to reflect the accuracy after the last detection based on the time passed since the last detection event: if $t_{\text{step}} < 0.5\mathrm{s}$ best accuracy, if $0.5\mathrm{s} \leq t_{\text{step}} < 3\mathrm{s}$ medium accuracy, and if $t_{\text{step}} \geq 3\mathrm{s}$  worst accuracy is assumed.
 
 %\begin{itemize}
 %	\item Time since last step was detected. It is assumed that the accuracy of the estimated position by the step-detection algorithm deteriorates with time if no succeeding step is detected. Three conditions are proposed: the time passed since the last detection event $t_{step} < 0.5\mathrm{s}$, $5\mathrm{s} \leq t_{step} < 3\mathrm{s}$ or $t_{step} \geq 3\mathrm{s}$.\\
@@ -279,7 +279,7 @@ Based on the model in equation (\ref{eq:nl}), the available acceleration signal 
 %	\item Tracking Confidence of the tracking camera. The tracking camera is able to calculate and return a confidence value of the tracking results. The tracking confidence returned by the camera can reach four cases from zero to three, where three is the highest confidence and zero the lowest.
 %\end{itemize}
 
-The resulting weighting, motivated by the work in \cite{caron2006}, scheme includes twelve cases.  If the quality of both markers is bad, the step detection gets highly favored, since it provides stable results during walking, even in zero visibility environments. If the tracking confidence is high, the camera measurements get slightly favored. This is because in theory the tracking cameras results will more accurate since it produces continuous position updates and can track the position regardless of the type of movement. %Figure \ref{fig:confidence} shows a graphical representation of the weighting scheme. 
+The resulting weighting, motivated by the work in \cite{caron2006}, scheme includes twelve cases.  If the quality of both markers is bad, the step-detection gets highly favored, since it provides stable results during walking, even in zero visibility environments. If the tracking confidence is high, the camera measurements get slightly favored. This is because in theory the tracking cameras results will more accurate since it produces continuous position updates and can track the position regardless of the type of movement. %Figure \ref{fig:confidence} shows a graphical representation of the weighting scheme. 
 The combination of the measurements is performed before they are used in the Kalman Filter. With a weighting gain  $w$  the weighted measurement input for the x- and y-position is calculated via
 \begin{equation}
 	\begin{bmatrix}
@@ -291,7 +291,7 @@ The combination of the measurements is performed before they are used in the Kal
 		w(k\Delta_T) \, y_{\text{step}}(k\Delta_T) + (1-w(k\Delta_T)) \, y_{\text{camera}}(k\Delta_T)
 	\end{bmatrix},
 \end{equation}  
-with $x_{\text{step}}$ and $y_{\text{step}}$ are the position estimates produced by the step-detection and $x_{\text{camera}}$ and $y_{\text{camera}}$ being the position estimate from the tracking camera. Since the step-detection cannot estimate the z-position, only the measurement from the tracking camera is used, therefore no weighting is performed.
+where $x_{\text{step}}$ and $y_{\text{step}}$ are the position estimates produced by the step-detection and $x_{\text{camera}}$ and $y_{\text{camera}}$ being the position estimate from the tracking camera. Since the step-detection cannot estimate the z-position, only the measurement from the tracking camera is used, therefore no weighting is performed.
 %\begin{figure}[h!]
 %	\centering
 %	\includegraphics[width=0.5\textwidth]{measurementQuality.eps}
@@ -307,20 +307,19 @@ The IMU used  is the Bosch Sensortech BNO055 MEMS absolute orientation sensor. T
 
 
   
-For validation of the system, a wearable sensor assembly is designed. Both sensors are mounted on a backplate of a self-contained breathing apparatus. This design is chosen to imitate an application in firefighting settings, where the sensors are placed on the pressurized air tank. For this a 3D-printed spacer is designed to mount the sensors at the right distance. Weight is added to represent the  air tank. Camera and IMU are protected from damage by an enclosure.  Figure \ref{fig:Assembly} shows the developed experimental setup.
+For validation of the system, a wearable sensor assembly is designed. Both sensors are mounted on a backplate of a self-contained breathing apparatus. This design is chosen to imitate an application in firefighting settings, where the sensors are placed on the pressurized air tank. For this, a 3D-printed spacer is designed to mount the sensors at the right distance. Weight is added to represent the  air tank. Camera and IMU are protected from damage by an enclosure.  Figure \ref{fig:Assembly} shows the developed experimental setup.
 
 \begin{figure}
 	\centering
 	\includegraphics[width=0.5\textwidth]{Assembly.jpg}
-	\caption{Sensor assembly mounted on the equipment to be worn by a firefighter.}
+	\caption{Sensor assembly mounted on the firefighter equipment.}
 	\label{fig:Assembly}
 \end{figure}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Results}
-
-For a realistic validation of the sensor setup and the  algorithms,  tests on predefined paths are performed. \textcolor{red}{While these tests are not designed to recreate the conditions, that occur during firefighting operations, they allow us to assess the feasibility of the design. Additional experiments in real-life applications will have to be conducted in further studies. }
+For an initial validation of the sensor setup and the algorithms, tests on predefined paths are performed. While these tests do not fully mimic the conditions that occur during firefighting operations, they allow, however, the initial feasibility assessment of the setup. Additional experiments in real-life applications are planned in further studies.
 %The deviation from this predefined path at four specific points are determined to validate the algorithms' accuracy. 
 %\subsection{Performance during Walking}
 First, to validate the performance during regular walking scenarios, a 33\,m long path is tested. The right diagram in Figure \ref{fig:path} shows the estimated position of the different algorithms compared to the true path. While at the beginning of the test all three algorithms deliver accurate results, the step-detection deviates strongly after the first heading change. The proposed sensor fusion is able to stay close to the real path and deliver the best results most of the time.
@@ -328,13 +327,10 @@ The tracking camera alone, however, delivers the best result in the middle of th
 %The results show a 55\% increased accuracy of the enhanced step-detection algorithm compared to step-detection algorithms relying on peak detection and length estimation using a fixed step length.
 %\subsection{Performance while Crouching} 
 
-In the second validation experiment, dynamic crouching, frequently employed in firefighting, was tested. The test path, illustrated in the left diagram of Figure \ref{fig:path}, covers a total length of 12\,m and includes four 90$^\circ$ turns.
-
-
-
-The starting- and endpoint are identical and 10 test runs  are performed. Clearly, the step detection alone performs the worst in this scenario, because simply no steps are performed during the movement. The  mean values over 10 runs, as listed in Table \ref{tab1}, demonstrate significant improvements in tracking accuracy, with at least a five-fold enhancement at the four corner points (P1 to P4) when utilizing the proposed algorithm compared to relying solely on step detection. To simulate potential obstructions of the tracking camera caused by dirt or heavy smoke, the tracking confidence is artificially reduced so that the step detection is highly favored.
+In the second validation experiment, dynamic crouching, frequently employed in firefighting, has been tested. The test path, illustrated in the left diagram of Figure \ref{fig:path}, covers a total length of 12\,m and includes four 90$^\circ$ turns.
+The starting- and endpoint are identical and 10 test runs  are performed. Clearly, the step-detection alone performs the worst in this scenario, because simply no steps are performed during the movement. The  mean values over 10 runs, as listed in Table \ref{tab1}, demonstrate significant improvements in tracking accuracy, with at least a five-fold enhancement at the four corner points (P1 to P4) when utilizing the proposed algorithm compared to relying solely on step-detection. To simulate potential obstructions of the tracking camera caused by dirt or heavy smoke, the tracking confidence is artificially reduced so that the step-detection is highly favored.
 In these scenarios, the mean deviation at each control point is degraded but lies still within the acceptable range of 1\,m. The data in Table \ref{tab1} also indicates that the tracking camera alone performs similar well to the sensor fusion algorithm. In these results, however, the tracking camera confidence was set to its highest possible level. 
-To ensure reliable results, even in scenarios where the camera confidence is degraded, it is essential to incorporate data from step detection for crouching scenarios. This is crucial because the camera  may produce highly inaccurate data in those scenarios. In German firefighting tactics crouching movement is predominantly used in low visibility environments (where the camera confidence will be degraded). Thus, the assumption herein is, that in those low visibility situations a reliable step-detection is still possible due to the use of he crouching method. This assumption will be validated in real-life applications in future studies.
+To ensure reliable results, even in scenarios where the camera confidence is degraded, it is essential to incorporate data from step-detection for crouching scenarios. This is crucial because the camera  may produce highly inaccurate data in those scenarios. In German firefighting tactics crouching movement is predominantly used in low visibility environments (where the camera confidence will be degraded). Thus, the assumption herein is, that in those low visibility situations a reliable step-detection is still possible due to the use of he crouching method. This assumption will be validated in real-life applications in future studies.
 
 \begin{figure}[t!]
 	\centering
@@ -349,7 +345,7 @@ To ensure reliable results, even in scenarios where the camera confidence is deg
 		\hspace{-1cm}
 		\includegraphics[width=1.1\textwidth]{Path2.png}
 	\end{subfigure}
-	\caption{Experimental results comparing step detection only, tracking camera only, and the proposed sensor data fusion to the true path for crouching (left) and walking (right).}
+	\caption{Experimental results comparing step-detection only, tracking camera only, and the proposed sensor data fusion to the true path for crouching (left) and walking (right).}
 	\label{fig:path}
 \end{figure}
 
@@ -372,7 +368,7 @@ To ensure reliable results, even in scenarios where the camera confidence is deg
 %	\begin{tabularx}{\textwidth}{lccccc}
 %		\toprule
 %		\textbf{Estimation Method}                  &   \textbf{P1}    &   \textbf{P2}    &   \textbf{P3}    &   \textbf{P4}    &  \textbf{Mean}   \\ \midrule
-%		Step Detection                              & $1.60\mathrm{m}$ & $2.45\mathrm{m}$ & $2.44\mathrm{m}$ & $1.80\mathrm{m}$ & $2.07\mathrm{m}$ \\
+%		step-detection                              & $1.60\mathrm{m}$ & $2.45\mathrm{m}$ & $2.44\mathrm{m}$ & $1.80\mathrm{m}$ & $2.07\mathrm{m}$ \\
 %		Sensordata Fusion                           & $0.28\mathrm{m}$ & $0.42\mathrm{m}$ & $0.27\mathrm{m}$ & $0.32\mathrm{m}$ & $0.32\mathrm{m}$ \\
 %		Sensordata Fusion (Low Tracking Confidence) & $0.66\mathrm{m}$ & $0.68\mathrm{m}$ & $0.76\mathrm{m}$ & $0.54\mathrm{m}$ & $0.66\mathrm{m}$ \\ \bottomrule
 %		&
@@ -397,7 +393,7 @@ An enhanced Pedestrian Dead Reckoning method for firefighting applications has b
 %This section is not mandatory, but may be added if there are patents resulting from the work reported in this manuscript.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\vspace{6pt} 
+\vspace{-0.1cm} 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% optional
@@ -426,6 +422,8 @@ An enhanced Pedestrian Dead Reckoning method for firefighting applications has b
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \authorcontributions{T.A.: methodology, visualization, analysis, synthesis, testing, validation and original draft preparation. D.O.: Supervision, scientific review and proofreading. All authors have read and agreed to the published version of the manuscript.}
+\vspace{-0.3cm} 
+
 %\authorcontributions{Conceptualization, X.X. and Y.Y.; methodology, X.X.; software, X.X.; validation, X.X., Y.Y. and Z.Z.; formal analysis, X.X.; investigation, X.X.; resources, X.X.; data curation, X.X.; writing---original draft preparation, X.X.; writing---review and editing, X.X.; visualization, X.X.; supervision, X.X.; project administration, X.X.; funding acquisition, Y.Y. All authors have read and agreed to the published version of the manuscript.}
 
 %\funding{This research received no external funding}
@@ -560,7 +558,7 @@ X.~Hou and J.~Bergmann.
 
 \bibitem{jen2023}
 Y.-H. Jen, C.-H. Huang, S.~Tsai, and K.-W. Chiang.
-\newblock A {{MULTI-IMU BASED SELF-CONTAINED PEDESTRIAN NAVIGATION ALGORITHM}}.
+\newblock A {{mulit-IMU based self-contained pedestrian navigation algorithm}}.
 \newblock {\em The International Archives of the Photogrammetry, Remote Sensing
 	and Spatial Information Sciences}, XLVIII-1/W1-2023:603--608, May 2023.
 
@@ -571,7 +569,7 @@ C.~Lu, H.~Uchiyama, D.~Thomas, A.~Shimada, and R.-I. Taniguchi.
 
 \bibitem{petukhov2022}
 N.~I. Petukhov, V.~N. Zamolodchikov, A.~P. Malyshev,
-Tatyana~A. Brovko, Sergey~A. Serov, and Ilya~V. Korogodin.
+T.~A. Brovko, S.~A. Serov, and I.~V. Korogodin.
 \newblock Synthesis of {{PDR Algorithm}} and {{Experimental Estimation}} of
 {{Accuracy}} of {{Step Length Estimation Methods}}.
 {Moscow, Russian Federation}, March 2022. {IEEE}.
