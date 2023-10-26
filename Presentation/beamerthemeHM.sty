@@ -1,0 +1,96 @@
+\defbeamertemplate*{upper separation line foot}{default}{%
+  \rule{\paperwidth}{0.3pt}\par
+  \vskip 0.1em\relax
+}
+
+
+%--------------Color Scheme------------------------------------------------------------------------------
+\definecolor{HMRed}{RGB}{252 085 085}
+\definecolor{HMRed2}{RGB}{254 184 184}
+\definecolor{MYgray}{RGB}{140 136 136}
+\definecolor{FK03}{RGB}{000 204 204}
+\definecolor{lightgrey}{RGB}{207 200 200}
+\definecolor{green}{RGB}{013 189 016}
+
+\definecolor{black}{RGB}{000 000 000}
+
+\setbeamercolor{frametitle}{fg =HMRed}
+\setbeamercolor{title}{fg =HMRed}
+\setbeamercolor{footline}{fg=MYgray}
+\setbeamercolor{upper separation line foot}{fg=MYgray}
+
+\setbeamercolor{item}{fg=HMRed}
+
+\setbeamercolor{block title}{bg=HMRed,fg=black}
+\setbeamercolor{block body}{bg=HMRed2}
+
+
+\setbeamercolor{alerted text}{fg=green}
+
+\setbeamercolor{colorboxRed}{bg=HMRed2,fg=black}
+\setbeamercolor{colorboxGray}{bg=lightgrey,fg=black}
+
+%---------------------Fonts-------------------------------------------------------------------------------
+\setbeamerfont{frametitle}{size=\LARGE,family=\sffamily,series=\bfseries}
+\setbeamerfont{title}{size=\LARGE,family=\sffamily,series=\bfseries}
+\setbeamerfont{framesubtitle}{size=\LARGE,family=\sffamily,series=\mdseries}
+
+\setbeamerfont{title/titlepage}{size=\LARGE,family=\sffamily,series=\bfseries}
+\setbeamerfont{institute/titlepage}{size=\small,family=\sffamily,series=\bfseries}
+\setbeamerfont{names/titlepage}{size=\small}
+%\setbeamerfont{date/titlepage}{size=\smal,family=\sffamily,series=\bfseries}
+
+%------------------Inner Style---------------------------------------------------------------------------
+%\useinnertheme{rounded}
+\setbeamertemplate{itemize items}[circle]
+\setbeamertemplate{enumerate items}[default]
+\setbeamertemplate{navigation symbols}{}
+
+%--------------Outer Style--------------------------------------------------------------------------------
+%\setbeamertemplate{blocks}[rounded][shadow=true]
+
+%% Normal Slide
+\setbeamertemplate{footline}{
+	\usebeamertemplate***{upper separation line foot}
+	\vbox{
+	\hspace{3pt}
+	\includegraphics[width=2.5cm]{StyleFiles/HMLogo.pdf}
+	\hspace{1cm}
+	\hbox to 0.4\textwidth{
+		\vbox to 0.1\paperheight {
+			\inserttitle \newline \vfil
+			\insertauthor \newline \vfil
+			\insertinstitute \newline \vfil
+			\hfil
+		}
+	}
+	\hfill
+	\hbox to 0.15\textwidth{
+		\vbox to 0.11\paperheight {
+			\vfil
+			Slide \insertframenumber \ of \inserttotalframenumber
+			\vfil
+		}
+	}
+	\hfill
+	}
+}
+
+
+
+\setbeamertemplate{title page}{
+\vspace{-10mm}\hspace{-5mm}
+\hbox to 0.55\textwidth{
+\vbox to 0.5\paperheight{
+\usebeamerfont{names/titlepage}\insertauthor 
+\vspace{3mm} \ \\
+\usebeamerfont{title/titlepage}\inserttitle
+\vspace{3mm} \ \\
+\usebeamerfont{institute/titlepage}\insertinstitute
+\vspace{3mm} \ \\
+\insertdate
+\vspace{5mm} \ \\
+\hspace{-7mm}
+\includegraphics[width=8cm]{StyleFiles/HMLogo.pdf}
+}}
+}
