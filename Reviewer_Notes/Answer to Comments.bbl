@@ -1,0 +1,28 @@
+\begin{thebibliography}{1}
+
+\bibitem{damasevcius2023}
+Robertas Damaševičius, Nebojsa Bacanin, and Sanjay Misra.
+\newblock From sensors to safety: Internet of emergency services (ioes) for
+  emergency response and disaster management.
+\newblock {\em Journal of Sensor and Actuator Networks}, 12(3), 2023.
+\newblock Cited by: 1; All Open Access, Gold Open Access.
+
+\bibitem{hou2021}
+X.~Hou and J.~Bergmann.
+\newblock Pedestrian {{Dead Reckoning}} with {{Wearable Sensors}}: {{A
+  Systematic Review}}.
+\newblock {\em IEEE Sensors Journal}, 21(1):143--152, 2021.
+
+\bibitem{shin2007}
+S.~H. Shin, C.~G. Park, J.~W. Kim, H.~S. Hong, and J.~M. Lee.
+\newblock Adaptive {{Step Length Estimation Algorithm Using Low-Cost MEMS
+  Inertial Sensors}}.
+\newblock In {\em 2007 {{IEEE Sensors Applications Symposium}}}, pages 1--5,
+  February 2007.
+
+\bibitem{welch2006}
+Greg Welch and Gary Bishop.
+\newblock An {{Introduction}} to the {{Kalman Filter}}.
+\newblock 2006.
+
+\end{thebibliography}

@@ -21,7 +21,11 @@ We  thank the reviewer for spending his or her valuable time to review our paper
 
 \begin{itemize}
 \item Expand on the literature review, showcasing where the current method fills a gap.\\
-\textit{Thank you for the remarks on the literature. We took inspiration for our approach from a review on Pedestrian Dead Reckoning, where a clear lack of solutions using cameras for tracking was evident. We added a sentence pointing to the review and the lack of tracking camera technology in PDR. \textcolor{blue}{Note that blue text shows changes or additions to the text.}}\\
+\textit{Thank you for the remarks on the literature. We took inspiration for our approach from a review on Pedestrian Dead Reckoning, where a clear lack of solutions using cameras for tracking was evident. We added a sentence pointing to the review and the lack of tracking camera technology in PDR. We also mentioned the possible application of such a system in a IoES scenario. \textcolor{blue}{Note that blue text shows changes or additions to the text.}}\\
+
+\textit{To improve safety while performing such a dangerous task, knowing the exact position of firefighters in indoor environments can shorten rescue time of injured personnel or help firefighters avoiding dangerous situations. \textcolor{blue}{Such technologies can not only improve safety of the involved firefighters, but can provide  real-time data for so-called internet of emergency services applications, which aims to improve emergency response and disaster management \cite{damasevcius2023}.} To determine the position of a person in indoor or GPS-denied environments, a technique called Pedestrian Dead Reckoning (PDR) is used}
+
+
 
 
 \textit{Due to these shortcomings in PDR for firefighting application, in this paper  a novel approach for enhanced PDR is presented. The step-detection algorithm is extended with a stereo tracking camera as a secondary sensor. \textcolor{blue}{Despite Tracking cameras being readily availabe and producing accurate tracking results, they are hardly used in Pedestrian Dead Reckoning applications \cite{hou2021}}. This tracking camera is able to visually determine velocity and position relative to a starting point, even is smoky scenarios. The camera providing position and velocity is combined with a step-detection algorithm providing position information.}
@@ -43,7 +47,14 @@ By changing the covariance matrices of the Kalman filter, the accuracy of the pr
 
 \textit{To ensure reliable results, even in scenarios where the camera confidence is degraded, it is essential to incorporate data from step detection for crouching scenarios. This is crucial because the camera  may produce highly inaccurate data in those scenarios. \textcolor{blue}{In German firefighting tactics crouching movement is predominantly used in low visibility environments (where the camera confidence will be degraded). Thus, the assumption herein is, that in those low visibility situations a reliable step-detection is still possible due to the use of he crouching method. This assumption will be validated in real-life applications in future studies.}}
 
+\textit{
+We have also added a comment on the performed tests in the result section, clarifying that the study is an initial investigation:
+\\
+\textcolor{blue}{While these tests do not fully mimic the conditions that occur during firefighting operations, they allow, however, the initial feasibility assessment of the setup. Additional experiments in real-life applications are planned in further studies.}}
+
+
 \item Address potential limitations and challenges more transparently, especially regarding the camera's limitations in smoke and low visibility conditions.\\
+
 
 
 \textit{Thank you for this important comment. We are aware of this problem and have already planned a special investigation on this matter. However, the results will not be available before the end of the year.  We enhanced, however,  the description on the optical sensor as follows and pointed to our future work:\\	
