@@ -62,7 +62,12 @@
 	\end{frame}}
 	
 	\begin{frame}{Requirements for Firefighting}
-		
+		\begin{itemize}
+			\item Does not require prior setup of electronics
+			\item Should be able to work in smoke [Schlecht!]
+			\item Lightweight and easy to carry
+			\item 
+		\end{itemize}
 	\end{frame}
 	
 	\begin{frame}{Existing Solutions}
@@ -70,11 +75,33 @@
 	\end{frame}
 	
 	\begin{frame}{Step-Detection}
-		Inhalt...
+		\begin{itemize}
+			\item Zero-crossing detection 
+			\item Step-length estimation with $d = \sqrt[4]{a_{\max}-a_{\min}}  \, c$
+			\item Step-length is added in the direction the individual is looking
+		\end{itemize}
+		\vspace{0.5cm}
+		\begin{figure}
+			\centering
+			\includegraphics[width=0.9\linewidth]{../Conference_Paper/WalkAcceleration}
+			\caption{}
+			\label{fig:walkacceleration}
+		\end{figure}
+			
+
+		
 	\end{frame}
 	
 	\begin{frame}{Tracking Camera}
-		Inhalt...
+		\begin{itemize}
+			\item Stereo-camera ...
+			\item Works by tracking pixels and calculating the distance to them
+			\item Intel RealSense T265 was used
+		\end{itemize}
+		\begin{figure}
+			\centering
+			\includegraphics[width=0.7\textwidth]{../Conference_Paper/realsense.png}
+		\end{figure}
 	\end{frame}
 	
 	\begin{frame}{Sensor-Data Fusion}
@@ -82,48 +109,42 @@
 	\end{frame}
 	
 	\begin{frame}{Design Evaluation}
-		Inhalt...
+		\begin{itemize}
+			\item Only lab-tests as a proof of concept and to tune the system
+			\item Walked or moved in a crouching movement on a set trajectory
+			\item Analysis of the deviation on defined checkpoints
+			\item Sensor assembly mounted on the backplate of a breathing apparatus
+		\end{itemize}
+		
 	\end{frame}
 	
 	\begin{frame}{Results}
-		Inhalt...
+		\begin{columns}
+			\begin{column}{0.45\textwidth}
+				\begin{itemize}
+					\item Text
+				\end{itemize}
+			\end{column}
+			\begin{column}{0.54\textwidth}
+				\begin{figure}
+					\centering
+					\includegraphics[width=0.9\linewidth]{../Conference_Paper/Path}
+					\caption{}
+					\label{fig:path}
+				\end{figure}
+			\end{column}
+					
+			
+		\end{columns}
 	\end{frame}
 	
 	\begin{frame}{What next?}
-		Inhalt...
-	\end{frame}
-		% Lists frame
-	\section{Lists in Beamer}
-	\begin{frame}{Lists in Beamer}
-		
-		This is an unordered list:
 		\begin{itemize}
-			\item Item 1
-			\item Item 2
-			\item Item 3
+			\item Further tests in a firefighting environment are necessary
+			\item[$\rightarrow$] Sensor assembly needs to be adapted for this task
 		\end{itemize}
 		
-		and this is an ordered list:
-		\begin{enumerate}
-			\item Item 1
-			\item Item 2
-			\item Item 3
-		\end{enumerate}
-		
 	\end{frame}
+
 	
-	
-	% Blocks frame
-	\section{Blocks in Beamer}
-	\begin{frame}{Blocks in Beamer}
-		\begin{block}{Standard Block}
-			This is a standard block.
-		\end{block}
-		\begin{alertblock}{Alert Message}
-			This block presents alert message.
-		\end{alertblock}
-		\begin{exampleblock}{An example of typesetting tool}
-			Example: MS Word, \LaTeX{}
-		\end{exampleblock}
-	\end{frame} 
 \end{document}
