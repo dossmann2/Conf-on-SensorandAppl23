@@ -58,20 +58,45 @@
 	\usebackgroundtemplate{ }
 	
 	\begin{frame}{Introduction}
+			\begin{columns}
+			\column{0.5\textwidth}
+				\begin{itemize}
+					\item<2-> Communication between leadership on the outside and firefighters in the building can be difficult and lead to further damages
+					\item<3-> Knowing the position of injured firefighters could shorten rescue times
+					\item<4-> Position tracking of firefighters can improve training effectiveness
+					\item[$\blacktriangleright$]<5-> Requires a body worn system to track a firefighters position
+				\end{itemize}
 		
-	\end{frame}}
+			\column{0.4\textwidth}
+				\begin{figure}
+					\centering
+					\includegraphics[width=0.7\textwidth]{firefighter.png}
+				\end{figure}
+	
+		\end{columns}
+		
+		
+	\end{frame}
 	
 	\begin{frame}{Requirements for Firefighting}
 		\begin{itemize}
-			\item Does not require prior setup of electronics
-			\item Should be able to work in smoke [Schlecht!]
+			\item Should not require prior setup of electronics
+			\item Should be able to work in environments with smoke and high temperatures
 			\item Lightweight and easy to carry
-			\item 
+			\item Wireless data transmission possible
 		\end{itemize}
 	\end{frame}
 	
 	\begin{frame}{Existing Solutions}
-		Inhalt...
+		\begin{itemize}
+			\item Radio Triangulation $\rightarrow$ Requires expensive setup, not feasible for small departments 
+			\item Lidar Sensors $\rightarrow$ Accuracy strongly influenced by smoke particles
+			\item RF Localization 
+			\item RF or magnetic field mapping $\rightarrow$ require prior setup
+			\item Inertial measurement unit $\rightarrow$ prone to drift, needs secondary sensor
+			\item Step detection $\rightarrow$ Accuracy affected by non walking movements
+			\item[$\blacktriangleright$] What about an optical sensor?
+		\end{itemize}
 	\end{frame}
 	
 	\begin{frame}{Step-Detection}
@@ -139,10 +164,21 @@
 	\end{frame}
 	
 	\begin{frame}{What next?}
-		\begin{itemize}
-			\item Further tests in a firefighting environment are necessary
-			\item[$\rightarrow$] Sensor assembly needs to be adapted for this task
-		\end{itemize}
+		\begin{columns}
+			\column{0.5\textwidth}
+				\begin{itemize}
+					\item Further tests in a firefighting environment are necessary (for example in a training container)
+					\item[$\blacktriangleright$] Sensor assembly needs to be adapted for this task
+				\end{itemize}
+			\column{0.5\textwidth}
+				\begin{figure}
+					\centering
+					\includegraphics[width=0.8\textwidth]{Brandcontainer.jpg}
+					%https://ffw-badbocklet.de/atemschutzgeraetetraeger-ueben-im-feststoff-brandcontainer/
+				\end{figure}
+			
+		\end{columns}
+		
 		
 	\end{frame}
 
