@@ -1,4 +1,4 @@
-\documentclass[aspectratio=1609]{beamer}
+\documentclass[aspectratio=169]{beamer}
 
 %Style
 
@@ -58,6 +58,26 @@
 	\usebackgroundtemplate{ }
 	
 	\begin{frame}{Introduction}
+		How miscommunication almost burned down a house:
+		\begin{columns}
+			\column{0.5\textwidth}
+			\begin{figure}
+				\centering
+				\includegraphics[height=0.7\textheight]{fire.png}
+			\end{figure}
+			
+			\column{0.4\textwidth}
+			\begin{figure}
+				\centering
+				\includegraphics[height=0.7\textheight]{firefighter.png}
+			\end{figure}
+			
+		\end{columns}
+		
+		
+	\end{frame}
+	
+	\begin{frame}{Introduction}
 			\begin{columns}
 			\column{0.5\textwidth}
 				\begin{itemize}
@@ -82,14 +102,20 @@
 		\begin{itemize}
 			\item Should not require prior setup of electronics
 			\item Should be able to work in environments with smoke and high temperatures
-			\item Lightweight and easy to carry
-			\item Wireless data transmission possible
+			\item Lightweight and easy to carry % Should not impact movement
+			\item Wireless data transmission possible % For leadership outside
+			\item Low cost % Widespread use
 		\end{itemize}
+		
+		\begin{block}{Problem:}
+			$\blacktriangleright$ Existing solutions for indoor tracking can not meet these demands
+		\end{block}
+		
 	\end{frame}
 	
 	\begin{frame}{Existing Solutions}
 		\begin{itemize}
-			\item Radio Triangulation $\rightarrow$ Requires expensive setup, not feasible for small departments 
+			\item Magnetic Triangulation $\rightarrow$ Requires expensive setup, not feasible for small departments 
 			\item Lidar Sensors $\rightarrow$ Accuracy strongly influenced by smoke particles
 			\item RF Localization 
 			\item RF or magnetic field mapping $\rightarrow$ require prior setup
@@ -99,47 +125,61 @@
 		\end{itemize}
 	\end{frame}
 	
+	
+	\begin{frame}{Tracking Camera}
+		\begin{itemize}
+			\item Stereo-camera
+			\item Calculates 3D information by measuring the horizontal difference of corresponding image points
+			\item Intel RealSense T265 is used
+			\item Works in environments with light smoke or bad lighting
+		\end{itemize}
+		
+		
+		\begin{figure}
+			\centering
+			\includegraphics[width=0.45\textwidth]{realsense.jpg}
+		\end{figure}
+		
+			\begin{block}{What if the optical sensor is obstructed by debris or heavy smoke?}
+		\end{block}
+	\end{frame}
+	
 	\begin{frame}{Step-Detection}
 		\begin{itemize}
 			\item Zero-crossing detection 
 			\item Step-length estimation with $d = \sqrt[4]{a_{\max}-a_{\min}}  \, c$
 			\item Step-length is added in the direction the individual is looking
 		\end{itemize}
+		
 		\vspace{0.5cm}
 		\begin{figure}
 			\centering
 			\includegraphics[width=0.9\linewidth]{../Conference_Paper/WalkAcceleration}
-			\caption{}
-			\label{fig:walkacceleration}
 		\end{figure}
-			
-
+		
+		
 		
 	\end{frame}
 	
-	\begin{frame}{Tracking Camera}
-		\begin{itemize}
-			\item Stereo-camera ...
-			\item Works by tracking pixels and calculating the distance to them
-			\item Intel RealSense T265 was used
-		\end{itemize}
-		\begin{figure}
-			\centering
-			\includegraphics[width=0.7\textwidth]{../Conference_Paper/realsense.png}
-		\end{figure}
-	\end{frame}
-	
 	\begin{frame}{Sensor-Data Fusion}
-		Inhalt...
+		\begin{itemize}
+			\item Kalman filter for sensor-data fusion
+			\item Prediction step assumes a constant acceleration between filter updates 
+			\item Sensor estimates are used in the update step of the Kalman filter
+		\end{itemize}
 	\end{frame}
 	
-	\begin{frame}{Design Evaluation}
+	\begin{frame}{Lab-Testing the System}
 		\begin{itemize}
 			\item Only lab-tests as a proof of concept and to tune the system
 			\item Walked or moved in a crouching movement on a set trajectory
 			\item Analysis of the deviation on defined checkpoints
 			\item Sensor assembly mounted on the backplate of a breathing apparatus
 		\end{itemize}
+		\begin{figure}
+			\centering
+			\includegraphics[width=7cm]{../Conference_Paper/Assembly.jpg}
+		\end{figure}
 		
 	\end{frame}
 	
@@ -147,13 +187,16 @@
 		\begin{columns}
 			\begin{column}{0.45\textwidth}
 				\begin{itemize}
-					\item Text
+					\item Significant improvement when the camera is used
+					\item Accuracy when using only the tracking camera is slightly higher (in a lab environment)
+					\item Step-detection accuracy goes down especially when crouching
 				\end{itemize}
+				
 			\end{column}
 			\begin{column}{0.54\textwidth}
 				\begin{figure}
 					\centering
-					\includegraphics[width=0.9\linewidth]{../Conference_Paper/Path}
+					\includegraphics[width=0.9\linewidth]{../Conference_Paper/Path2}
 					\caption{}
 					\label{fig:path}
 				\end{figure}
@@ -163,10 +206,11 @@
 		\end{columns}
 	\end{frame}
 	
-	\begin{frame}{What next?}
+	\begin{frame}{Conclusion}
 		\begin{columns}
 			\column{0.5\textwidth}
 				\begin{itemize}
+					\item While the results are promising, further research is necessary 
 					\item Further tests in a firefighting environment are necessary (for example in a training container)
 					\item[$\blacktriangleright$] Sensor assembly needs to be adapted for this task
 				\end{itemize}
