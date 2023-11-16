@@ -81,7 +81,7 @@
 			\begin{columns}
 			\column{0.5\textwidth}
 				\begin{itemize}
-					\item<2-> Communication between leadership on the outside and firefighters in the building can be difficult and lead to further damages
+					\item<2-> Relaying the firefighters position to the leadership on the outside can be difficult and lead to damages
 					\item<3-> Knowing the position of injured firefighters could shorten rescue times
 					\item<4-> Position tracking of firefighters can improve training effectiveness
 					\item[$\blacktriangleright$]<5-> Requires a body worn system to track a firefighters position
@@ -162,11 +162,20 @@
 	\end{frame}
 	
 	\begin{frame}{Sensor-Data Fusion}
-		\begin{itemize}
-			\item Kalman filter for sensor-data fusion
-			\item Prediction step assumes a constant acceleration between filter updates 
-			\item Sensor estimates are used in the update step of the Kalman filter
-		\end{itemize}
+		\begin{columns}
+			\column{0.45\textwidth}
+				\begin{itemize}
+				\item Kalman filter for sensor-data fusion
+				\item Prediction step assumes a constant acceleration between filter updates 
+				\item Sensor estimates are used in the update step of the Kalman filter
+			\end{itemize}
+			\column{0.55\textwidth}
+			\begin{figure}
+				\centering
+				\includegraphics[width=0.9\textwidth]{schema1.png}
+			\end{figure}
+		\end{columns}
+	
 	\end{frame}
 	
 	\begin{frame}{Lab-Testing the System}
@@ -191,16 +200,23 @@
 					\item Accuracy when using only the tracking camera is slightly higher (in a lab environment)
 					\item Step-detection accuracy goes down especially when crouching
 				\end{itemize}
-				
+				\begin{tabular}{lcccc}
+					\toprule
+					\textbf{Estimation Method}                  &   \textbf{Mean}      \\ \midrule
+					Step-Detection only                              & $2.0\,\mathrm{m}$   \\
+					Sensordata Fusion                           & $0.32\,\mathrm{m}$   \\
+					%Low tracking confidence S. F. & $0.66\,\mathrm{m}$  \\
+					Tracking Camera only & $0.3\,\mathrm{m}$  \\ \bottomrule
+				\end{tabular}
 			\end{column}
 			\begin{column}{0.54\textwidth}
 				\begin{figure}
 					\centering
 					\includegraphics[width=0.9\linewidth]{../Conference_Paper/Path2}
-					\caption{}
-					\label{fig:path}
 				\end{figure}
+				
 			\end{column}
+			
 					
 			
 		\end{columns}
