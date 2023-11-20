@@ -191,7 +191,8 @@
 		
 	\end{frame}
 	
-	\begin{frame}{Results}
+	
+		\begin{frame}{Results}
 		\begin{columns}
 			\begin{column}{0.45\textwidth}
 				\begin{itemize}
@@ -199,14 +200,7 @@
 					\item<3-> Accuracy when using only the tracking camera is slightly higher %(in a lab environment)
 					\item<4-> Step-detection accuracy goes down especially when crouching
 				\end{itemize}
-				\begin{tabular}{lcccc}
-					\toprule
-					\textbf{Estimation Method}                  &   \textbf{Mean}      \\ \midrule
-					Step-Detection only                              & $2.0\,\mathrm{m}$   \\
-					Sensordata Fusion                           & $0.32\,\mathrm{m}$   \\
-					%Low tracking confidence S. F. & $0.66\,\mathrm{m}$  \\
-					Tracking Camera only & $0.3\,\mathrm{m}$  \\ \bottomrule
-				\end{tabular}
+				
 			\end{column}
 			\begin{column}{0.54\textwidth}
 				\begin{figure}
@@ -216,10 +210,47 @@
 				
 			\end{column}
 			
-					
+			
 			
 		\end{columns}
 	\end{frame}
+	
+		
+		\begin{frame}{Results}
+		\begin{columns}
+			\begin{column}{0.45\textwidth}
+				\begin{itemize}
+					\item Significant improvement when the camera is used
+					\item Accuracy when using only the tracking camera is slightly higher %(in a lab environment)
+					\item Step-detection accuracy goes down especially when crouching
+				\end{itemize}
+				
+					\begin{tabular}{lcccc}
+					\toprule
+					\textbf{Estimation Method}                  &   \textbf{Mean}      \\ \midrule
+					Step-Detection only                              & $2.0\,\mathrm{m}$   \\
+					Sensordata Fusion                           & $0.32\,\mathrm{m}$   \\
+					%Low tracking confidence S. F. & $0.66\,\mathrm{m}$  \\
+					Tracking Camera only & $0.3\,\mathrm{m}$  \\ \bottomrule
+				\end{tabular}
+
+			\end{column}
+			\begin{column}{0.54\textwidth}
+				\begin{figure}
+					\centering
+					\includegraphics[width=0.9\linewidth]{../Conference_Paper/Path2}
+				\end{figure}
+				
+			\end{column}
+			
+			
+			
+		\end{columns}
+	\end{frame}
+	
+
+	
+
 	
 	\begin{frame}{Conclusion}
 		\begin{columns}
