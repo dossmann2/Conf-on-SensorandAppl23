@@ -81,10 +81,10 @@
 			\begin{columns}
 			\column{0.5\textwidth}
 				\begin{itemize}
-					\item<2-> Relaying firefighters position to the leadership can be difficult
-					\item<3-> Knowing the position of injured firefighters can shorten rescue times
-					\item<4-> Position tracking of firefighters can improve training effectiveness
-					\item[$\blacktriangleright$]<5-> Requires a body worn system to track a firefighters position
+					\item<2-> Relaying firefighters indoor position to leadership is difficult
+					\item<3-> Knowing the position of injured firefighters shortens rescue times
+					\item<4-> Position tracking of firefighters improves training effectiveness
+					\item[$\blacktriangleright$]<5-> \textbf{Body worn system neccesary}
 				\end{itemize}
 		
 			\column{0.4\textwidth}
@@ -98,13 +98,13 @@
 		
 	\end{frame}
 	
-	\begin{frame}{Requirements for Firefighting}
+	\begin{frame}{Challenges for Firefighting Applications}
 		\begin{itemize}
-			\item<2-> Not require prior setup of electronics
-			\item<3-> Work in environments with smoke and high temperatures
-			\item<4-> Lightweight % Should not impact movement
+			\item<2-> Avoiding prior setup of electronics
+			\item<3-> Tracking any type of movement
+			\item<4-> Cheap and lightweight % Should not impact movement
 			\item<5-> Wireless data transmission % For leadership outside
-			\item<6-> Low cost % Widespread use
+			\item<6-> Working in hot and smoky environments % Widespread use
 		\end{itemize}
 		\pause
 		\pause
@@ -112,8 +112,8 @@
 		\pause
 		\pause
 		\pause
-		\begin{block}{Problem:}
-			$\blacktriangleright$ Existing solutions for indoor tracking can not meet these demands
+		\begin{block}{$\blacktriangleright$ Existing solutions for indoor tracking can not meet these demands}
+			
 		\end{block}
 		
 	\end{frame}
@@ -132,8 +132,8 @@
 	
 	
 	\begin{frame}{Tracking Camera (Stereo Camera)}
-		 Calculates 3D information by measuring the horizontal difference of image points\\
-		 Works in environments with light smoke or bad lighting
+		 Calculates 3D information by \textbf{measuring the horizontal difference} of image points\\
+		 works in environments with \textbf{light smoke or bad lighting}
 	
 		
 		
@@ -142,10 +142,30 @@
 			\includegraphics[width=0.45\textwidth]{realsense.jpg}<2->
 		\end{figure}
 		
-			\begin{block}{What if the optical sensor is obstructed by debris or heavy smoke?}<3->
+			\begin{block}{What if the optical sensor is obstructed?}<3->
 		\end{block}
 	\end{frame}
 	
+	
+	\begin{frame}{Step-Detection}
+		\begin{itemize}
+			\item<2-> Zero-crossing detection 
+			\item<3-> Step-length estimation: $d = \sqrt[4]{a_{\max}-a_{\min}}  \, c$
+			\item<4-> Step-length is added in the direction of the individuals heading
+		\end{itemize}
+		
+		%\vspace{0.5cm}
+		\begin{figure}
+			\centering
+			\includegraphics[width=0.9\linewidth]{../Conference_Paper/WalkAcceleration}
+		\end{figure}
+		
+		\begin{alert}{$\blacktriangleright$\textbf{Requires sensor-data fusion to combine the measurements}}<3->
+		\end{alert}
+		
+		
+		
+	\end{frame}
 
 	
 	\begin{frame}{Sensor-Data Fusion}
@@ -153,8 +173,7 @@
 			\column{0.45\textwidth}
 				\begin{itemize}
 				\item<2-> Sensor-data fusion algorithm combines step-detection and tracking camera data
-				\item<3-> Algortihm takes quality of meausrements into account
-				\item<4-> Sensor estimates are used in the update step of the Kalman filter
+				\item<3-> Algortihm takes quality of measurements into account
 			\end{itemize}
 			\column{0.55\textwidth}
 			\begin{figure}
@@ -165,29 +184,12 @@
 	
 	\end{frame}
 	
-		\begin{frame}{Step-Detection}
-		\begin{itemize}
-			\item<2-> Zero-crossing detection 
-			\item<3-> Step-length estimation with $d = \sqrt[4]{a_{\max}-a_{\min}}  \, c$
-			\item<4-> Step-length is added in the direction the individual is looking
-		\end{itemize}
-		
-		\vspace{0.5cm}
-		\begin{figure}
-			\centering
-			\includegraphics[width=0.9\linewidth]{../Conference_Paper/WalkAcceleration}
-		\end{figure}
-		
-		
-		
-	\end{frame}
 	
-	\begin{frame}{Experiment}
+	\begin{frame}{Experimental Validation - Setup}
 		\begin{itemize}
-			\item<2-> As a proof of concept and to tune the system
-			\item<3-> Walked or moved in a crouching movement on a set trajectory
-			\item<4-> Analysis of the deviation on defined checkpoints
-			\item<5-> Sensor assembly mounted on the backplate of a breathing apparatus
+			\item<2-> Sensor assembly mounted on the backplate of a breathing apparatus
+			\item<3-> Moving along predefined trajectory
+			\item<4-> Error calculation at predefined waypoints
 		\end{itemize}
 		\begin{figure}
 			\centering
@@ -201,10 +203,11 @@
 		\begin{columns}
 			\begin{column}{0.45\textwidth}
 				\begin{itemize}
-					\item<2-> Significant improvement when the camera is used
-					\item<3-> Accuracy when using only the tracking camera is slightly higher %(in a lab environment)
-					\item<4-> Step-detection accuracy goes down especially when crouching
+					\item<2-> Step-detection accuracy insufficient, especially when crouching
+					\item<3-> Significant improvement with the camera
+					\item<4-> Accuracy using the tracking camera  only is slightly higher %(in a lab environment)
 				\end{itemize}
+				\vspace{2.4cm}
 				
 			\end{column}
 			\begin{column}{0.54\textwidth}
@@ -225,9 +228,9 @@
 		\begin{columns}
 			\begin{column}{0.45\textwidth}
 				\begin{itemize}
-					\item Significant improvement when the camera is used
-					\item Accuracy when using only the tracking camera is slightly higher %(in a lab environment)
-					\item Step-detection accuracy goes down especially when crouching
+					\item<2-> Step-detection accuracy insufficient, especially when crouching
+					\item<3-> Significant improvement with the camera
+					\item<4-> Accuracy using the tracking camera  only is slightly higher %(in a lab environment)
 				\end{itemize}
 				
 					\begin{tabular}{lcccc}
@@ -257,13 +260,13 @@
 	
 
 	
-	\begin{frame}{Conclusion}
+	\begin{frame}{Outlook}
 		\begin{columns}
 			\column{0.5\textwidth}
 				\begin{itemize}
-					\item<2-> Promising initial results
-					\item<3-> Next step: Tests in a firefighting environment (for example in a training container)
-					\item[$\blacktriangleright$]<4-> Sensor assembly needs to be adapted for this task
+					\item<2-> Promising initial results with prototype
+					\item<3-> Next: Tests in a firefighting environment 
+					\item[$\blacktriangleright$]<4-> Prototype requires adaptation
 				\end{itemize}
 			\column{0.5\textwidth}
 				\begin{figure}
